@@ -6,14 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "start": "astro preview --host 0.0.0.0",
-    "build:with-images": "npm run optimize:images && astro build",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "start": "astro preview --host 0.0.0.0"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
-    "astro": "^5.10.2",
-    "sharp": "^0.34.2"
+    "astro": "^5.10.2"
   },
   "devDependencies": {}
 }

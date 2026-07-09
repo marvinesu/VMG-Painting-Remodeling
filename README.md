@@ -10,8 +10,6 @@ npm run build
 npm start
 ```
 
-Use `npm run build:with-images` only after adding new source images and regenerating optimized assets.
-
 ## Hostinger Deployment
 
 Use Hostinger static website or Git deployment settings:
@@ -30,7 +28,7 @@ Upload or deploy the contents of `dist` to the site root for `vmgpaintingremodel
 - Free estimate form: update the Fillout embed in `src/components/FilloutEstimateForm.astro`.
 - Chatbot: paste the chatbot embed/container code inside `src/components/ChatbotPlaceholder.astro`.
 - Services/content: update `src/data/services.ts` and `src/data/site.ts`.
-- Images: add original images to `assets/source-images/<service-folder>`, then run `npm run optimize:images`. Optimized site images live in `public/images`.
+- Images used by the live site live in `public/images`. Keep large source-image folders outside Git or under ignored `assets/source-images/`.
 
 ## Launch Checklist
 
