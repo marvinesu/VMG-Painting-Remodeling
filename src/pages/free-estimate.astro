@@ -4,19 +4,51 @@ import PageHero from "../components/PageHero.astro";
 import FilloutEstimateForm from "../components/FilloutEstimateForm.astro";
 import CTASection from "../components/CTASection.astro";
 import { images } from "../data/images";
+import { site } from "../data/site";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+    { "@type": "ListItem", position: 2, name: "Free Estimate", item: `${site.url}/free-estimate` }
+  ]
+};
 ---
-<BaseLayout title="Free Estimate | VMG Painting & Remodeling LLC" description="Request a free estimate from VMG Painting & Remodeling LLC for painting, siding, roofing, windows, decks, and remodeling services." path="/free-estimate">
-  <PageHero title="Free Estimate" text="Get a clear estimate from a contractor with 30+ years of experience." image={images.roofing[0]} />
+<BaseLayout
+  title="Free Estimate in Roy, WA | VMG Painting & Remodeling LLC"
+  description="Request a free, no-obligation estimate for painting, siding, roofing, windows, decks, or remodeling from VMG Painting & Remodeling LLC — serving Thurston, Pierce, King, and Snohomish County."
+  path="/free-estimate"
+  image={images.roofing[0].src}
+  schema={[breadcrumbSchema]}
+>
+  <PageHero
+    title="Get Your Free Estimate"
+    text="A clear, no-obligation estimate from a family-owned contractor with 30+ years of construction experience."
+    image={images.roofing[0].src}
+    crumbs={[{ label: "Home", href: "/" }, { label: "Free Estimate" }]}
+  />
   <section class="section">
     <div class="container split">
       <div>
         <span class="eyebrow">Request Your Quote</span>
         <h2>Tell VMG What You Want to Improve</h2>
-        <p>Whether you already know exactly what you need or you are still comparing options, VMG can help you review the project and understand the next step.</p>
-        <ul class="check-list"><li>We review your request</li><li>We contact you</li><li>We prepare a clear estimate</li><li>You decide when to start</li></ul>
+        <p>Whether you know exactly what you need or you're still comparing options, we'll help you understand the project, the priorities, and the realistic cost — before you commit to anything.</p>
+        <h3>What happens next</h3>
+        <ul class="check-list">
+          <li>We review your request — usually the same day</li>
+          <li>We contact you to talk through the project and schedule a visit if needed</li>
+          <li>You receive a clear, written estimate with no pressure</li>
+          <li>You decide if and when to start — the estimate is free either way</li>
+        </ul>
+        <p class="note">Serving Thurston, Pierce, King, and Snohomish County from Roy, WA. Prefer the phone? Call <a class="inline-link" href={`tel:${site.tel}`}>{site.phoneDisplay}</a>.</p>
       </div>
       <div class="card pad"><FilloutEstimateForm /></div>
     </div>
   </section>
-  <CTASection title="Need a Faster Answer?" text="Call VMG Painting & Remodeling LLC directly and speak with our team about your project." />
+  <CTASection title="Need a Faster Answer?" text="Call VMG Painting & Remodeling LLC directly and speak with our team about your painting, remodeling, or exterior project." />
 </BaseLayout>
+
+<style>
+  .inline-link { color: var(--gold-dark); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+</style>

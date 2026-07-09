@@ -13,7 +13,9 @@ export const site = {
   license: "VMGPAPR782PD",
   owner: "Victor Gomez",
   admin: "Elizabeth Gomez",
-  areas: ["Thurston County", "Pierce County", "King County", "Snohomish County", "Washington"]
+  areas: ["Thurston County", "Pierce County", "King County", "Snohomish County"],
+  // Approximate coordinates for Roy, WA — used in LocalBusiness structured data.
+  geo: { latitude: 47.0043, longitude: -122.5443 }
 };
 
 export const navItems = [

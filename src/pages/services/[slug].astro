@@ -16,18 +16,62 @@ if (!service) {
   throw new Error(`Unknown service slug: ${Astro.params.slug}`);
 }
 const related = services.filter((item) => item.slug !== service.slug).slice(0, 3);
+const pageUrl = `${site.url}/services/${service.slug}`;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: service.title,
+  serviceType: service.title,
+  description: service.description,
+  url: pageUrl,
+  image: new URL(service.image.src, site.url).toString(),
+  provider: { "@id": `${site.url}/#business` },
+  areaServed: site.areas.map((area) => ({ "@type": "AdministrativeArea", name: `${area}, WA` }))
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+    { "@type": "ListItem", position: 2, name: "Services", item: `${site.url}/services` },
+    { "@type": "ListItem", position: 3, name: service.title, item: pageUrl }
+  ]
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: service.faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: { "@type": "Answer", text: faq.answer }
+  }))
+};
 ---
-<BaseLayout title={service.seoTitle} description={service.description} path={`/services/${service.slug}`} image={service.image}>
-  <PageHero title={service.title} text={service.hero} image={service.image} />
+<BaseLayout
+  title={service.seoTitle}
+  description={service.description}
+  path={`/services/${service.slug}`}
+  image={service.image.src}
+  schema={[serviceSchema, breadcrumbSchema, faqSchema]}
+>
+  <PageHero
+    title={service.title}
+    text={service.short}
+    image={service.image.src}
+    crumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }, { label: service.title }]}
+  />
   <section class="section">
     <div class="container split">
       <div>
-        <span class="eyebrow">{service.title}</span>
+        <span class="eyebrow">{service.title} in Western Washington</span>
         <h2>{service.hero}</h2>
         <p class="lead">{service.intro}</p>
-        <div class="button-row"><a class="btn" href="/free-estimate">Get a Free Estimate</a><a class="btn outline" href={`tel:${site.tel}`}>Call Now</a></div>
+        <div class="button-row"><a class="btn" href="/free-estimate">Get a Free Estimate</a><a class="btn outline" href={`tel:${site.tel}`}>Call {site.phoneDisplay}</a></div>
       </div>
-      <img class="card-image" src={service.image} alt={`${service.title} by VMG`} />
+      <img class="card-image" src={service.image.src} alt={service.image.alt} width="720" height="430" loading="lazy" decoding="async" />
     </div>
   </section>
   <section class="section alt compact">
@@ -42,7 +86,12 @@ const related = services.filter((item) => item.slug !== service.slug).slice(0, 3
       <span class="eyebrow">Our Process</span>
       <h2>Organized From Estimate to Final Walkthrough</h2>
       <div class="grid grid-4">
-        {service.process.map((step, i) => <div class="card pad"><h3>{i + 1}. {step}</h3></div>)}
+        {service.process.map((item, i) => (
+          <div class="card pad">
+            <h3>{i + 1}. {item.step}</h3>
+            <p>{item.detail}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -50,36 +99,64 @@ const related = services.filter((item) => item.slug !== service.slug).slice(0, 3
     <div class="container">
       <span class="eyebrow">Service Area</span>
       <h2>{service.title} Across Western Washington</h2>
-      <p class="lead">VMG serves Thurston County, Pierce County, King County, Snohomish County, and nearby Washington communities from Roy, WA.</p>
-      <div class="button-row"><a class="btn" href="/free-estimate">Request Your Quote</a></div>
+      <p class="lead">From our home base in Roy, WA, VMG serves homeowners in Thurston County, Pierce County, King County, Snohomish County, and nearby Washington communities.</p>
+      <div class="button-row"><a class="btn" href="/free-estimate">Request Your Free Estimate</a></div>
     </div>
   </section>
   <section class="section">
     <div class="container">
       <span class="eyebrow">Gallery</span>
       <h2>{service.title} Project Images</h2>
-      <GalleryGrid images={service.gallery} title={`${service.title} gallery`} />
+      <GalleryGrid images={service.gallery} label={`${service.title} gallery`} />
     </div>
   </section>
   <section class="section alt">
+    <div class="container">
+      <span class="eyebrow">FAQ</span>
+      <h2>{service.title} Questions, Answered</h2>
+      <div class="grid grid-2 faq-grid">
+        {service.faqs.map((faq, i) => (
+          <details class="card pad" open={i === 0}>
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section">
     <div class="container split">
       <div>
         <span class="eyebrow">Free Estimate</span>
         <h2>Request a {service.title} Quote</h2>
-        <p class="lead">Share a few project details and VMG will follow up about your estimate for {service.title.toLowerCase()}.</p>
+        <p class="lead">Share a few project details and VMG will follow up with a free, no-obligation estimate for your {service.title.toLowerCase()} project.</p>
+        <p>Prefer to talk first? Call <a class="inline-link" href={`tel:${site.tel}`}>{site.phoneDisplay}</a>.</p>
       </div>
       <div class="card pad"><FilloutEstimateForm /></div>
     </div>
   </section>
-  <section class="section compact">
+  <section class="section alt compact">
     <div class="container">
       <span class="eyebrow">Related Services</span>
       <h2>Other Ways VMG Can Help</h2>
-      <div class="grid grid-3">{related.map((item) => <a class="card pad" href={`/services/${item.slug}`}><h3>{item.title}</h3><p>{item.short}</p></a>)}</div>
+      <div class="grid grid-3">
+        {related.map((item) => (
+          <a class="card pad related-card" href={`/services/${item.slug}`}>
+            <h3>{item.title}</h3>
+            <p>{item.short}</p>
+            <span class="related-link">Learn More <span aria-hidden="true">&rarr;</span></span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
-  <CTASection title={`Ready for ${service.title}?`} text="Call VMG Painting & Remodeling LLC today to schedule your free estimate." />
+  <CTASection title={`Ready to Start Your ${service.title} Project?`} text="Call VMG Painting & Remodeling LLC today or request your free estimate online — we'll help you plan the right next step." />
 </BaseLayout>
 <style>
   .card-image { width: 100%; height: 430px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
+  .inline-link { color: var(--gold-dark); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+  .related-card h3 { color: var(--ink); }
+  .related-link { color: var(--gold-dark); font-weight: 900; }
+  .related-card:hover .related-link, .related-card:focus-visible .related-link { text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 720px) { .card-image { height: 300px; } }
 </style>

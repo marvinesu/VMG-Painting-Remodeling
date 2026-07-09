@@ -5,16 +5,54 @@ import GalleryGrid from "../components/GalleryGrid.astro";
 import CTASection from "../components/CTASection.astro";
 import { services } from "../data/services";
 import { images } from "../data/images";
+import { site } from "../data/site";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+    { "@type": "ListItem", position: 2, name: "Projects", item: `${site.url}/projects` }
+  ]
+};
+
+const categories = [
+  { title: "Painting Projects", images: images.painting.slice(0, 3), href: "/services/interior-exterior-painting" },
+  { title: "Siding Projects", images: images.siding.slice(0, 3), href: "/services/siding" },
+  { title: "Roofing Projects", images: images.roofing.slice(0, 3), href: "/services/roofing" },
+  { title: "Window Projects", images: images.windows.slice(0, 3), href: "/services/windows-installation" },
+  { title: "Deck Projects", images: images.decks.slice(0, 3), href: "/services/decks" },
+  { title: "Remodeling Projects", images: images.remodeling.slice(0, 3), href: "/services/remodeling-services" }
+];
 ---
-<BaseLayout title="Projects | VMG Painting & Remodeling LLC" description="View project categories from VMG Painting & Remodeling LLC, including painting, siding, roofing, windows, decks, and remodeling work." path="/projects">
-  <PageHero title="Projects" text="Explore project categories and see how VMG helps homeowners improve their properties." image={images.decks[0]} />
-  <section class="section">
-    <div class="container">
-      <span class="eyebrow">Project Categories</span>
-      <h2>Recent Work, Organized by Service</h2>
-      <div class="grid grid-3">{services.map((service) => <a class="card pad" href={`/services/${service.slug}`}><h3>{service.title}</h3><p>{service.short}</p></a>)}</div>
-    </div>
-  </section>
-  <section class="section alt"><div class="container"><GalleryGrid images={[...images.painting.slice(0,2), ...images.siding.slice(0,2), ...images.roofing.slice(0,2), ...images.windows.slice(0,2), ...images.decks.slice(0,2), ...images.remodeling.slice(0,2)]} title="VMG project gallery" /></div></section>
-  <CTASection title="Have a Similar Project in Mind?" />
+<BaseLayout
+  title="Project Gallery | Painting, Decks, Roofing & Remodeling | VMG"
+  description="Browse painting, siding, roofing, window, deck, and remodeling project galleries from VMG Painting & Remodeling LLC, a family-owned Roy, WA contractor."
+  path="/projects"
+  image={images.decks[0].src}
+  schema={[breadcrumbSchema]}
+>
+  <PageHero
+    title="Our Work Speaks for Itself"
+    text="Browse project galleries by service and see the kind of workmanship VMG brings to homes across Thurston, Pierce, King, and Snohomish County."
+    image={images.decks[0].src}
+    crumbs={[{ label: "Home", href: "/" }, { label: "Projects" }]}
+  />
+  {categories.map((category, i) => (
+    <section class={`section${i % 2 === 1 ? " alt" : ""}`}>
+      <div class="container">
+        <div class="category-head">
+          <h2>{category.title}</h2>
+          <a class="btn outline" href={category.href}>About This Service</a>
+        </div>
+        <GalleryGrid images={category.images} label={category.title} />
+      </div>
+    </section>
+  ))}
+  <CTASection title="Have a Similar Project in Mind?" text="Tell us what you're planning and we'll walk the project with you — then give you a clear, free estimate." />
 </BaseLayout>
+
+<style>
+  .category-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .category-head h2 { margin-bottom: 0; }
+</style>

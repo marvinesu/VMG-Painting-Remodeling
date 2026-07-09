@@ -5,18 +5,54 @@ import ServiceCard from "../../components/ServiceCard.astro";
 import CTASection from "../../components/CTASection.astro";
 import { services } from "../../data/services";
 import { images } from "../../data/images";
+import { site } from "../../data/site";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+    { "@type": "ListItem", position: 2, name: "Services", item: `${site.url}/services` }
+  ]
+};
 ---
-<BaseLayout title="Painting, Siding, Roofing, Decks & Remodeling Services in WA | VMG" description="VMG Painting & Remodeling LLC offers painting, siding, roofing, window installation, decks, and remodeling services in Thurston, Pierce, King, and Snohomish County." path="/services">
-  <PageHero title="Our Services" text="Painting, siding, roofing, windows, decks, and remodeling services for Western Washington homes and properties." image={images.siding[0]} />
+<BaseLayout
+  title="Painting, Siding, Roofing, Decks & Remodeling Services in WA | VMG"
+  description="VMG Painting & Remodeling LLC offers interior and exterior painting, siding, roofing, window installation, decks, and remodeling across Thurston, Pierce, King, and Snohomish County, WA."
+  path="/services"
+  image={images.siding[0].src}
+  schema={[breadcrumbSchema]}
+>
+  <PageHero
+    title="Home Improvement Services Backed by Construction Experience"
+    text="Painting, siding, roofing, windows, decks, and remodeling for Western Washington homes — from one family-owned, Washington-registered contractor."
+    image={images.siding[0].src}
+    crumbs={[{ label: "Home", href: "/" }, { label: "Services" }]}
+  />
   <section class="section">
     <div class="container">
       <span class="eyebrow">What We Do</span>
-      <h2>Home Improvement Services Backed by Construction Experience</h2>
-      <p class="lead">Whether you are repainting your home, replacing siding, repairing a roof, installing windows, building a deck, or planning a remodel, VMG brings practical construction knowledge and detail-focused workmanship to the project.</p>
+      <h2>Every Service, One Experienced Local Team</h2>
+      <p class="lead">Whether you're repainting your home, replacing siding, repairing a roof, installing windows, building a deck, or planning a remodel, VMG brings practical construction knowledge and detail-focused workmanship to the project — and coordinates the pieces so the whole home comes together.</p>
       <div class="grid grid-3">
-        {services.map((service) => <ServiceCard title={service.title} text={service.short} href={`/services/${service.slug}`} image={service.image} />)}
+        {services.map((service) => <ServiceCard title={service.title} text={service.short} href={`/services/${service.slug}`} image={service.image.src} imageAlt={service.image.alt} />)}
       </div>
     </div>
   </section>
-  <CTASection title="Not Sure What Should Come First?" text="Call VMG Painting & Remodeling LLC and we'll help you review your project, prioritize the work, and understand your options." />
+  <section class="section alt compact">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">How Projects Fit Together</span>
+        <h2>Planning More Than One Improvement?</h2>
+        <p>Many of our best projects combine services: new siding finished with fresh exterior paint, windows trimmed and painted by the same crew, or a deck built alongside an exterior refresh. Because VMG handles every trade, you get one schedule, one point of contact, and one standard of quality.</p>
+      </div>
+      <ul class="check-list">
+        <li>Siding + exterior painting in one coordinated project</li>
+        <li>Windows installed with trim and paint finished properly</li>
+        <li>Roofing planned alongside gutters and exterior work</li>
+        <li>Remodels that include paint, trim, and finish details</li>
+      </ul>
+    </div>
+  </section>
+  <CTASection title="Not Sure What Should Come First?" text="Call VMG Painting & Remodeling LLC and we'll help you review your project, prioritize the work, and understand your options — starting with a free estimate." />
 </BaseLayout>

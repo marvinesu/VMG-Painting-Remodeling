@@ -1,14 +1,22 @@
 ---
-interface Props { images: string[]; title?: string; }
-const { images, title = "Project Gallery" } = Astro.props;
+import type { SiteImage } from "../data/images";
+
+interface Props {
+  images: SiteImage[];
+  label?: string;
+}
+const { images, label = "Project gallery" } = Astro.props;
 ---
-<div class="gallery" aria-label={title}>
-  {images.map((image, index) => (
-    <img src={image} alt={`${title} image ${index + 1}`} loading="lazy" width="520" height="390" />
+<ul class="gallery" aria-label={label}>
+  {images.map((image) => (
+    <li>
+      <img src={image.src} alt={image.alt} loading="lazy" decoding="async" width="520" height="390" />
+    </li>
   ))}
-</div>
+</ul>
 <style>
-  .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); margin-top: var(--space-lg); }
+  .gallery { list-style: none; margin: var(--space-lg) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); }
   .gallery img { width: 100%; height: clamp(220px, 24vw, 280px); object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
-  @media (max-width: 760px) { .gallery { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .gallery { grid-template-columns: 1fr; } }
 </style>

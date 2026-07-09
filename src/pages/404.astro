@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CTASection from "../components/CTASection.astro";
+import { services } from "../data/services";
+---
+<BaseLayout
+  title="Page Not Found | VMG Painting & Remodeling LLC"
+  description="The page you're looking for doesn't exist. Explore VMG Painting & Remodeling LLC services or request a free estimate."
+  path="/404"
+>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">404 — Page Not Found</span>
+      <h1>That Page Seems to Have Been Remodeled</h1>
+      <p class="lead">The page you're looking for doesn't exist or has moved. Here's where you probably want to go:</p>
+      <div class="button-row">
+        <a class="btn" href="/">Back to Home</a>
+        <a class="btn outline" href="/free-estimate">Get a Free Estimate</a>
+      </div>
+      <h2 class="services-heading">Our Services</h2>
+      <ul class="check-list">
+        {services.map((service) => (
+          <li><a class="inline-link" href={`/services/${service.slug}`}>{service.title}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .services-heading { margin-top: 48px; font-size: 1.4rem; }
+  .inline-link { color: var(--gold-dark); font-weight: 800; }
+  .inline-link:hover, .inline-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+</style>

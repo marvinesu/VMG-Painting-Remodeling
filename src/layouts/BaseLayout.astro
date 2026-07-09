@@ -11,17 +11,23 @@ interface Props {
   description: string;
   path?: string;
   image?: string;
+  /** Additional JSON-LD objects (Service, FAQPage, BreadcrumbList, …) rendered alongside the LocalBusiness schema. */
+  schema?: object[];
 }
 
-const { title, description, path = "/", image = "/images/painting-exterior-residential.webp" } = Astro.props;
+const { title, description, path = "/", image = "/images/painting-exterior-residential.webp", schema = [] } = Astro.props;
 const canonical = new URL(path, site.url).toString();
-const jsonLd = {
+const ogImage = new URL(image, site.url).toString();
+
+const businessSchema = {
   "@context": "https://schema.org",
   "@type": "HomeAndConstructionBusiness",
+  "@id": `${site.url}/#business`,
   name: site.name,
   url: site.url,
-  telephone: site.phoneDisplay,
+  telephone: site.tel,
   email: site.email,
+  image: ogImage,
   address: {
     "@type": "PostalAddress",
     streetAddress: "8517 311th St S",
@@ -30,10 +36,26 @@ const jsonLd = {
     postalCode: "98580",
     addressCountry: "US"
   },
-  areaServed: site.areas,
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: site.geo.latitude,
+    longitude: site.geo.longitude
+  },
+  areaServed: site.areas.map((area) => ({ "@type": "AdministrativeArea", name: `${area}, WA` })),
   identifier: `WA Contractor Registration #${site.license}`,
-  founder: site.owner
+  founder: { "@type": "Person", name: site.owner },
+  knowsAbout: [
+    "Interior painting",
+    "Exterior painting",
+    "Siding installation",
+    "Roofing",
+    "Window installation",
+    "Deck building",
+    "Home remodeling"
+  ]
 };
+
+const jsonLd = [businessSchema, ...schema];
 ---
 <!doctype html>
 <html lang="en">
@@ -43,17 +65,28 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#29251d" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL(image, site.url).toString()} />
+    <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {jsonLd.map((entry) => (
+      <script type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <Header />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <Footer />

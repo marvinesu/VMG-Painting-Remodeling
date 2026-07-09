@@ -14,10 +14,12 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
     </div>
   </div>
   <nav class="nav container" aria-label="Primary navigation">
-    <a class="logo" href="/" aria-label="VMG Painting & Remodeling home">VMG Painting & Remodeling</a>
-    <input id="menu-toggle" class="menu-toggle" type="checkbox" aria-label="Toggle navigation" />
-    <label class="menu-button" for="menu-toggle">Menu</label>
-    <div class="nav-links">
+    <a class="logo" href="/" aria-label="VMG Painting & Remodeling home">VMG Painting <span>&amp; Remodeling</span></a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav-links">
+      <span class="menu-icon" aria-hidden="true"></span>
+      Menu
+    </button>
+    <div class="nav-links" id="site-nav-links">
       {primaryNav.slice(0, 2).map((item) => <a href={item.href}>{item.label}</a>)}
       <details class="services-menu">
         <summary>Services</summary>
@@ -27,19 +29,40 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
         </div>
       </details>
       {primaryNav.slice(2).map((item) => <a href={item.href}>{item.label}</a>)}
+      <a class="nav-phone" href={`tel:${site.tel}`}>{site.phoneDisplay}</a>
       <FilloutEstimateButton className="nav-cta-wrap" />
     </div>
   </nav>
 </header>
 
+<script>
+  const button = document.querySelector<HTMLButtonElement>(".menu-button");
+  const links = document.getElementById("site-nav-links");
+  button?.addEventListener("click", () => {
+    const open = button.getAttribute("aria-expanded") === "true";
+    button.setAttribute("aria-expanded", String(!open));
+    links?.classList.toggle("open", !open);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && button?.getAttribute("aria-expanded") === "true") {
+      button.setAttribute("aria-expanded", "false");
+      links?.classList.remove("open");
+      button.focus();
+    }
+  });
+</script>
+
 <style>
   .site-header { position: sticky; top: 0; z-index: 50; background: var(--white); box-shadow: 0 8px 12px rgba(36,32,24,.08); }
   .topbar { background: var(--charcoal); color: rgba(255,255,255,.82); font-size: .86rem; }
   .topbar-inner { min-height: 38px; display: flex; gap: 22px; align-items: center; justify-content: space-between; }
+  .topbar a:hover, .topbar a:focus-visible { color: var(--gold); }
   .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
   .logo { font-size: 1.16rem; font-weight: 900; color: var(--ink); max-width: 270px; line-height: 1.15; }
+  .logo span { color: var(--gold-dark); }
   .nav-links { display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: .92rem; }
   .nav-links a:hover, .nav-links a:focus-visible { color: var(--gold-dark); }
+  .nav-phone { white-space: nowrap; }
   .nav-cta-wrap { align-items: center; }
   .services-menu { position: relative; }
   .services-menu summary { list-style: none; cursor: pointer; }
@@ -50,17 +73,33 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
   .services-panel a { margin: 0; padding: 10px 12px; border-radius: 8px; line-height: 1.2; color: var(--ink); }
   .services-panel a:hover, .services-panel a:focus-visible { background: var(--cream); color: var(--ink); }
   .services-panel .all-services { color: var(--gold-dark); }
-  .menu-toggle, .menu-button { display: none; }
+  .menu-button { display: none; }
   @media (max-width: 920px) {
-    .topbar { display: none; }
-    .menu-button { display: inline-flex; background: var(--gold); border-radius: 999px; padding: 10px 16px; font-weight: 900; }
-    .menu-toggle { position: absolute; opacity: 0; }
+    .topbar-inner { justify-content: center; }
+    .topbar-inner a:first-child, .topbar-inner span { display: none; }
+    .menu-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--gold);
+      color: #1f1a12;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .menu-icon { display: inline-block; width: 16px; height: 2px; background: currentColor; position: relative; }
+    .menu-icon::before, .menu-icon::after { content: ""; position: absolute; left: 0; width: 16px; height: 2px; background: currentColor; }
+    .menu-icon::before { top: -5px; }
+    .menu-icon::after { top: 5px; }
     .nav { flex-wrap: wrap; min-height: 68px; }
     .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; padding: 0 0 18px; }
-    .menu-toggle:checked ~ .nav-links { display: flex; }
-    .nav-links a { padding: 8px 0; }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 10px 0; }
     .services-panel { position: static; width: 100%; margin-top: 8px; box-shadow: none; }
     .services-panel a { padding: 11px 12px; }
+    .nav-phone { padding: 10px 0; }
     .nav-cta-wrap { width: 100%; justify-content: center; }
   }
 </style>

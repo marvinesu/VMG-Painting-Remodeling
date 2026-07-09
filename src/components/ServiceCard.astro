@@ -1,14 +1,20 @@
 ---
-interface Props { title: string; text: string; href: string; image: string; }
-const { title, text, href, image } = Astro.props;
+interface Props {
+  title: string;
+  text: string;
+  href: string;
+  image: string;
+  imageAlt?: string;
+}
+const { title, text, href, image, imageAlt } = Astro.props;
 ---
 <article class="service-card">
   <a href={href}>
-    <img src={image} alt={`${title} service example`} loading="lazy" width="520" height="420" />
+    <img src={image} alt={imageAlt ?? `${title} project by VMG Painting & Remodeling`} loading="lazy" decoding="async" width="520" height="420" />
     <div class="service-body">
       <h3>{title}</h3>
       <p>{text}</p>
-      <span>Learn More</span>
+      <span class="service-link">Learn More <span aria-hidden="true">&rarr;</span></span>
     </div>
   </a>
 </article>
@@ -16,5 +22,11 @@ const { title, text, href, image } = Astro.props;
   .service-card { border-radius: var(--radius); overflow: hidden; background: var(--white); box-shadow: var(--shadow); transition: transform 160ms cubic-bezier(.23,1,.32,1); }
   .service-card img { width: 100%; height: clamp(210px, 24vw, 260px); object-fit: cover; }
   .service-body { padding: 22px; border: 1px solid var(--line); border-top: 0; min-height: 190px; display: grid; align-content: start; }
-  .service-body span { color: var(--gold-dark); font-weight: 900; }
+  .service-body h3 { color: var(--ink); }
+  .service-body p { margin-bottom: 12px; }
+  .service-link { color: var(--gold-dark); font-weight: 900; }
+  .service-card a:hover .service-link, .service-card a:focus-visible .service-link { text-decoration: underline; text-underline-offset: 3px; }
+  @media (hover: hover) and (pointer: fine) {
+    .service-card:hover { transform: translateY(-3px); }
+  }
 </style>

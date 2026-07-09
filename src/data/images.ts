@@ -1,50 +1,55 @@
-export const images = {
+export type SiteImage = {
+  src: string;
+  alt: string;
+};
+
+export const images: Record<string, SiteImage[]> = {
   painting: [
-    "/images/painting-exterior-residential.webp",
-    "/images/painting-interior-painting-services.webp",
-    "/images/painting-kitchen-cabinet-painting.webp",
-    "/images/painting-house-painters.webp",
-    "/images/painting-deck-staining-services.webp",
-    "/images/painting-trim-and-baseboard-painting.webp"
+    { src: "/images/painting-exterior-residential.webp", alt: "Freshly painted exterior of a two-story Washington home with crisp trim lines" },
+    { src: "/images/painting-interior-painting-services.webp", alt: "Interior living space with smooth, professionally painted walls" },
+    { src: "/images/painting-kitchen-cabinet-painting.webp", alt: "Kitchen cabinets refinished with a clean painted factory-style finish" },
+    { src: "/images/painting-house-painters.webp", alt: "House exterior repainted with durable weather-resistant coating" },
+    { src: "/images/painting-deck-staining-services.webp", alt: "Wood deck boards protected with fresh stain" },
+    { src: "/images/painting-trim-and-baseboard-painting.webp", alt: "Painted trim and baseboards with sharp, clean edges" }
   ],
   siding: [
-    "/images/siding-modern-siding-installation.webp",
-    "/images/siding-classic-lap-siding.webp",
-    "/images/siding-siding1.webp",
-    "/images/siding-siding3.webp",
-    "/images/siding-siding6.webp",
-    "/images/siding-siding8.webp"
+    { src: "/images/siding-modern-siding-installation.webp", alt: "Modern siding installation on a residential home exterior" },
+    { src: "/images/siding-classic-lap-siding.webp", alt: "Classic horizontal lap siding installed on a family home" },
+    { src: "/images/siding-siding1.webp", alt: "New siding panels protecting a home from Northwest weather" },
+    { src: "/images/siding-siding3.webp", alt: "Replaced siding with coordinated exterior trim details" },
+    { src: "/images/siding-siding6.webp", alt: "Home exterior refreshed with new siding and clean lines" },
+    { src: "/images/siding-siding8.webp", alt: "Finished siding project improving curb appeal" }
   ],
   roofing: [
-    "/images/roofing-roof-repair.webp",
-    "/images/roofing-metal-roofing.webp",
-    "/images/roofing-roof-inspection.webp",
-    "/images/roofing-flat-roof.webp",
-    "/images/roofing-gutter-replacement.webp",
-    "/images/roofing-skylight-installation.webp"
+    { src: "/images/roofing-roof-repair.webp", alt: "Roof repair work on an asphalt shingle residential roof" },
+    { src: "/images/roofing-metal-roofing.webp", alt: "Standing seam metal roofing installed on a home" },
+    { src: "/images/roofing-roof-inspection.webp", alt: "Contractor reviewing the condition of a residential roof" },
+    { src: "/images/roofing-flat-roof.webp", alt: "Low-slope flat roof section on a residential structure" },
+    { src: "/images/roofing-gutter-replacement.webp", alt: "New gutters installed along a residential roofline" },
+    { src: "/images/roofing-skylight-installation.webp", alt: "Skylight installed and flashed into a shingle roof" }
   ],
   windows: [
-    "/images/windows-window-installation.webp",
-    "/images/windows-window-installation2.webp",
-    "/images/windows-sliding-glass-door.webp",
-    "/images/windows-casement-windows.webp",
-    "/images/windows-windows.webp",
-    "/images/windows-sliding-glass-door2.webp"
+    { src: "/images/windows-window-installation.webp", alt: "New energy-efficient window installed with clean trim work" },
+    { src: "/images/windows-window-installation2.webp", alt: "Replacement window installation in a residential wall opening" },
+    { src: "/images/windows-sliding-glass-door.webp", alt: "Sliding glass door opening onto an outdoor living area" },
+    { src: "/images/windows-casement-windows.webp", alt: "Casement windows bringing natural light into a home" },
+    { src: "/images/windows-windows.webp", alt: "Row of new windows on a freshly finished home exterior" },
+    { src: "/images/windows-sliding-glass-door2.webp", alt: "Modern sliding glass door with full-height glass panels" }
   ],
   decks: [
-    "/images/decks-cedar-deck-with-glass-railings.webp",
-    "/images/decks-composite-decking.webp",
-    "/images/decks-custom-deck-with-curves.webp",
-    "/images/decks-multi-level-decking.webp",
-    "/images/decks-pergola-addition.webp",
-    "/images/decks-pool-deck.webp"
+    { src: "/images/decks-cedar-deck-with-glass-railings.webp", alt: "Cedar deck with glass panel railings overlooking the yard" },
+    { src: "/images/decks-composite-decking.webp", alt: "Low-maintenance composite deck boards on a backyard deck" },
+    { src: "/images/decks-custom-deck-with-curves.webp", alt: "Custom curved deck design built for outdoor living" },
+    { src: "/images/decks-multi-level-decking.webp", alt: "Multi-level deck with stairs connecting outdoor spaces" },
+    { src: "/images/decks-pergola-addition.webp", alt: "Deck with a wood pergola providing shade" },
+    { src: "/images/decks-pool-deck.webp", alt: "Deck built around a backyard pool area" }
   ],
   remodeling: [
-    "/images/remodeling-open-concept-kitchen.webp",
-    "/images/remodeling-bathroom.webp",
-    "/images/remodeling-kitchen.webp",
-    "/images/remodeling-basement.webp",
-    "/images/remodeling-home-office-addition.webp",
-    "/images/remodeling-laundry-room-remodel.webp"
+    { src: "/images/remodeling-open-concept-kitchen.webp", alt: "Open-concept kitchen after a full remodel" },
+    { src: "/images/remodeling-bathroom.webp", alt: "Updated bathroom with modern fixtures and tile" },
+    { src: "/images/remodeling-kitchen.webp", alt: "Remodeled kitchen with new cabinets and countertops" },
+    { src: "/images/remodeling-basement.webp", alt: "Finished basement converted into comfortable living space" },
+    { src: "/images/remodeling-home-office-addition.webp", alt: "Home office space added during a remodel" },
+    { src: "/images/remodeling-laundry-room-remodel.webp", alt: "Laundry room remodel with new cabinets and counters" }
   ]
 };

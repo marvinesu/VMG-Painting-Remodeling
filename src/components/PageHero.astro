@@ -1,11 +1,26 @@
 ---
-interface Props { title: string; text?: string; image?: string; }
-const { title, text = "", image } = Astro.props;
+interface Props {
+  title: string;
+  text?: string;
+  image?: string;
+  /** Optional breadcrumb trail rendered above the H1 (last item is the current page). */
+  crumbs?: { label: string; href?: string }[];
+}
+const { title, text = "", image, crumbs = [] } = Astro.props;
 const bg = image ? `linear-gradient(rgba(34,29,21,.78), rgba(34,29,21,.78)), url('${image}') center/cover` : undefined;
 ---
 <section class="page-hero" style={bg ? `background:${bg}` : undefined}>
   <div class="container">
-    <span class="eyebrow">VMG Painting & Remodeling</span>
+    {crumbs.length > 0 && (
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          {crumbs.map((crumb) => (
+            <li>{crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>}</li>
+          ))}
+        </ol>
+      </nav>
+    )}
+    <span class="eyebrow">VMG Painting &amp; Remodeling</span>
     <h1>{title}</h1>
     {text && <p class="lead">{text}</p>}
   </div>

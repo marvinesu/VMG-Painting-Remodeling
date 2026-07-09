@@ -5,17 +5,80 @@ import FilloutContactForm from "../components/FilloutContactForm.astro";
 import CTASection from "../components/CTASection.astro";
 import { images } from "../data/images";
 import { site } from "../data/site";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+    { "@type": "ListItem", position: 2, name: "Contact Us", item: `${site.url}/contact-us` }
+  ]
+};
 ---
-<BaseLayout title="Contact VMG Painting & Remodeling LLC | Free Estimate in Roy, WA" description="Contact VMG Painting & Remodeling LLC for painting, siding, roofing, window installation, deck, and remodeling estimates in Western Washington." path="/contact-us">
-  <PageHero title="Contact Us" text="Tell us what you want to improve and we'll help you take the next step with a free estimate." image={images.windows[0]} />
+<BaseLayout
+  title="Contact VMG Painting & Remodeling LLC in Roy, WA | (253) 754-4871"
+  description="Contact VMG Painting & Remodeling LLC for painting, siding, roofing, window, deck, and remodeling estimates. Call (253) 754-4871 or send your project details online."
+  path="/contact-us"
+  image={images.windows[0].src}
+  schema={[breadcrumbSchema]}
+>
+  <PageHero
+    title="Let's Talk About Your Home"
+    text="Tell us what you want to improve and we'll help you take the next step — starting with a free estimate."
+    image={images.windows[0].src}
+    crumbs={[{ label: "Home", href: "/" }, { label: "Contact Us" }]}
+  />
   <section class="section">
-    <div class="container grid grid-3">
-      <div class="card pad"><h3>Mailing Address</h3><p>{site.name}<br />{site.address}</p></div>
-      <div class="card pad"><h3>Quick Contact</h3><p><a href={`tel:${site.tel}`}>{site.phoneDisplay}</a><br /><a href="tel:+12069448143">{site.secondaryPhoneDisplay}</a></p></div>
-      <div class="card pad"><h3>Support Email</h3><p><a href={`mailto:${site.email}`}>{site.email}</a></p></div>
+    <div class="container">
+      <h2 class="visually-hidden">Contact Information</h2>
+      <div class="grid grid-3">
+        <div class="card pad">
+          <h3>Call or Text</h3>
+          <p>
+            <a class="contact-link" href={`tel:${site.tel}`}>{site.phoneDisplay}</a><br />
+            <a class="contact-link" href="tel:+12069448143">{site.secondaryPhoneDisplay}</a>
+          </p>
+          <p class="note">The fastest way to reach the team.</p>
+        </div>
+        <div class="card pad">
+          <h3>Email</h3>
+          <p><a class="contact-link" href={`mailto:${site.email}`}>{site.email}</a></p>
+          <p class="note">Send photos and project details any time.</p>
+        </div>
+        <div class="card pad">
+          <h3>Address</h3>
+          <address><p>{site.name}<br />{site.address}</p></address>
+          <p class="note">WA Contractor Registration #{site.license}</p>
+        </div>
+      </div>
     </div>
   </section>
-  <section class="section alt"><div class="container split"><div><span class="eyebrow">Contact Form</span><h2>Send Us Your Project Details</h2><p>Need painting, siding, roofing, windows, a deck, or remodeling work? Send the basic details and VMG will follow up as soon as possible.</p></div><div class="card pad"><FilloutContactForm /></div></div></section>
-  <section class="section"><div class="container"><h2>Service Area</h2><p class="lead">VMG proudly serves homeowners and property owners across Thurston County, Pierce County, King County, Snohomish County, and nearby Washington communities.</p></div></section>
-  <CTASection title="Prefer to Talk Now?" text="Call VMG Painting & Remodeling LLC directly and speak with our team about your project." />
+  <section class="section alt">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Contact Form</span>
+        <h2>Send Us Your Project Details</h2>
+        <p>Need painting, siding, roofing, windows, a deck, or remodeling work? Send the basic details — what you want done, roughly where you're located, and any timing — and VMG will follow up as soon as possible.</p>
+        <ul class="check-list">
+          <li>Free, no-obligation estimates</li>
+          <li>Direct communication with the owners</li>
+          <li>Honest recommendations, no pressure</li>
+        </ul>
+      </div>
+      <div class="card pad"><FilloutContactForm /></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <h2>Our Service Area</h2>
+      <p class="lead">From our home base in Roy, WA, VMG proudly serves homeowners and property owners across Thurston County, Pierce County, King County, Snohomish County, and nearby Washington communities.</p>
+    </div>
+  </section>
+  <CTASection title="Prefer to Talk Now?" text="Call VMG Painting & Remodeling LLC directly and speak with our team about your project — no phone trees, no runaround." />
 </BaseLayout>
+
+<style>
+  .contact-link { color: var(--gold-dark); font-weight: 800; }
+  .contact-link:hover, .contact-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+  address { font-style: normal; }
+</style>
