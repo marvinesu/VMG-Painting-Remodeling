@@ -25,4 +25,15 @@ import { site } from "../data/site";
     transition: transform 160ms cubic-bezier(.23,1,.32,1), background 160ms ease;
   }
   .floating-call:hover, .floating-call:focus-visible { transform: translateY(-2px); background: #f0b650; }
+  @media (max-width: 520px) {
+    .floating-call {
+      right: 12px;
+      bottom: 12px;
+      width: 52px;
+      height: 52px;
+      justify-content: center;
+      padding: 0;
+    }
+    .floating-call span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  }
 </style>

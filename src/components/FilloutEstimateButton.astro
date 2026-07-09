@@ -24,4 +24,23 @@ const { className = "" } = Astro.props;
     display: inline-flex;
     width: fit-content;
   }
+
+  .fillout-popup-button :global(button) {
+    min-height: 46px !important;
+    padding: 12px 20px !important;
+    border: 2px solid transparent !important;
+    border-radius: 999px !important;
+    background: var(--gold) !important;
+    color: #1f1a12 !important;
+    box-shadow: none !important;
+    font: inherit !important;
+    font-weight: 800 !important;
+    transition: transform 160ms cubic-bezier(.23,1,.32,1), background 160ms ease !important;
+  }
+
+  .fillout-popup-button :global(button:hover),
+  .fillout-popup-button :global(button:focus-visible) {
+    background: #f0b650 !important;
+    transform: translateY(-1px);
+  }
 </style>

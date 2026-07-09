@@ -29,6 +29,7 @@ body {
   background: var(--paper);
   line-height: 1.6;
 }
+a { text-underline-offset: 3px; }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; height: auto; }
 button, input, textarea, select { font: inherit; }
@@ -76,6 +77,8 @@ button, input, textarea, select { font: inherit; }
 .section.alt { background: var(--cream); }
 .section.dark { background: var(--charcoal); color: var(--white); }
 .eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
   color: var(--gold-dark);
   font-size: 0.78rem;
   font-weight: 800;
@@ -118,7 +121,7 @@ p { text-wrap: pretty; }
 .btn.outline { background: transparent; border-color: var(--gold); color: var(--ink); }
 .card {
   background: var(--white);
-  border: 1px solid var(--line);
+  border: 0;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow: hidden;
@@ -183,6 +186,13 @@ details.card p { margin: 12px 0 0; }
   .image-stack { min-height: auto; }
   .image-stack img:first-child, .image-stack img:last-child { position: static; width: 100%; height: auto; max-height: 360px; object-fit: cover; border: 0; margin-top: 12px; }
   .form-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .container { width: min(100% - 24px, 1120px); }
+  h1 { font-size: clamp(2.15rem, 11vw, 3.2rem); }
+  h2 { font-size: clamp(1.8rem, 9vw, 2.55rem); }
+  .button-row .btn { width: 100%; }
 }
 
 @media (hover: hover) and (pointer: fine) {
