@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run optimize:images && astro build",
+    "build": "astro build",
     "start": "astro preview --host 0.0.0.0",
+    "build:with-images": "npm run optimize:images && astro build",
     "optimize:images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {

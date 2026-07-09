@@ -10,13 +10,15 @@ npm run build
 npm start
 ```
 
+Use `npm run build:with-images` only after adding new source images and regenerating optimized assets.
+
 ## Hostinger Deployment
 
 Use Hostinger static website or Git deployment settings:
 
 - Build command: `npm run build`
 - Output directory: `dist`
-- Entry file: none
+- Entry file: leave blank
 - Node version: 20+ recommended
 
 Upload or deploy the contents of `dist` to the site root for `vmgpaintingremodeling.com`.
