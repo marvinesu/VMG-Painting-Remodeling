@@ -5,6 +5,7 @@ import GalleryGrid from "../../components/GalleryGrid.astro";
 import CTASection from "../../components/CTASection.astro";
 import FilloutEstimateForm from "../../components/FilloutEstimateForm.astro";
 import { services, getService } from "../../data/services";
+import { srcsetFor, SPLIT_SIZES } from "../../data/images";
 import { site } from "../../data/site";
 
 export function getStaticPaths() {
@@ -56,6 +57,7 @@ const faqSchema = {
   path={`/services/${service.slug}`}
   image={service.image.src}
   schema={[serviceSchema, breadcrumbSchema, faqSchema]}
+  preloadImage={service.image.src}
 >
   <PageHero
     title={service.title}
@@ -71,7 +73,7 @@ const faqSchema = {
         <p class="lead">{service.intro}</p>
         <div class="button-row"><a class="btn" href="/free-estimate">Get a Free Estimate</a><a class="btn outline" href={`tel:${site.tel}`}>Call {site.phoneDisplay}</a></div>
       </div>
-      <img class="card-image" src={service.image.src} alt={service.image.alt} width="720" height="430" loading="lazy" decoding="async" />
+      <img class="card-image" src={service.image.src} srcset={srcsetFor(service.image.src)} sizes={SPLIT_SIZES} alt={service.image.alt} width="720" height="430" loading="lazy" decoding="async" />
     </div>
   </section>
   <section class="section alt compact">
