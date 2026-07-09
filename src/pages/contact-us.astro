@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import FilloutContactForm from "../components/FilloutContactForm.astro";
+import CTASection from "../components/CTASection.astro";
+import { images } from "../data/images";
+import { site } from "../data/site";
+---
+<BaseLayout title="Contact VMG Painting & Remodeling LLC | Free Estimate in Roy, WA" description="Contact VMG Painting & Remodeling LLC for painting, siding, roofing, window installation, deck, and remodeling estimates in Western Washington." path="/contact-us">
+  <PageHero title="Contact Us" text="Tell us what you want to improve and we'll help you take the next step with a free estimate." image={images.windows[0]} />
+  <section class="section">
+    <div class="container grid grid-3">
+      <div class="card pad"><h3>Mailing Address</h3><p>{site.name}<br />{site.address}</p></div>
+      <div class="card pad"><h3>Quick Contact</h3><p><a href={`tel:${site.tel}`}>{site.phoneDisplay}</a><br /><a href="tel:+12069448143">{site.secondaryPhoneDisplay}</a></p></div>
+      <div class="card pad"><h3>Support Email</h3><p><a href={`mailto:${site.email}`}>{site.email}</a></p></div>
+    </div>
+  </section>
+  <section class="section alt"><div class="container split"><div><span class="eyebrow">Contact Form</span><h2>Send Us Your Project Details</h2><p>Need painting, siding, roofing, windows, a deck, or remodeling work? Send the basic details and VMG will follow up as soon as possible.</p></div><div class="card pad"><FilloutContactForm /></div></div></section>
+  <section class="section"><div class="container"><h2>Service Area</h2><p class="lead">VMG proudly serves homeowners and property owners across Thurston County, Pierce County, King County, Snohomish County, and nearby Washington communities.</p></div></section>
+  <CTASection title="Prefer to Talk Now?" text="Call VMG Painting & Remodeling LLC directly and speak with our team about your project." />
+</BaseLayout>

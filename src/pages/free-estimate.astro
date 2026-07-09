@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import FilloutEstimateForm from "../components/FilloutEstimateForm.astro";
+import CTASection from "../components/CTASection.astro";
+import { images } from "../data/images";
+---
+<BaseLayout title="Free Estimate | VMG Painting & Remodeling LLC" description="Request a free estimate from VMG Painting & Remodeling LLC for painting, siding, roofing, windows, decks, and remodeling services." path="/free-estimate">
+  <PageHero title="Free Estimate" text="Get a clear estimate from a contractor with 30+ years of experience." image={images.roofing[0]} />
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Request Your Quote</span>
+        <h2>Tell VMG What You Want to Improve</h2>
+        <p>Whether you already know exactly what you need or you are still comparing options, VMG can help you review the project and understand the next step.</p>
+        <ul class="check-list"><li>We review your request</li><li>We contact you</li><li>We prepare a clear estimate</li><li>You decide when to start</li></ul>
+      </div>
+      <div class="card pad"><FilloutEstimateForm /></div>
+    </div>
+  </section>
+  <CTASection title="Need a Faster Answer?" text="Call VMG Painting & Remodeling LLC directly and speak with our team about your project." />
+</BaseLayout>

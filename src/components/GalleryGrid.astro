@@ -1,0 +1,14 @@
+---
+interface Props { images: string[]; title?: string; }
+const { images, title = "Project Gallery" } = Astro.props;
+---
+<div class="gallery" aria-label={title}>
+  {images.map((image, index) => (
+    <img src={image} alt={`${title} image ${index + 1}`} loading="lazy" width="520" height="390" />
+  ))}
+</div>
+<style>
+  .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .gallery img { width: 100%; height: 260px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
+  @media (max-width: 760px) { .gallery { grid-template-columns: 1fr; } }
+</style>

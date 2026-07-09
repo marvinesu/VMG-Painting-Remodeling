@@ -1,0 +1,18 @@
+{
+  "name": "vmg-painting-remodeling",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run optimize:images && astro build",
+    "start": "astro preview --host 0.0.0.0",
+    "optimize:images": "node scripts/optimize-images.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.10.2",
+    "sharp": "^0.34.2"
+  },
+  "devDependencies": {}
+}

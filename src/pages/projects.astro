@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import GalleryGrid from "../components/GalleryGrid.astro";
+import CTASection from "../components/CTASection.astro";
+import { services } from "../data/services";
+import { images } from "../data/images";
+---
+<BaseLayout title="Projects | VMG Painting & Remodeling LLC" description="View project categories from VMG Painting & Remodeling LLC, including painting, siding, roofing, windows, decks, and remodeling work." path="/projects">
+  <PageHero title="Projects" text="Explore project categories and see how VMG helps homeowners improve their properties." image={images.decks[0]} />
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Project Categories</span>
+      <h2>Recent Work, Organized by Service</h2>
+      <div class="grid grid-3">{services.map((service) => <a class="card pad" href={`/services/${service.slug}`}><h3>{service.title}</h3><p>{service.short}</p></a>)}</div>
+    </div>
+  </section>
+  <section class="section alt"><div class="container"><GalleryGrid images={[...images.painting.slice(0,2), ...images.siding.slice(0,2), ...images.roofing.slice(0,2), ...images.windows.slice(0,2), ...images.decks.slice(0,2), ...images.remodeling.slice(0,2)]} title="VMG project gallery" /></div></section>
+  <CTASection title="Have a Similar Project in Mind?" />
+</BaseLayout>

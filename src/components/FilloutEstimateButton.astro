@@ -1,0 +1,27 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+<div class={`fillout-popup-button ${className}`}>
+  <div
+    data-fillout-id="xeVye6EX7Mus"
+    data-fillout-embed-type="popup"
+    data-fillout-button-text="Request a Free Estimate"
+    data-fillout-dynamic-resize
+    data-fillout-button-size="medium"
+    data-fillout-inherit-parameters
+    data-fillout-popup-size="medium"
+  >
+  </div>
+  <script src="https://server.fillout.com/embed/v1/"></script>
+</div>
+
+<style>
+  .fillout-popup-button {
+    display: inline-flex;
+    width: fit-content;
+  }
+</style>

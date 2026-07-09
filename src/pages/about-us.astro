@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import CTASection from "../components/CTASection.astro";
+import { images } from "../data/images";
+import { site } from "../data/site";
+---
+<BaseLayout title="About VMG Painting & Remodeling LLC | Family-Owned Contractor in Roy, WA" description="Learn about VMG Painting & Remodeling LLC, a family-owned painting and remodeling contractor serving Thurston, Pierce, King, and Snohomish County." path="/about-us">
+  <PageHero title="About VMG Painting & Remodeling LLC" text="Built on 30+ years of experience, family values, and pride in the work." image={images.remodeling[0]} />
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Our Story</span>
+        <h2>Built on Experience, Family Values, and Pride in the Work</h2>
+        <p>Victor Gomez has spent more than 30 years in residential and commercial construction. Before starting his own company, Victor built his career in the field and became a respected foreman for a well-known construction company in Washington State.</p>
+        <p>After years of hands-on construction experience, Victor launched VMG Painting & Remodeling LLC to serve homeowners directly with dependable craftsmanship, honest communication, and quality work that helps local families improve and protect their homes.</p>
+        <p>Today, Victor's wife, Elizabeth Gomez, helps with the administrative side of the business. Together, they are building VMG as a family-owned company rooted in service, trust, and long-term relationships.</p>
+      </div>
+      <div class="image-stack"><img src={images.painting[1]} alt="Interior painting workmanship" /><img src={images.siding[0]} alt="Siding workmanship" /></div>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container">
+      <span class="eyebrow">Mission & Values</span>
+      <h2>Practical Solutions and Clear Communication</h2>
+      <div class="grid grid-3">
+        {["Quality Workmanship", "Honest Communication", "Family-Owned Service", "Community Commitment", "Practical Solutions", "Long-Term Relationships"].map((value) => <div class="card pad"><h3>{value}</h3><p>VMG focuses on dependable work, realistic recommendations, and respectful service from the first call through the final walkthrough.</p></div>)}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Credentials</span>
+      <h2>Washington-Registered Contractor</h2>
+      <p class="lead">VMG Painting & Remodeling LLC is based in Roy, WA and operates as a Washington-registered construction contractor. Contractor Registration #{site.license}.</p>
+      <p class="note">Always verify contractor registration, bond, insurance, and current status directly with Washington L&I before hiring any contractor.</p>
+    </div>
+  </section>
+  <CTASection title="Talk With VMG About Your Home Improvement Project" />
+</BaseLayout>

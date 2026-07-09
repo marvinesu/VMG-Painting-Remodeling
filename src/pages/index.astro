@@ -1,0 +1,97 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import CTASection from "../components/CTASection.astro";
+import GalleryGrid from "../components/GalleryGrid.astro";
+import FilloutEstimateForm from "../components/FilloutEstimateForm.astro";
+import { services } from "../data/services";
+import { images } from "../data/images";
+import { site } from "../data/site";
+---
+<BaseLayout title="Painting & Remodeling Contractor in Roy, WA | VMG Painting & Remodeling LLC" description="VMG Painting & Remodeling LLC provides painting, siding, roofing, windows, decks, and remodeling services across Thurston, Pierce, King, and Snohomish County. Call for a free estimate." path="/">
+  <Hero eyebrow="Welcome to VMG Painting & Remodeling LLC" title="Quality Painting, Remodeling & Exterior Upgrades Built to Last" text="Your home should look sharp, feel solid, and be protected from Washington weather. VMG helps homeowners and property owners upgrade their spaces with professional painting, siding, roofing, windows, decks, and remodeling services backed by over 30 years of construction experience." image={images.painting[0]} />
+  <section class="section">
+    <div class="container pill-row">
+      <span class="pill">30+ Years Experience</span><span class="pill">Family-Owned Company</span><span class="pill">WA Registration #{site.license}</span><span class="pill">Residential & Commercial</span>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Welcome to VMG</span>
+        <h2>Skilled Craftsmanship, Clear Communication, and Real Construction Experience</h2>
+        <p>A fresh coat of paint can change the way a home feels. New siding can protect it. A better deck can bring the family outside again. A smart remodel can make the space finally work the way it should.</p>
+        <p>Owner Victor Gomez built his career in residential and commercial construction before starting VMG to serve local homeowners with honest, detail-focused work. Today, Victor and Elizabeth Gomez continue growing the company as a family-run business built on trust, quality, and service.</p>
+        <ul class="check-list"><li>Interior and exterior painting</li><li>Siding, roofing, and window installation</li><li>Wood, composite, and custom deck builds</li><li>Remodeling services for more functional spaces</li></ul>
+        <div class="button-row"><a class="btn" href="/free-estimate">Request Your Free Estimate</a></div>
+      </div>
+      <div class="image-stack"><img src={images.remodeling[0]} alt="Open concept remodeling project" /><img src={images.decks[0]} alt="Custom deck project" /></div>
+    </div>
+  </section>
+  <section class="section dark">
+    <div class="container">
+      <span class="eyebrow">Our Services</span>
+      <h2>Services We're Offering</h2>
+      <div class="grid grid-3">
+        {services.map((service) => <ServiceCard title={service.title} text={service.short} href={`/services/${service.slug}`} image={service.image} />)}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Why Choose Us</span>
+        <h2>Quality Work Is Built Before the First Brushstroke, Board, or Shingle Goes Up</h2>
+        <p>The difference between work that looks good for a month and work that holds up for years usually comes down to preparation. VMG brings a contractor's eye to every project, looking at the whole home, the conditions, the materials, and the final goal.</p>
+      </div>
+      <ul class="check-list"><li>Over 30 years of construction experience</li><li>Family-owned and locally operated</li><li>Washington contractor registration #{site.license}</li><li>Honest estimates and practical recommendations</li><li>Service across Thurston, Pierce, King, and Snohomish County</li></ul>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container">
+      <span class="eyebrow">Our Process</span>
+      <h2>A Simple Process From First Call to Final Walkthrough</h2>
+      <div class="grid grid-4">
+        {["Request Your Estimate", "Review the Scope", "Get a Clear Proposal", "We Complete the Work"].map((step, i) => <div class="card pad"><h3>{i + 1}. {step}</h3><p>{["Tell us what you need help with and we'll schedule a review.", "We look at the condition, goals, and project priorities.", "You receive a straightforward estimate and next steps.", "Our team handles the project with careful workmanship."][i]}</p></div>)}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Our Projects</span>
+      <h2>Recent Work, Real Improvements</h2>
+      <p class="lead">From fresh exterior paint to updated decks, siding, roofing, windows, and remodels, our work is focused on making homes stronger, cleaner, and more enjoyable to live in.</p>
+      <GalleryGrid images={[images.painting[0], images.siding[0], images.roofing[0], images.windows[0], images.decks[0], images.remodeling[0]]} title="VMG projects" />
+      <div class="button-row"><a class="btn outline" href="/projects">View Projects</a></div>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container grid grid-3">
+      {["Victor and his team were professional, respectful, and detail-oriented. They explained the work clearly and made sure everything was finished the right way.", "VMG communicated well, showed up as scheduled, and helped us understand our options before the work started.", "The finished project looked clean and solid. We appreciated the practical recommendations and attention to detail."].map((quote) => <blockquote class="card pad"><p>"{quote}"</p></blockquote>)}
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">FAQ</span>
+      <h2>Common Questions</h2>
+      <div class="grid grid-2">
+        <details class="card pad" open><summary>Do you provide free estimates?</summary><p>Yes. VMG provides free estimates for painting, siding, roofing, window installation, deck, and remodeling projects.</p></details>
+        <details class="card pad"><summary>What areas do you serve?</summary><p>VMG serves Thurston County, Pierce County, King County, Snohomish County, and nearby Washington communities.</p></details>
+        <details class="card pad"><summary>Are you registered in Washington?</summary><p>VMG operates under Washington Contractor Registration #{site.license}. Please verify current status with Washington L&I before hiring any contractor.</p></details>
+        <details class="card pad"><summary>Who owns VMG?</summary><p>VMG Painting & Remodeling LLC is owned by Victor Gomez. Elizabeth Gomez helps with administrative and business support.</p></details>
+      </div>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Free Estimate</span>
+        <h2>Request Your Quote</h2>
+        <p class="lead">Tell VMG what you want to improve and our team will follow up about your painting, siding, roofing, window, deck, or remodeling project.</p>
+      </div>
+      <div class="card pad"><FilloutEstimateForm /></div>
+    </div>
+  </section>
+  <CTASection title="Ready to Talk About Your Project?" text="Whether you need paint, siding, roofing, windows, a custom deck, or a remodel, VMG Painting & Remodeling LLC is ready to help." />
+</BaseLayout>

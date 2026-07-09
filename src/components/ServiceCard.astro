@@ -1,0 +1,20 @@
+---
+interface Props { title: string; text: string; href: string; image: string; }
+const { title, text, href, image } = Astro.props;
+---
+<article class="service-card">
+  <a href={href}>
+    <img src={image} alt={`${title} service example`} loading="lazy" width="520" height="420" />
+    <div class="service-body">
+      <h3>{title}</h3>
+      <p>{text}</p>
+      <span>Learn More</span>
+    </div>
+  </a>
+</article>
+<style>
+  .service-card { border-radius: var(--radius); overflow: hidden; background: var(--white); box-shadow: var(--shadow); }
+  .service-card img { width: 100%; height: 260px; object-fit: cover; }
+  .service-body { padding: 22px; border: 1px solid var(--line); border-top: 0; }
+  .service-body span { color: var(--gold-dark); font-weight: 900; }
+</style>

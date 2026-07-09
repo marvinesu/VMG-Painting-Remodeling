@@ -1,0 +1,12 @@
+---
+interface Props { title: string; text?: string; image?: string; }
+const { title, text = "", image } = Astro.props;
+const bg = image ? `linear-gradient(rgba(34,29,21,.78), rgba(34,29,21,.78)), url('${image}') center/cover` : undefined;
+---
+<section class="page-hero" style={bg ? `background:${bg}` : undefined}>
+  <div class="container">
+    <span class="eyebrow">VMG Painting & Remodeling</span>
+    <h1>{title}</h1>
+    {text && <p class="lead">{text}</p>}
+  </div>
+</section>

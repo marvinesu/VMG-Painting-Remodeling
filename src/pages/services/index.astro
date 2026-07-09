@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import ServiceCard from "../../components/ServiceCard.astro";
+import CTASection from "../../components/CTASection.astro";
+import { services } from "../../data/services";
+import { images } from "../../data/images";
+---
+<BaseLayout title="Painting, Siding, Roofing, Decks & Remodeling Services in WA | VMG" description="VMG Painting & Remodeling LLC offers painting, siding, roofing, window installation, decks, and remodeling services in Thurston, Pierce, King, and Snohomish County." path="/services">
+  <PageHero title="Our Services" text="Painting, siding, roofing, windows, decks, and remodeling services for Western Washington homes and properties." image={images.siding[0]} />
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">What We Do</span>
+      <h2>Home Improvement Services Backed by Construction Experience</h2>
+      <p class="lead">Whether you are repainting your home, replacing siding, repairing a roof, installing windows, building a deck, or planning a remodel, VMG brings practical construction knowledge and detail-focused workmanship to the project.</p>
+      <div class="grid grid-3">
+        {services.map((service) => <ServiceCard title={service.title} text={service.short} href={`/services/${service.slug}`} image={service.image} />)}
+      </div>
+    </div>
+  </section>
+  <CTASection title="Not Sure What Should Come First?" text="Call VMG Painting & Remodeling LLC and we'll help you review your project, prioritize the work, and understand your options." />
+</BaseLayout>

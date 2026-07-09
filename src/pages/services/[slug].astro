@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import GalleryGrid from "../../components/GalleryGrid.astro";
+import CTASection from "../../components/CTASection.astro";
+import FilloutEstimateForm from "../../components/FilloutEstimateForm.astro";
+import { services, getService } from "../../data/services";
+import { site } from "../../data/site";
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: service.slug } }));
+}
+
+const service = getService(Astro.params.slug!);
+if (!service) {
+  throw new Error(`Unknown service slug: ${Astro.params.slug}`);
+}
+const related = services.filter((item) => item.slug !== service.slug).slice(0, 3);
+---
+<BaseLayout title={service.seoTitle} description={service.description} path={`/services/${service.slug}`} image={service.image}>
+  <PageHero title={service.title} text={service.hero} image={service.image} />
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">{service.title}</span>
+        <h2>{service.hero}</h2>
+        <p class="lead">{service.intro}</p>
+        <div class="button-row"><a class="btn" href="/free-estimate">Get a Free Estimate</a><a class="btn outline" href={`tel:${site.tel}`}>Call Now</a></div>
+      </div>
+      <img class="card-image" src={service.image} alt={`${service.title} by VMG`} />
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container grid grid-3">
+      <div class="card pad"><h3>Benefits</h3><ul class="check-list">{service.benefits.map((item) => <li>{item}</li>)}</ul></div>
+      <div class="card pad"><h3>What's Included</h3><ul class="check-list">{service.included.map((item) => <li>{item}</li>)}</ul></div>
+      <div class="card pad"><h3>Why VMG</h3><ul class="check-list">{service.why.map((item) => <li>{item}</li>)}</ul></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Our Process</span>
+      <h2>Organized From Estimate to Final Walkthrough</h2>
+      <div class="grid grid-4">
+        {service.process.map((step, i) => <div class="card pad"><h3>{i + 1}. {step}</h3></div>)}
+      </div>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container">
+      <span class="eyebrow">Service Area</span>
+      <h2>{service.title} Across Western Washington</h2>
+      <p class="lead">VMG serves Thurston County, Pierce County, King County, Snohomish County, and nearby Washington communities from Roy, WA.</p>
+      <div class="button-row"><a class="btn" href="/free-estimate">Request Your Quote</a></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Gallery</span>
+      <h2>{service.title} Project Images</h2>
+      <GalleryGrid images={service.gallery} title={`${service.title} gallery`} />
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Free Estimate</span>
+        <h2>Request a {service.title} Quote</h2>
+        <p class="lead">Share a few project details and VMG will follow up about your estimate for {service.title.toLowerCase()}.</p>
+      </div>
+      <div class="card pad"><FilloutEstimateForm /></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Related Services</span>
+      <h2>Other Ways VMG Can Help</h2>
+      <div class="grid grid-3">{related.map((item) => <a class="card pad" href={`/services/${item.slug}`}><h3>{item.title}</h3><p>{item.short}</p></a>)}</div>
+    </div>
+  </section>
+  <CTASection title={`Ready for ${service.title}?`} text="Call VMG Painting & Remodeling LLC today to schedule your free estimate." />
+</BaseLayout>
+<style>
+  .card-image { width: 100%; height: 430px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
+</style>

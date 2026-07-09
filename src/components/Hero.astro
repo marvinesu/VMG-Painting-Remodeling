@@ -1,0 +1,32 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  text: string;
+  image: string;
+  primaryHref?: string;
+  secondaryHref?: string;
+}
+const { eyebrow, title, text, image, primaryHref = "/free-estimate", secondaryHref = "/services" } = Astro.props;
+---
+<section class="hero">
+  <div class="hero-bg"><img src={image} alt="" /></div>
+  <div class="container hero-inner">
+    <span class="eyebrow">{eyebrow}</span>
+    <h1>{title}</h1>
+    <p class="lead">{text}</p>
+    <div class="button-row">
+      <a class="btn" href={primaryHref}>Get a Free Estimate</a>
+      <a class="btn secondary" href={secondaryHref}>View Services</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { min-height: 720px; position: relative; display: grid; align-items: center; color: var(--white); overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: var(--charcoal); }
+  .hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(31,27,20,.88), rgba(31,27,20,.52), rgba(31,27,20,.25)); }
+  .hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-inner { position: relative; padding: 120px 0 80px; }
+  @media (max-width: 720px) { .hero { min-height: 620px; } .hero-bg::after { background: rgba(31,27,20,.76); } }
+</style>

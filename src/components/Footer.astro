@@ -1,0 +1,57 @@
+---
+import FilloutEstimateButton from "./FilloutEstimateButton.astro";
+import { services } from "../data/services";
+import { site } from "../data/site";
+---
+<footer class="footer">
+  <div class="container footer-top">
+    <a class="footer-logo" href="/">VMG Painting & Remodeling</a>
+    <FilloutEstimateButton className="footer-estimate-button" />
+  </div>
+  <div class="container footer-grid">
+    <div>
+      <h3>About</h3>
+      <p>Family-owned contractor based in Roy, WA, serving homeowners and property owners across Western Washington with painting, exterior upgrades, decks, roofing, windows, and remodeling.</p>
+    </div>
+    <div>
+      <h3>Services</h3>
+      {services.map((service) => <a href={`/services/${service.slug}`}>{service.title}</a>)}
+    </div>
+    <div>
+      <h3>Company</h3>
+      <a href="/about-us">About Us</a>
+      <a href="/services">Our Services</a>
+      <a href="/projects">Projects</a>
+      <a href="/contact-us">Contact</a>
+      <a href="/free-estimate">Free Estimate</a>
+    </div>
+    <div>
+      <h3>Contact</h3>
+      <p>{site.address}</p>
+      <a href={`tel:${site.tel}`}>{site.phoneDisplay}</a>
+      <a href={`tel:+12069448143`}>{site.secondaryPhoneDisplay}</a>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <p>WA Contractor Registration #{site.license}</p>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>Serving Thurston, Pierce, King, and Snohomish County.</span>
+    <span>Verify contractor registration, bond, and insurance status with Washington L&I before hiring any contractor.</span>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--charcoal); color: var(--white); padding: 48px 0 24px; }
+  .footer-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 34px; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .footer-logo { font-size: 1.35rem; font-weight: 900; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 34px; padding: 38px 0; }
+  .footer h3 { color: var(--white); }
+  .footer p, .footer a, .footer-bottom { color: rgba(255,255,255,.72); }
+  .footer a { display: block; margin: 9px 0; }
+  .footer-estimate-button { margin-top: 6px; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); padding-top: 20px; display: flex; justify-content: space-between; gap: 20px; font-size: .9rem; }
+  @media (max-width: 860px) {
+    .footer-top, .footer-bottom { flex-direction: column; align-items: flex-start; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+</style>

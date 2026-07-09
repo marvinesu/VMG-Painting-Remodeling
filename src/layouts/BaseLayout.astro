@@ -1,0 +1,63 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FloatingCallButton from "../components/FloatingCallButton.astro";
+import ChatbotPlaceholder from "../components/ChatbotPlaceholder.astro";
+import { site } from "../data/site";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  image?: string;
+}
+
+const { title, description, path = "/", image = "/images/painting-exterior-residential.webp" } = Astro.props;
+const canonical = new URL(path, site.url).toString();
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  name: site.name,
+  url: site.url,
+  telephone: site.phoneDisplay,
+  email: site.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "8517 311th St S",
+    addressLocality: "Roy",
+    addressRegion: "WA",
+    postalCode: "98580",
+    addressCountry: "US"
+  },
+  areaServed: site.areas,
+  identifier: `WA Contractor Registration #${site.license}`,
+  founder: site.owner
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, site.url).toString()} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <FloatingCallButton />
+    <ChatbotPlaceholder />
+  </body>
+</html>
