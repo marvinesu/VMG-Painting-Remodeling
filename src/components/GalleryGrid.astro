@@ -8,7 +8,7 @@ const { images, title = "Project Gallery" } = Astro.props;
   ))}
 </div>
 <style>
-  .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-  .gallery img { width: 100%; height: 260px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
+  .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); margin-top: var(--space-lg); }
+  .gallery img { width: 100%; height: clamp(220px, 24vw, 280px); object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
   @media (max-width: 760px) { .gallery { grid-template-columns: 1fr; } }
 </style>

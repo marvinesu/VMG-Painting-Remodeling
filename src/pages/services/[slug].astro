@@ -30,7 +30,7 @@ const related = services.filter((item) => item.slug !== service.slug).slice(0, 3
       <img class="card-image" src={service.image} alt={`${service.title} by VMG`} />
     </div>
   </section>
-  <section class="section alt">
+  <section class="section alt compact">
     <div class="container grid grid-3">
       <div class="card pad"><h3>Benefits</h3><ul class="check-list">{service.benefits.map((item) => <li>{item}</li>)}</ul></div>
       <div class="card pad"><h3>What's Included</h3><ul class="check-list">{service.included.map((item) => <li>{item}</li>)}</ul></div>
@@ -46,7 +46,7 @@ const related = services.filter((item) => item.slug !== service.slug).slice(0, 3
       </div>
     </div>
   </section>
-  <section class="section alt">
+  <section class="section alt compact">
     <div class="container">
       <span class="eyebrow">Service Area</span>
       <h2>{service.title} Across Western Washington</h2>
@@ -71,7 +71,7 @@ const related = services.filter((item) => item.slug !== service.slug).slice(0, 3
       <div class="card pad"><FilloutEstimateForm /></div>
     </div>
   </section>
-  <section class="section">
+  <section class="section compact">
     <div class="container">
       <span class="eyebrow">Related Services</span>
       <h2>Other Ways VMG Can Help</h2>

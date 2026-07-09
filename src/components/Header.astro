@@ -1,6 +1,9 @@
 ---
 import FilloutEstimateButton from "./FilloutEstimateButton.astro";
+import { services } from "../data/services";
 import { navItems, site } from "../data/site";
+
+const primaryNav = navItems.filter((item) => item.label !== "Services");
 ---
 <header class="site-header">
   <div class="topbar">
@@ -15,21 +18,38 @@ import { navItems, site } from "../data/site";
     <input id="menu-toggle" class="menu-toggle" type="checkbox" aria-label="Toggle navigation" />
     <label class="menu-button" for="menu-toggle">Menu</label>
     <div class="nav-links">
-      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      {primaryNav.slice(0, 2).map((item) => <a href={item.href}>{item.label}</a>)}
+      <details class="services-menu">
+        <summary>Services</summary>
+        <div class="services-panel">
+          <a class="all-services" href="/services">All Services</a>
+          {services.map((service) => <a href={`/services/${service.slug}`}>{service.title}</a>)}
+        </div>
+      </details>
+      {primaryNav.slice(2).map((item) => <a href={item.href}>{item.label}</a>)}
       <FilloutEstimateButton className="nav-cta-wrap" />
     </div>
   </nav>
 </header>
 
 <style>
-  .site-header { position: sticky; top: 0; z-index: 50; background: var(--white); box-shadow: 0 8px 24px rgba(36,32,24,.08); }
+  .site-header { position: sticky; top: 0; z-index: 50; background: var(--white); box-shadow: 0 8px 12px rgba(36,32,24,.08); }
   .topbar { background: var(--charcoal); color: rgba(255,255,255,.82); font-size: .86rem; }
   .topbar-inner { min-height: 38px; display: flex; gap: 22px; align-items: center; justify-content: space-between; }
   .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-  .logo { font-size: 1.25rem; font-weight: 900; color: var(--ink); max-width: 300px; line-height: 1.15; }
-  .nav-links { display: flex; align-items: center; gap: 22px; font-weight: 800; font-size: .95rem; }
+  .logo { font-size: 1.16rem; font-weight: 900; color: var(--ink); max-width: 270px; line-height: 1.15; }
+  .nav-links { display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: .92rem; }
   .nav-links a:hover, .nav-links a:focus-visible { color: var(--gold-dark); }
   .nav-cta-wrap { align-items: center; }
+  .services-menu { position: relative; }
+  .services-menu summary { list-style: none; cursor: pointer; }
+  .services-menu summary::-webkit-details-marker { display: none; }
+  .services-menu summary::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform 160ms cubic-bezier(.23,1,.32,1); }
+  .services-menu[open] summary::after { transform: translateY(1px) rotate(225deg); }
+  .services-panel { position: absolute; top: calc(100% + 18px); left: -18px; width: 310px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); box-shadow: 0 10px 12px rgba(36,32,24,.14); display: grid; gap: 2px; z-index: 70; }
+  .services-panel a { margin: 0; padding: 10px 12px; border-radius: 8px; line-height: 1.2; color: var(--ink); }
+  .services-panel a:hover, .services-panel a:focus-visible { background: var(--cream); color: var(--ink); }
+  .services-panel .all-services { color: var(--gold-dark); }
   .menu-toggle, .menu-button { display: none; }
   @media (max-width: 920px) {
     .topbar { display: none; }
@@ -39,6 +59,8 @@ import { navItems, site } from "../data/site";
     .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; padding: 0 0 18px; }
     .menu-toggle:checked ~ .nav-links { display: flex; }
     .nav-links a { padding: 8px 0; }
+    .services-panel { position: static; width: 100%; margin-top: 8px; box-shadow: none; }
+    .services-panel a { padding: 11px 12px; }
     .nav-cta-wrap { width: 100%; justify-content: center; }
   }
 </style>
