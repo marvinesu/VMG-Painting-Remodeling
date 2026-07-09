@@ -1,26 +1,19 @@
-<!--
-  FREE ESTIMATE FORM EMBED
-  This component holds the third-party form embed used on the Free Estimate page,
-  the home page, and each service page.
-  To swap in a new or updated embed code, replace everything inside
-  <div class="fillout-form"> below with the embed snippet from your form provider.
-  Keep the surrounding .fillout-form wrapper so page styling still applies.
--->
-<div class="fillout-form">
-  <div
-    style="width:100%;height:500px;"
-    data-fillout-id="xeVye6EX7Mus"
-    data-fillout-embed-type="standard"
-    data-fillout-inherit-parameters
-    data-fillout-dynamic-resize
-  >
-  </div>
-  <script src="https://server.fillout.com/embed/v1/"></script>
-</div>
+---
+/**
+ * FREE ESTIMATE FORM EMBED (lazy-loaded)
+ * Used on the home page, service pages, and the Free Estimate page.
+ * The Fillout script loads only on user intent (scroll-near or click) so the
+ * ~4MB third-party payload never blocks initial page load.
+ * To swap in a new embed, update the formId below.
+ *
+ * trigger="click" makes the form load ONLY when "Start Form" is clicked —
+ * used on the home page to keep it as light as possible.
+ */
+import LazyFilloutEmbed from "./LazyFilloutEmbed.astro";
 
-<style>
-  .fillout-form {
-    width: 100%;
-    min-height: 500px;
-  }
-</style>
+interface Props {
+  trigger?: "visible" | "click";
+}
+const { trigger = "visible" } = Astro.props;
+---
+<LazyFilloutEmbed formId="xeVye6EX7Mus" trigger={trigger} heading="Free Estimate Request" />

@@ -1,4 +1,6 @@
 ---
+import { srcsetFor } from "../data/images";
+
 interface Props {
   eyebrow: string;
   title: string;
@@ -11,7 +13,18 @@ interface Props {
 const { eyebrow, title, text, image, imageAlt = "", primaryHref = "/free-estimate", secondaryHref = "/services" } = Astro.props;
 ---
 <section class="hero">
-  <div class="hero-bg"><img src={image} alt={imageAlt} width="1600" height="1000" fetchpriority="high" decoding="async" /></div>
+  <div class="hero-bg">
+    <img
+      src={image}
+      srcset={srcsetFor(image)}
+      sizes="100vw"
+      alt={imageAlt}
+      width="1440"
+      height="1152"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </div>
   <div class="container hero-inner">
     <span class="eyebrow">{eyebrow}</span>
     <h1>{title}</h1>

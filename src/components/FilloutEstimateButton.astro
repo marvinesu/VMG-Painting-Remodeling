@@ -1,46 +1,22 @@
 ---
+/**
+ * Lightweight estimate CTA.
+ * Intentionally a plain link (no Fillout popup script) — the header and footer
+ * appear on every page, and loading third-party JS globally was the site's
+ * biggest performance problem. The form itself lives on /free-estimate.
+ */
 interface Props {
   className?: string;
 }
-
 const { className = "" } = Astro.props;
 ---
-<div class={`fillout-popup-button ${className}`}>
-  <div
-    data-fillout-id="xeVye6EX7Mus"
-    data-fillout-embed-type="popup"
-    data-fillout-button-text="Request a Free Estimate"
-    data-fillout-dynamic-resize
-    data-fillout-button-size="medium"
-    data-fillout-inherit-parameters
-    data-fillout-popup-size="medium"
-  >
-  </div>
-  <script src="https://server.fillout.com/embed/v1/"></script>
+<div class={`estimate-cta ${className}`}>
+  <a class="btn" href="/free-estimate">Request a Free Estimate</a>
 </div>
 
 <style>
-  .fillout-popup-button {
+  .estimate-cta {
     display: inline-flex;
     width: fit-content;
-  }
-
-  .fillout-popup-button :global(button) {
-    min-height: 46px !important;
-    padding: 12px 20px !important;
-    border: 2px solid transparent !important;
-    border-radius: 999px !important;
-    background: var(--gold) !important;
-    color: #1f1a12 !important;
-    box-shadow: none !important;
-    font: inherit !important;
-    font-weight: 800 !important;
-    transition: transform 160ms cubic-bezier(.23,1,.32,1), background 160ms ease !important;
-  }
-
-  .fillout-popup-button :global(button:hover),
-  .fillout-popup-button :global(button:focus-visible) {
-    background: #f0b650 !important;
-    transform: translateY(-1px);
   }
 </style>

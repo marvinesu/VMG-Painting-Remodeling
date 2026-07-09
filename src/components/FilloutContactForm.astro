@@ -1,25 +1,10 @@
-<!--
-  CONTACT FORM EMBED
-  This component holds the third-party form embed for the Contact page.
-  To swap in a new or updated embed code, replace everything inside
-  <div class="fillout-form"> below with the embed snippet from your form provider.
-  Keep the surrounding .fillout-form wrapper so page styling still applies.
--->
-<div class="fillout-form">
-  <div
-    style="width:100%;height:500px;"
-    data-fillout-id="71p9BkecAGus"
-    data-fillout-embed-type="standard"
-    data-fillout-inherit-parameters
-    data-fillout-dynamic-resize
-  >
-  </div>
-  <script src="https://server.fillout.com/embed/v1/"></script>
-</div>
-
-<style>
-  .fillout-form {
-    width: 100%;
-    min-height: 500px;
-  }
-</style>
+---
+/**
+ * CONTACT FORM EMBED (lazy-loaded)
+ * The Fillout script loads only when the visitor scrolls near the form or
+ * clicks "Start Form" — it never blocks initial page load.
+ * To swap in a new embed, update the formId below.
+ */
+import LazyFilloutEmbed from "./LazyFilloutEmbed.astro";
+---
+<LazyFilloutEmbed formId="71p9BkecAGus" heading="Contact Form" />

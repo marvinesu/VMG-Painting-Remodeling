@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import FloatingCallButton from "../components/FloatingCallButton.astro";
 import ChatbotPlaceholder from "../components/ChatbotPlaceholder.astro";
 import { site } from "../data/site";
+import { srcsetFor } from "../data/images";
 import "../styles/global.css";
 
 interface Props {
@@ -13,9 +14,21 @@ interface Props {
   image?: string;
   /** Additional JSON-LD objects (Service, FAQPage, BreadcrumbList, …) rendered alongside the LocalBusiness schema. */
   schema?: object[];
+  /** Hero/LCP image to preload with responsive hints (path under /images). */
+  preloadImage?: string;
+  /** Extra origins to preconnect to (e.g. Fillout on form pages). */
+  preconnect?: string[];
 }
 
-const { title, description, path = "/", image = "/images/painting-exterior-residential.webp", schema = [] } = Astro.props;
+const {
+  title,
+  description,
+  path = "/",
+  image = "/images/painting-exterior-residential.webp",
+  schema = [],
+  preloadImage,
+  preconnect = []
+} = Astro.props;
 const canonical = new URL(path, site.url).toString();
 const ogImage = new URL(image, site.url).toString();
 
@@ -68,6 +81,17 @@ const jsonLd = [businessSchema, ...schema];
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#29251d" />
+    {preloadImage && (
+      <link
+        rel="preload"
+        as="image"
+        href={preloadImage}
+        imagesrcset={srcsetFor(preloadImage)}
+        imagesizes="100vw"
+        fetchpriority="high"
+      />
+    )}
+    {preconnect.map((origin) => <link rel="preconnect" href={origin} crossorigin />)}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:locale" content="en_US" />
