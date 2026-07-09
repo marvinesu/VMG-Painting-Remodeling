@@ -1,4 +1,6 @@
 ---
+import { srcsetFor, CARD_SIZES } from "../data/images";
+
 interface Props {
   title: string;
   text: string;
@@ -10,7 +12,16 @@ const { title, text, href, image, imageAlt } = Astro.props;
 ---
 <article class="service-card">
   <a href={href}>
-    <img src={image} alt={imageAlt ?? `${title} project by VMG Painting & Remodeling`} loading="lazy" decoding="async" width="520" height="420" />
+    <img
+      src={image}
+      srcset={srcsetFor(image)}
+      sizes={CARD_SIZES}
+      alt={imageAlt ?? `${title} project by VMG Painting & Remodeling`}
+      loading="lazy"
+      decoding="async"
+      width="520"
+      height="420"
+    />
     <div class="service-body">
       <h3>{title}</h3>
       <p>{text}</p>

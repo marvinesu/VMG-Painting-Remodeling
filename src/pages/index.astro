@@ -6,7 +6,7 @@ import CTASection from "../components/CTASection.astro";
 import GalleryGrid from "../components/GalleryGrid.astro";
 import FilloutEstimateForm from "../components/FilloutEstimateForm.astro";
 import { services } from "../data/services";
-import { images } from "../data/images";
+import { images, srcsetFor, SPLIT_SIZES } from "../data/images";
 import { site } from "../data/site";
 
 const faqs = [
@@ -58,6 +58,7 @@ const commitments = [
   description="VMG Painting & Remodeling LLC is a family-owned contractor in Roy, WA providing painting, siding, roofing, windows, decks, and remodeling across Thurston, Pierce, King, and Snohomish County. Free estimates."
   path="/"
   schema={[faqSchema]}
+  preloadImage={images.painting[0].src}
 >
   <Hero
     eyebrow="Welcome to VMG Painting & Remodeling LLC"
@@ -89,8 +90,8 @@ const commitments = [
         <div class="button-row"><a class="btn" href="/free-estimate">Request Your Free Estimate</a><a class="btn outline" href="/about-us">Meet the Team</a></div>
       </div>
       <div class="image-stack">
-        <img src={images.remodeling[0].src} alt={images.remodeling[0].alt} width="720" height="580" loading="lazy" decoding="async" />
-        <img src={images.decks[0].src} alt={images.decks[0].alt} width="420" height="330" loading="lazy" decoding="async" />
+        <img src={images.remodeling[0].src} srcset={srcsetFor(images.remodeling[0].src)} sizes={SPLIT_SIZES} alt={images.remodeling[0].alt} width="720" height="580" loading="lazy" decoding="async" />
+        <img src={images.decks[0].src} srcset={srcsetFor(images.decks[0].src)} sizes="(max-width: 860px) 92vw, 300px" alt={images.decks[0].alt} width="420" height="330" loading="lazy" decoding="async" />
       </div>
     </div>
   </section>
@@ -191,7 +192,7 @@ const commitments = [
         <p class="lead">Share a few details about your painting, siding, roofing, window, deck, or remodeling project and our team will follow up with a free, no-obligation estimate.</p>
         <p>Prefer to talk it through? Call <a class="inline-link" href={`tel:${site.tel}`}>{site.phoneDisplay}</a> and speak with the team directly.</p>
       </div>
-      <div class="card pad"><FilloutEstimateForm /></div>
+      <div class="card pad"><FilloutEstimateForm trigger="click" /></div>
     </div>
   </section>
   <CTASection title="Ready to Talk About Your Project?" text="Whether you need paint, siding, roofing, windows, a custom deck, or a remodel, VMG Painting & Remodeling LLC is ready to help — starting with a free estimate." />

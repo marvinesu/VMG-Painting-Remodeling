@@ -1,5 +1,5 @@
 ---
-import type { SiteImage } from "../data/images";
+import { srcsetFor, CARD_SIZES, type SiteImage } from "../data/images";
 
 interface Props {
   images: SiteImage[];
@@ -10,7 +10,16 @@ const { images, label = "Project gallery" } = Astro.props;
 <ul class="gallery" aria-label={label}>
   {images.map((image) => (
     <li>
-      <img src={image.src} alt={image.alt} loading="lazy" decoding="async" width="520" height="390" />
+      <img
+        src={image.src}
+        srcset={srcsetFor(image.src)}
+        sizes={CARD_SIZES}
+        alt={image.alt}
+        loading="lazy"
+        decoding="async"
+        width="520"
+        height="390"
+      />
     </li>
   ))}
 </ul>
