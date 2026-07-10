@@ -19,6 +19,15 @@ export const CARD_SIZES = "(max-width: 560px) 92vw, (max-width: 900px) 46vw, 360
 export const SPLIT_SIZES = "(max-width: 860px) 92vw, 560px";
 
 export const images: Record<string, SiteImage[]> = {
+  /** Real VMG job-site photos provided by the client (July 2026). */
+  projects: [
+    { src: "/images/projects-vmg-team-wall-framing.webp", alt: "VMG Painting & Remodeling crew framing the walls of a new backyard structure on a concrete slab" },
+    { src: "/images/projects-crew-framing-roof-rafters.webp", alt: "VMG crew member installing roof rafters on a framed backyard building" },
+    { src: "/images/projects-crew-raising-ridge-beam.webp", alt: "Two VMG crew members raising the ridge beam on a framed structure" },
+    { src: "/images/projects-exterior-siding-fascia-gutters.webp", alt: "Two-story home exterior with blue siding and freshly installed white fascia and gutters by VMG" },
+    { src: "/images/projects-new-construction-framed-interior.webp", alt: "Framed interior of a new backyard building with door and window openings on a fresh concrete slab" },
+    { src: "/images/projects-vaulted-ceiling-framing.webp", alt: "Vaulted ceiling framing inside a new backyard structure built by VMG" }
+  ],
   painting: [
     { src: "/images/painting-exterior-residential.webp", alt: "Freshly painted exterior of a two-story Washington home with crisp trim lines" },
     { src: "/images/painting-interior-painting-services.webp", alt: "Interior living space with smooth, professionally painted walls" },

@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import CTASection from "../components/CTASection.astro";
+import GalleryGrid from "../components/GalleryGrid.astro";
 import { images, srcsetFor, SPLIT_SIZES } from "../data/images";
 import { site } from "../data/site";
 
@@ -45,14 +46,14 @@ const breadcrumbSchema = {
   title="About VMG Painting & Remodeling LLC | Family-Owned Contractor in Roy, WA"
   description="Meet VMG Painting & Remodeling LLC — a family-owned Roy, WA contractor with 30+ years of construction experience serving Thurston, Pierce, King, and Snohomish County."
   path="/about-us"
-  image={images.remodeling[0].src}
+  image={images.projects[3].src}
   schema={[breadcrumbSchema]}
-  preloadImage={images.remodeling[0].src}
+  preloadImage={images.projects[3].src}
 >
   <PageHero
     title="A Family-Owned Contractor With 30+ Years in the Trade"
     text="VMG Painting & Remodeling LLC was built on decades of hands-on construction experience, family values, and pride in the work."
-    image={images.remodeling[0].src}
+    image={images.projects[3].src}
     crumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
   />
   <section class="section">
@@ -66,9 +67,17 @@ const breadcrumbSchema = {
         <div class="button-row"><a class="btn" href="/free-estimate">Get a Free Estimate</a><a class="btn outline" href="/services">Explore Our Services</a></div>
       </div>
       <div class="image-stack">
-        <img src={images.painting[1].src} srcset={srcsetFor(images.painting[1].src)} sizes={SPLIT_SIZES} alt={images.painting[1].alt} width="720" height="580" loading="lazy" decoding="async" />
-        <img src={images.siding[0].src} srcset={srcsetFor(images.siding[0].src)} sizes="(max-width: 860px) 92vw, 300px" alt={images.siding[0].alt} width="420" height="330" loading="lazy" decoding="async" />
+        <img src={images.projects[0].src} srcset={srcsetFor(images.projects[0].src)} sizes={SPLIT_SIZES} alt={images.projects[0].alt} width="720" height="580" loading="lazy" decoding="async" />
+        <img src={images.projects[2].src} srcset={srcsetFor(images.projects[2].src)} sizes="(max-width: 860px) 92vw, 300px" alt={images.projects[2].alt} width="420" height="330" loading="lazy" decoding="async" />
       </div>
+    </div>
+  </section>
+  <section class="section compact" aria-label="VMG crews on the job">
+    <div class="container">
+      <span class="eyebrow">On the Job</span>
+      <h2>Real Crews, Real Job Sites</h2>
+      <p class="lead">This is the VMG team at work — framing new structures, finishing exteriors, and leaving every job site clean and organized.</p>
+      <GalleryGrid images={[images.projects[1], images.projects[4], images.projects[5]]} label="VMG crews at work" />
     </div>
   </section>
   <section class="section alt">
