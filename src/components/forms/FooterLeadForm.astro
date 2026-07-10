@@ -40,6 +40,7 @@ import LeadFormScript from "./LeadFormScript.astro";
   <input type="hidden" name="page" value="" data-page-source />
 
   <button class="btn" type="submit" data-submit>Request a Free Estimate</button>
+  <p class="recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" rel="noopener" target="_blank">Privacy Policy</a> and <a href="https://policies.google.com/terms" rel="noopener" target="_blank">Terms of Service</a> apply.</p>
 </form>
 
 <style>
@@ -54,5 +55,6 @@ import LeadFormScript from "./LeadFormScript.astro";
   .footer-lead-form :global(input::placeholder) { color: rgba(255, 255, 255, .5); }
   .footer-lead-form :global(.consent-option) { color: rgba(255, 255, 255, .72); }
   .footer-lead-form :global(.field-error) { color: #ffb3b3; }
+  .footer-lead-form :global(.recaptcha-note) { color: rgba(255, 255, 255, .55); }
   .footer-lead-form :global(.form-success-panel), .footer-lead-form :global(.form-success-panel h3) { color: var(--white); }
 </style>

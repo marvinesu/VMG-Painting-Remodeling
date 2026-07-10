@@ -5,6 +5,46 @@
   ships once per page.
 -->
 <script>
+  // reCAPTCHA (score-based, invisible). The site key is public by design.
+  // The script loads lazily on first form interaction so page load stays fast;
+  // if it fails to load (blocked, offline) we submit without a token and the
+  // server decides (it skips the check entirely until the secret is set).
+  const RECAPTCHA_SITE_KEY = "6LfBzkwtAAAAAAW-OYD9ImIGYrrXP6FSY8y0mLur";
+  let recaptchaLoader: Promise<void> | null = null;
+
+  function loadRecaptcha(): Promise<void> {
+    const w = window as typeof window & { grecaptcha?: unknown };
+    if (w.grecaptcha) return Promise.resolve();
+    if (!recaptchaLoader) {
+      recaptchaLoader = new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = () => resolve();
+        document.head.appendChild(script);
+      });
+    }
+    return recaptchaLoader;
+  }
+
+  async function getRecaptchaToken(): Promise<string> {
+    try {
+      await loadRecaptcha();
+      const grecaptcha = (window as unknown as {
+        grecaptcha?: {
+          ready: (cb: () => void) => void;
+          execute: (key: string, opts: { action: string }) => Promise<string>;
+        };
+      }).grecaptcha;
+      if (!grecaptcha?.execute) return "";
+      await new Promise<void>((resolve) => grecaptcha.ready(resolve));
+      return (await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "lead_submit" })) ?? "";
+    } catch {
+      return "";
+    }
+  }
+
   function isValidEmail(value: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   }
@@ -104,6 +144,9 @@
   }
 
   document.querySelectorAll<HTMLFormElement>("[data-lead-form]").forEach((form) => {
+    // Warm up reCAPTCHA as soon as the visitor touches the form.
+    form.addEventListener("focusin", () => void loadRecaptcha(), { once: true });
+
     // Anti-spam timing + page source
     const started = form.querySelector<HTMLInputElement>("[data-started-at]");
     if (started) started.value = String(Date.now());
@@ -213,10 +256,12 @@
       }
 
       try {
+        const payload = payloadFrom(form);
+        payload.recaptchaToken = await getRecaptchaToken();
         const response = await fetch(form.dataset.endpoint ?? form.action, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payloadFrom(form))
+          body: JSON.stringify(payload)
         });
         const result = await response.json().catch(() => ({}));
         if (response.ok && result.ok) {

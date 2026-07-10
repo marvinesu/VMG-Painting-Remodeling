@@ -243,6 +243,11 @@ textarea { min-height: 140px; resize: vertical; }
 .form-success-panel { text-align: left; }
 .form-success-panel h3 { color: var(--ink); }
 .honeypot-field { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* reCAPTCHA badge would cover the floating call button; Google permits hiding
+   it when the attribution text (.recaptcha-note) is shown in the form flow. */
+.grecaptcha-badge { visibility: hidden !important; }
+.recaptcha-note { font-size: .76rem; color: var(--muted); margin: 4px 0 0; }
+.recaptcha-note a { text-decoration: underline; text-underline-offset: 2px; }
 @media (max-width: 560px) { .checkbox-grid { grid-template-columns: 1fr; } }
 
 summary { cursor: pointer; font-weight: 800; }

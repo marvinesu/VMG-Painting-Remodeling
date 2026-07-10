@@ -11,6 +11,7 @@ import type { APIContext } from "astro";
 import { sendLeadEmail, smtpConfigured, type LeadRow } from "./email";
 import { createLead, createSecurityLog, payloadEnabled } from "./payload";
 import { isRateLimited } from "./rateLimit";
+import { verifyRecaptcha } from "./recaptcha";
 import { isSpam, type FieldErrors } from "./validation";
 import type { Lead } from "./types";
 
@@ -99,6 +100,21 @@ export async function handleLeadRequest(
       ok: false,
       error: `You're sending requests too quickly. Please wait a moment and try again, or call (253) 754-4871.`
     });
+  }
+
+  // reCAPTCHA (active only when RECAPTCHA_SECRET_KEY is set). Failed checks
+  // get the same fake success as the honeypot so bots learn nothing.
+  const recaptcha = await verifyRecaptcha(body.recaptchaToken, ip);
+  if (recaptcha.verdict === "fail") {
+    void createSecurityLog({
+      eventType: "suspicious_submission",
+      ipAddress: ip,
+      userAgent,
+      route,
+      description: `Submission dropped by reCAPTCHA (${recaptcha.reason ?? "failed"}).`,
+      severity: "low"
+    });
+    return json(200, { ok: true });
   }
 
   const { errors, subject, leadType, rows, replyTo, lead } = validate(body);
