@@ -1,15 +1,21 @@
 # VMG Painting & Remodeling LLC Website
 
-Two Node apps in one repository:
+Astro website with a Node server for `/api/*` lead endpoints and SMTP email.
 
-| App | Folder | What it does |
-| --- | --- | --- |
-| **Website** (Astro) | repo root | Prerendered pages + Node server for `/api/*` lead endpoints, CMS-driven pages, and SMTP email |
-| **CMS** (Payload 3 + Next.js) | `cms/` | Admin dashboard: pages, updates, media, leads, chat transcripts, security logs, admin docs, deployment checklists, and graphical SMTP settings |
+> **Note (2026-07-10):** the Payload CMS app that used to live in `cms/` was
+> removed from the repo (decision: deploy the website only for now). All the
+> CMS integration code in `src/lib/payload.ts` and the CMS docs below remain —
+> everything degrades gracefully while the `PAYLOAD_*` env vars are unset.
+> To bring the CMS back, restore the folder from git history:
+> `git checkout 539180a -- cms`
 
 The website works even when the CMS is offline (forms validate, email falls
 back to environment variables). When the CMS is connected, every form and
 chatbot submission is also stored as a lead/chat record.
+
+Lead emails go to `LEAD_NOTIFY_EMAIL` with a monitoring BCC to
+`emarketwizdigit@gmail.com` (override with `LEAD_BCC_EMAIL`; set it to an
+empty string to disable).
 
 ## Architecture
 

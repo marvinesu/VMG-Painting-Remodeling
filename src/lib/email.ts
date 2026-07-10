@@ -18,7 +18,14 @@ import { decryptSecret } from "./crypto";
 export type LeadRow = { label: string; value: string };
 
 const DEFAULT_NOTIFY = "vmgpaintingnremodelingllc@gmail.com";
+/** Agency copy of every lead email for delivery monitoring. Override with LEAD_BCC_EMAIL; set it to "" to disable. */
+const DEFAULT_BCC = "emarketwizdigit@gmail.com";
 const SETTINGS_CACHE_MS = 60_000;
+
+function leadBcc(): string | undefined {
+  const value = process.env.LEAD_BCC_EMAIL ?? DEFAULT_BCC;
+  return value.trim() === "" ? undefined : value;
+}
 
 export type ResolvedSmtp = {
   host: string;
@@ -153,6 +160,7 @@ export async function sendLeadEmail(options: {
   await createTransporter(settings).sendMail({
     from: settings.from,
     to: settings.notifyTo,
+    bcc: leadBcc(),
     replyTo: options.replyTo || settings.replyTo,
     subject: options.subject,
     text,
