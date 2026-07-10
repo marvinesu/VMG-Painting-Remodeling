@@ -16,15 +16,15 @@ import { site } from "../data/site";
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--gold);
-    color: #1f1a12;
+    background: var(--lime);
+    color: var(--ink);
     padding: 13px 20px;
     border-radius: 999px;
-    box-shadow: 0 10px 22px rgba(36, 32, 24, 0.3);
+    box-shadow: 0 10px 24px rgba(13, 6, 48, 0.32);
     font-weight: 900;
     transition: transform 160ms cubic-bezier(.23,1,.32,1), background 160ms ease;
   }
-  .floating-call:hover, .floating-call:focus-visible { transform: translateY(-2px); background: #f0b650; }
+  .floating-call:hover, .floating-call:focus-visible { transform: translateY(-2px); background: #d8f095; }
   @media (max-width: 520px) {
     .floating-call {
       right: 12px;

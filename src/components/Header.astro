@@ -53,13 +53,23 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
 </script>
 
 <style>
-  .site-header { position: sticky; top: 0; z-index: 50; background: var(--white); border-bottom: 1px solid var(--line); }
-  .topbar { background: var(--charcoal); color: rgba(255,255,255,.82); font-size: .86rem; }
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow 220ms ease;
+  }
+  .site-header.scrolled { box-shadow: 0 10px 30px rgba(13, 6, 48, 0.10); }
+  .topbar { background: linear-gradient(90deg, var(--ink), var(--navy)); color: rgba(255,255,255,.85); font-size: .86rem; }
   .topbar-inner { min-height: 38px; display: flex; gap: 22px; align-items: center; justify-content: space-between; }
-  .topbar a:hover, .topbar a:focus-visible { color: var(--gold); }
+  .topbar a:hover, .topbar a:focus-visible { color: var(--lime); }
   .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-  .logo { font-size: 1.16rem; font-weight: 900; color: var(--ink); max-width: 270px; line-height: 1.15; }
-  .logo span { color: var(--gold-dark); }
+  .logo { font-size: 1.16rem; font-weight: 700; font-family: var(--font-heading); color: var(--ink); max-width: 270px; line-height: 1.15; }
+  .logo span { color: var(--navy-2); }
   .nav-links { display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: .92rem; }
   .nav-links a:hover, .nav-links a:focus-visible { color: var(--gold-dark); }
   .nav-phone { white-space: nowrap; }
@@ -69,7 +79,7 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
   .services-menu summary::-webkit-details-marker { display: none; }
   .services-menu summary::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform 160ms cubic-bezier(.23,1,.32,1); }
   .services-menu[open] summary::after { transform: translateY(1px) rotate(225deg); }
-  .services-panel { position: absolute; top: calc(100% + 18px); left: -18px; width: 310px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); box-shadow: 0 10px 12px rgba(36,32,24,.14); display: grid; gap: 2px; z-index: 70; }
+  .services-panel { position: absolute; top: calc(100% + 18px); left: -18px; width: 310px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); box-shadow: 0 18px 40px rgba(13,6,48,.16); display: grid; gap: 2px; z-index: 70; }
   .services-panel a { margin: 0; padding: 10px 12px; border-radius: 8px; line-height: 1.2; color: var(--ink); }
   .services-panel a:hover, .services-panel a:focus-visible { background: var(--cream); color: var(--ink); }
   .services-panel .all-services { color: var(--gold-dark); }
@@ -81,8 +91,8 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      background: var(--gold);
-      color: #1f1a12;
+      background: var(--lime);
+      color: var(--ink);
       border: 0;
       border-radius: 999px;
       padding: 10px 16px;

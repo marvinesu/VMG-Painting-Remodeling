@@ -68,7 +68,7 @@ const commitments = [
   />
   <section class="trust-strip" aria-label="Company highlights">
     <div class="container trust-grid">
-      <div><strong>30+</strong><span>Years of construction experience</span></div>
+      <div><strong data-count="30" data-count-suffix="+">30+</strong><span>Years of construction experience</span></div>
       <div><strong>Local</strong><span>Family-owned in Roy, Washington</span></div>
       <div><strong>Registered</strong><span>WA contractor #{site.license}</span></div>
       <div><strong>Full-service</strong><span>Residential &amp; commercial work</span></div>
@@ -207,7 +207,7 @@ const commitments = [
   .trust-grid > div:first-child { padding-left: 0; }
   .trust-grid > div:last-child { border-right: 0; padding-right: 0; }
   .trust-grid strong, .trust-grid span { display: block; }
-  .trust-grid strong { margin-bottom: 3px; color: var(--ink); font-size: 1.05rem; }
+  .trust-grid strong { margin-bottom: 3px; color: var(--navy); font-family: var(--font-heading); font-size: 1.35rem; line-height: 1.15; }
   .trust-grid span { color: var(--muted); font-size: .88rem; line-height: 1.4; }
   .process-list { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 36px 0 0; padding: 0; counter-reset: process; }
   .process-list li { position: relative; padding: 0 clamp(20px, 3vw, 34px) 0 0; }

@@ -11,10 +11,10 @@ let cached: string | null = null;
 const FALLBACK_HTML = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Page Not Found | VMG Painting &amp; Remodeling LLC</title><meta name="robots" content="noindex"></head>
-<body style="font-family:system-ui,sans-serif;background:#fffaf2;color:#242018;display:grid;place-items:center;min-height:100vh;margin:0">
+<body style="font-family:system-ui,sans-serif;background:#fafcf7;color:#0d0630;display:grid;place-items:center;min-height:100vh;margin:0">
 <div style="text-align:center;padding:24px"><h1>Page Not Found</h1>
 <p>The page you're looking for doesn't exist or has moved.</p>
-<p><a href="/" style="color:#bf7d1f;font-weight:700">Back to Home</a> &middot; <a href="/free-estimate" style="color:#bf7d1f;font-weight:700">Get a Free Estimate</a></p>
+<p><a href="/" style="color:#384e77;font-weight:700">Back to Home</a> &middot; <a href="/free-estimate" style="color:#384e77;font-weight:700">Get a Free Estimate</a></p>
 </div></body></html>`;
 
 export async function notFoundResponse(): Promise<Response> {

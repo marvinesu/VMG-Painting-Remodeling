@@ -134,16 +134,16 @@ export async function sendLeadEmail(options: {
 
   const text = rows.map((row) => `${row.label}: ${row.value}`).join("\n");
   const html = `
-    <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#242018;line-height:1.5">
-      <h2 style="color:#29251d;margin:0 0 4px">${escapeHtml(options.subject)}</h2>
-      <p style="margin:0 0 16px;color:#6d665c">New lead from vmgpaintingnremodelingllc.com</p>
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#0d0630;line-height:1.5">
+      <h2 style="color:#18314f;margin:0 0 4px">${escapeHtml(options.subject)}</h2>
+      <p style="margin:0 0 16px;color:#4a5570">New lead from vmgpaintingnremodelingllc.com</p>
       <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:640px">
         ${rows
           .map(
             (row, index) => `
-          <tr style="background:${index % 2 === 0 ? "#f7f1e7" : "#ffffff"}">
-            <td style="padding:9px 12px;font-weight:bold;white-space:nowrap;vertical-align:top;border:1px solid #e8ddcd">${escapeHtml(row.label)}</td>
-            <td style="padding:9px 12px;border:1px solid #e8ddcd">${escapeHtml(row.value).replaceAll("\n", "<br>")}</td>
+          <tr style="background:${index % 2 === 0 ? "#edf4f1" : "#ffffff"}">
+            <td style="padding:9px 12px;font-weight:bold;white-space:nowrap;vertical-align:top;border:1px solid #d9e3e0">${escapeHtml(row.label)}</td>
+            <td style="padding:9px 12px;border:1px solid #d9e3e0">${escapeHtml(row.value).replaceAll("\n", "<br>")}</td>
           </tr>`
           )
           .join("")}
