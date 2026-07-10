@@ -54,6 +54,33 @@ const breadcrumbSchema = {
       </div>
     </div>
   </section>
+  <section class="section map-section" aria-labelledby="location-title">
+    <div class="container map-layout">
+      <div class="map-copy">
+        <span class="eyebrow">Our Location</span>
+        <h2 id="location-title">Visit VMG in Roy, Washington</h2>
+        <p class="lead">Find us at {site.address}. Tap below to open turn-by-turn directions in Google Maps.</p>
+        <a
+          class="btn"
+          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(site.address)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >Get Directions</a>
+      </div>
+      <div class="map-frame">
+        <iframe
+          title={`Map showing ${site.address}`}
+          src={`https://www.google.com/maps?q=${encodeURIComponent(site.address)}&output=embed`}
+          width="600"
+          height="420"
+          style="border:0"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </section>
   <section class="section alt">
     <div class="container split">
       <div>
@@ -82,4 +109,13 @@ const breadcrumbSchema = {
   .contact-link { color: var(--gold-dark); font-weight: 800; }
   .contact-link:hover, .contact-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
   address { font-style: normal; }
+  .map-section { padding-top: 12px; }
+  .map-layout { display: grid; grid-template-columns: minmax(240px, .65fr) minmax(0, 1.35fr); gap: clamp(24px, 5vw, 56px); align-items: center; }
+  .map-copy .lead { max-width: 48ch; }
+  .map-frame { overflow: hidden; border-radius: var(--radius); box-shadow: var(--shadow); background: var(--cream); }
+  .map-frame iframe { display: block; width: 100%; min-height: 420px; }
+  @media (max-width: 760px) {
+    .map-layout { grid-template-columns: 1fr; }
+    .map-frame iframe { min-height: 340px; }
+  }
 </style>
