@@ -1,101 +1,179 @@
 # VMG Painting & Remodeling LLC Website
 
-Astro website for `vmgpaintingnremodelingllc.com` with native lead capture:
-all pages are prerendered (static and fast), and a small Node server handles
-the form/chatbot API endpoints and SMTP email notifications. No third-party
-form or chatbot embeds.
+Two Node apps in one repository:
+
+| App | Folder | What it does |
+| --- | --- | --- |
+| **Website** (Astro) | repo root | Prerendered pages + Node server for `/api/*` lead endpoints, CMS-driven pages, and SMTP email |
+| **CMS** (Payload 3 + Next.js) | `cms/` | Admin dashboard: pages, updates, media, leads, chat transcripts, security logs, admin docs, deployment checklists, and graphical SMTP settings |
+
+The website works even when the CMS is offline (forms validate, email falls
+back to environment variables). When the CMS is connected, every form and
+chatbot submission is also stored as a lead/chat record.
+
+## Architecture
+
+- **Payload 3 is Next.js-native**, so it runs as its own Node app in `cms/`
+  (deployed as a second Hostinger web app). It cannot run inside the Astro
+  runtime.
+- The Astro server talks to Payload via REST using a server-only admin
+  **API key** (`PAYLOAD_INTERNAL_API_URL` + `PAYLOAD_API_KEY`).
+- The SMTP password is stored **AES-256-GCM encrypted** in the CMS. Both apps
+  share `SMTP_ENCRYPTION_KEY` so the website can decrypt it server-side.
+- Database: SQLite (file `cms/vmg-cms.db` by default via `DATABASE_URI`).
+  Schema is applied by migrations (`npm start` runs `payload migrate` first).
 
 ## Commands
 
+Website (repo root):
+
 ```bash
-npm install          # install dependencies
-npm run dev          # local dev server (http://localhost:4321)
-npm run build        # production build -> dist/
-npm start            # run the production server (node ./dist/server/entry.mjs)
-npm run optimize-images  # regenerate responsive image variants after adding images
+npm install
+npm run dev            # http://localhost:4321
+npm run build          # -> dist/client + dist/server
+npm start              # node ./dist/server/entry.mjs
+npm run optimize-images
 ```
 
-## Hostinger Deployment (requires Node — not static-only hosting)
+CMS (`cms/`):
 
-The lead forms and chatbot submit to server endpoints, so the site must run as
-a **Node.js web app**, not a plain static site:
+```bash
+cd cms
+npm install
+npm run dev            # http://localhost:3001 (admin at /admin)
+npm run build
+npm start              # payload migrate && next start
+```
 
-- Repository: GitHub `main` branch
+## Running locally
+
+1. Copy `.env.example` to `.env` (root) and `cms/.env.example` to `cms/.env`.
+2. Set `PAYLOAD_SECRET` (long random string) and the same `SMTP_ENCRYPTION_KEY`
+   in both files.
+3. Start the CMS (`cd cms && npm run dev`), open `http://localhost:3001/admin`,
+   and create the **first admin user** (Payload prompts automatically).
+4. In the admin, open your user → enable **API Key** → copy it.
+5. In the root `.env` set:
+   - `PAYLOAD_INTERNAL_API_URL=http://localhost:3001/api`
+   - `PAYLOAD_PUBLIC_SERVER_URL=http://localhost:3001`
+   - `PAYLOAD_API_KEY=<the key>`
+6. Start the website (`npm run dev`) and submit a form — the lead appears in
+   Payload Admin → Leads.
+
+## Hostinger deployment
+
+### Website app (existing)
+
 - Build command: `npm run build`
-- Start command: `npm start` (runs `node ./dist/server/entry.mjs`)
-- Node version: 20+ (22 recommended)
-- The server reads `HOST`/`PORT` from the environment (Hostinger sets these automatically; the adapter defaults to port 4321)
+- **Entry file: `dist/server/entry.mjs`** (required — see 403 note below)
+- Node version: 22.x
+- Env vars: everything in `.env.example` (`HOST=0.0.0.0`, SMTP fallback vars,
+  `SMTP_ENCRYPTION_KEY`, and the three `PAYLOAD_*` values once the CMS is live)
 
-If the site is ever deployed as static files only, the pages will work but
-every form/chatbot submission will fail — the `/api/*` endpoints need the Node
-process.
+### CMS app (new — second web app)
 
-## SMTP / Lead Email Setup
+- Root directory: `cms`
+- Build command: `npm run build`
+- Start command: `npm start` (runs migrations, then `next start`; honors `PORT`)
+- Node version: 22.x
+- Env vars: `PAYLOAD_SECRET`, `PAYLOAD_PUBLIC_SERVER_URL` (the CMS's own URL,
+  e.g. a `cms.` subdomain), `DATABASE_URI=file:./vmg-cms.db`,
+  `SMTP_ENCRYPTION_KEY` (same value as the website app)
+- Admin dashboard: `<CMS URL>/admin`
+- **Note:** the SQLite database and uploaded media live on the app's disk.
+  Keep Hostinger backups enabled; if the platform wipes app storage between
+  deploys, switch `DATABASE_URI` to a managed Postgres database and swap the
+  adapter to `@payloadcms/db-postgres`.
 
-All submissions (contact form, free estimate form, footer quick form, chatbot)
-send a notification email to the owner inbox. Configure these environment
-variables in the Hostinger panel (Web App → Environment variables):
+### If the site returns 403 after deployment
 
-| Variable | Example | Notes |
-| --- | --- | --- |
-| `SMTP_HOST` | `smtp.hostinger.com` | Your SMTP server |
-| `SMTP_PORT` | `465` or `587` | 465 with `SMTP_SECURE=true`, 587 with `false` |
-| `SMTP_SECURE` | `true` / `false` | TLS mode matching the port |
-| `SMTP_USER` | `leads@vmgpaintingnremodelingllc.com` | SMTP login |
-| `SMTP_PASS` | *(secret)* | SMTP password — never committed to Git |
-| `SMTP_FROM` | `"VMG Website" <leads@...>` | Optional; defaults to `SMTP_USER` |
-| `LEAD_NOTIFY_EMAIL` | `vmgpaintingnremodelingllc@gmail.com` | Where lead notifications go |
+A 403 usually means Hostinger is serving `dist/` as static files instead of
+running the Node server. Check:
 
-Until SMTP is configured, submissions return a friendly "temporarily
-unavailable" message with the phone number — nothing breaks.
+1. Entry file is `dist/server/entry.mjs` (not blank).
+2. Build command is `npm run build`.
+3. Node version is 22.x.
+4. `HOST=0.0.0.0` env var is set.
+5. The deployment completed successfully.
+6. Clear the cache after redeploying.
 
-**Tip:** create a mailbox on Hostinger (free with the domain) such as
-`leads@vmgpaintingnremodelingllc.com` and use its SMTP credentials
-(`smtp.hostinger.com`, port 465, secure `true`).
+## SMTP settings (graphical, in the CMS)
 
-## Where Forms Submit
+Payload Admin → **SMTP Settings**:
 
-| Source | Endpoint | Email subject |
-| --- | --- | --- |
-| Contact page form | `POST /api/contact` | New Contact Message - VMG Painting & Remodeling |
-| Free estimate form (home, service pages, /free-estimate) | `POST /api/free-estimate` | New Free Estimate Request - VMG Painting & Remodeling |
-| Chatbot | `POST /api/chatbot-lead` | New Chatbot Lead - VMG Painting & Remodeling |
-| Footer quick form | `POST /api/chatbot-lead` | New Website Lead - VMG Painting & Remodeling |
+- Host / port / SSL / username / password, From name + email, Lead
+  Notification Email, Reply-To, optional Test Recipient.
+- The password is **encrypted (AES-256-GCM) before saving**; leaving the field
+  blank on later saves keeps the existing password. Plaintext is never shown,
+  stored, logged, or returned by the API.
+- Click **Send Test Email** to verify: the result is written to *Last Test
+  Status* / *Last Tested At* and recorded in Security Logs.
+  (Endpoint: `POST <CMS URL>/api/admin/test-smtp`, admin session required.)
+- `SMTP_ENCRYPTION_KEY` must be set in **both** apps or saved passwords cannot
+  be decrypted.
 
-Protection on every endpoint: server-side validation, honeypot field,
-too-fast-submission check, in-memory rate limiting (5 per 10 min per IP,
-15s cooldown), input sanitization, and link-spam rejection. SMTP credentials
-never reach the client.
+**Priority:** the website uses CMS SMTP settings when enabled and complete;
+otherwise it falls back to the `SMTP_*` environment variables. Emails go to
+the *Lead Notification Email* (default `vmgpaintingnremodelingllc@gmail.com`).
 
-## Testing Forms Locally
+## Lead capture flow
 
-1. Copy `.env.example` to `.env` and fill in SMTP values (or leave empty to
-   test the "unavailable" state).
-2. `npm run dev`, then submit the forms on `/contact-us` and `/free-estimate`.
-3. Or test an endpoint directly:
+| Source | Website endpoint | Stored in CMS | Email subject |
+| --- | --- | --- | --- |
+| Contact page form | `POST /api/contact` | Leads | New Contact Message - VMG Painting & Remodeling |
+| Free estimate forms | `POST /api/free-estimate` | Leads | New Free Estimate Request - VMG Painting & Remodeling |
+| Footer quick form | `POST /api/lead` | Leads | New Website Lead - VMG Painting & Remodeling |
+| Chatbot (full transcript) | `POST /api/chat` | Chats + linked Lead | New Chatbot Lead - VMG Painting & Remodeling |
+| Legacy alias | `POST /api/chatbot-lead` | Leads | (same as /api/lead) |
 
-```bash
-curl -X POST http://localhost:4321/api/contact \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Test","phone":"2535550100","email":"test@example.com","service":"Roofing","message":"Test message","contactMethod":"Email","consent":true}'
-```
+Protection on every endpoint: server-side validation and sanitization,
+honeypot + timing checks, per-IP rate limiting, and link-spam rejection.
+A submission succeeds when it is **stored or emailed** — if email fails but
+the lead is stored, the visitor still gets a success and the failure is
+recorded in Security Logs.
 
-Expected: `{"ok":true}` with SMTP configured, or a 503 JSON error without it.
+## Content management
 
-## Customizing
+- **Pages** (Payload → Pages): published pages render at `/<slug>` with SEO
+  fields, canonical URLs, and safe rich-text rendering. Unpublished = 404.
+  Static routes (services, about, etc.) always take precedence.
+- **Updates** (Payload → Updates): listing at `/updates`, detail at
+  `/updates/<slug>`. Published only.
+- **Media**: uploads with required alt text; used for featured images.
+- Slugs are normalized automatically and must be unique.
 
-- **Chatbot questions/options:** edit `src/components/chatbot/ChatbotWidget.astro`
-  (the `ESTIMATE_STEPS` / `QUESTION_STEPS` arrays). Dropdown options shared by
-  the forms and chatbot live in `src/lib/leadOptions.ts`.
-- **Footer quick form on/off:** set `footerLeadForm: true|false` in `src/data/site.ts`.
-- **Services/content:** `src/data/services.ts` and `src/data/site.ts`.
-- **Logo:** replace the text logo in `src/components/Header.astro` / `Footer.astro`.
-- **Images:** add to `public/images/`, then run `npm run optimize-images`.
+## Security monitoring
 
-## Launch Checklist
+- `security-logs` collection (admins only): API errors, email failures, SMTP
+  test results, rate limiting, and suspicious submissions, with severity.
+- Website middleware catches unhandled API errors → logs + clean JSON 500.
+- Payload login brute-force protection: accounts lock for 10 minutes after
+  5 failed attempts (Payload core `maxLoginAttempts`/`lockTime`).
+- Nothing sensitive is ever logged: no passwords, keys, or full payloads.
 
-- Configure the SMTP environment variables and send a test lead.
-- Verify Washington contractor registration, bond, and insurance status with
-  Washington L&I before publishing final claims.
-- Confirm DNS and SSL inside Hostinger for `vmgpaintingnremodelingllc.com`.
-- After each deployment, clear the Hostinger cache and spot-check the forms.
+## Admin documentation (inside the CMS)
+
+Seeded on first boot (Admin → Admin Docs): **SMTP Settings Guide** and
+**Hostinger Deployment & SMTP Setup**, plus a production deployment checklist
+(Admin → Deployment Checklists). All admin-only.
+
+## Environment variables
+
+Website app: see `.env.example`. CMS app: see `cms/.env.example`.
+
+Rules:
+
+- Never commit `SMTP_PASS`, `SMTP_ENCRYPTION_KEY`, `PAYLOAD_SECRET`, or
+  `PAYLOAD_API_KEY` to Git.
+- Never prefix secrets with `ASTRO_PUBLIC_` — only public values (like
+  `ASTRO_PUBLIC_SITE_URL`) may be client-visible.
+
+## Testing after deployment
+
+1. Open `<CMS URL>/admin`, log in, save SMTP Settings, click Send Test Email.
+2. Submit `/free-estimate` and `/contact-us` forms; run the chatbot end to end.
+3. Confirm emails arrive at the Lead Notification inbox.
+4. Confirm the leads and chat transcript appear in Payload Admin.
+5. Publish a test page in Payload → verify it renders at `/<slug>` and that
+   unpublished content returns 404.
+6. Check Security Logs if anything failed, and Hostinger runtime logs.

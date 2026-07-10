@@ -1,0 +1,63 @@
+---
+/** Update detail page (SSR) — published CMS updates only; otherwise 404. */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import CTASection from "../../components/CTASection.astro";
+import { fetchUpdateBySlug } from "../../lib/payload";
+import { renderLexical, cmsAssetBase } from "../../lib/lexical";
+import { notFoundResponse } from "../../lib/notFound";
+import type { Media } from "../../lib/types";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const update = slug ? await fetchUpdateBySlug(slug) : null;
+
+if (!update) {
+  return notFoundResponse();
+}
+
+const contentHtml = renderLexical(update.content);
+const featured = typeof update.featuredImage === "object" && update.featuredImage !== null ? (update.featuredImage as Media) : null;
+const featuredUrl = featured?.url
+  ? featured.url.startsWith("/")
+    ? `${cmsAssetBase()}${featured.url}`
+    : featured.url
+  : undefined;
+const published = update.publishedAt
+  ? new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "America/Los_Angeles" }).format(new Date(update.publishedAt))
+  : "";
+---
+<BaseLayout
+  title={update.metaTitle || `${update.title} | VMG Painting & Remodeling LLC`}
+  description={update.metaDescription || update.excerpt || `${update.title} — an update from VMG Painting & Remodeling LLC.`}
+  path={`/updates/${update.slug}`}
+>
+  <PageHero
+    title={update.title}
+    text={update.excerpt ?? ""}
+    crumbs={[{ label: "Home", href: "/" }, { label: "Updates", href: "/updates" }, { label: update.title }]}
+  />
+  <section class="section">
+    <div class="container">
+      {published && <p class="note">Published {published}{update.category ? ` · ${update.category}` : ""}</p>}
+      {featuredUrl && (
+        <img class="cms-featured" src={featuredUrl} alt={featured?.alt ?? ""} width={featured?.width ?? 1200} height={featured?.height ?? 675} loading="lazy" decoding="async" />
+      )}
+      <article class="cms-content" set:html={contentHtml} />
+      <div class="button-row"><a class="btn outline" href="/updates">All Updates</a></div>
+    </div>
+  </section>
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .cms-featured { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 28px; }
+  .cms-content { max-width: 800px; }
+  .cms-content :global(h2), .cms-content :global(h3) { margin-top: 34px; }
+  .cms-content :global(img) { border-radius: var(--radius); margin: 20px 0; }
+  .cms-content :global(a) { color: var(--gold-dark); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .cms-content :global(ul), .cms-content :global(ol) { color: var(--muted); margin: 0 0 18px; padding-left: 24px; }
+  .cms-content :global(li) { margin-bottom: 8px; }
+  .cms-content :global(blockquote) { border-left: 4px solid var(--gold); margin: 20px 0; padding: 8px 0 8px 20px; color: var(--muted); }
+</style>

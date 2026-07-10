@@ -4,9 +4,5 @@ import { genericLeadValidator } from "../../lib/leadValidators";
 
 export const prerender = false;
 
-/**
- * Flexible lead endpoint used by the footer quick form (and kept as a
- * backward-compatible alias for older cached pages). The chatbot itself now
- * submits full transcripts to /api/chat.
- */
+/** Generic lead intake: validates, stores in Payload CMS, and emails the owner. */
 export const POST: APIRoute = (context) => handleLeadRequest(context, genericLeadValidator);

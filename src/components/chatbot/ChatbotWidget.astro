@@ -111,6 +111,15 @@ const config = {
     let leadType = "Chatbot Estimate Request";
     let editingKey: string | null = null;
     let opened = false;
+    // Full transcript + session id, submitted to /api/chat for CMS storage.
+    let transcript: { sender: "user" | "bot"; text: string; timestamp: string }[] = [];
+    let sessionId = "";
+
+    function newSessionId(): string {
+      return typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `chat-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
 
     function isValidEmail(value: string) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
@@ -126,6 +135,7 @@ const config = {
       bubble.innerHTML = html;
       messagesEl.appendChild(bubble);
       messagesEl.scrollTop = messagesEl.scrollHeight;
+      transcript.push({ sender: kind, text: bubble.textContent ?? "", timestamp: new Date().toISOString() });
     }
 
     function botSay(html: string, done?: () => void) {
@@ -186,6 +196,8 @@ const config = {
       steps = [];
       stepIndex = 0;
       editingKey = null;
+      transcript = [];
+      sessionId = newSessionId();
       botSay(
         "Hi! Welcome to VMG Painting &amp; Remodeling. I can help you request a free estimate or send a message to our team. What can we help you with today?",
         showMainMenu
@@ -318,10 +330,16 @@ const config = {
       clearOptions();
       botSay("Sending your request…");
       try {
-        const response = await fetch("/api/chatbot-lead", {
+        const response = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ leadType, ...answers, page: location.pathname })
+          body: JSON.stringify({
+            sessionId,
+            leadType,
+            messages: transcript,
+            ...answers,
+            page: location.pathname
+          })
         });
         const result = await response.json().catch(() => ({}));
         if (response.ok && result.ok) {

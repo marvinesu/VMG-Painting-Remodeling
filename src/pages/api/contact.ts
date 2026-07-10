@@ -45,6 +45,18 @@ export const POST: APIRoute = (context) =>
       subject: "New Contact Message - VMG Painting & Remodeling",
       leadType: "Contact Form Message",
       replyTo: email || undefined,
+      lead: {
+        name,
+        email,
+        phone,
+        serviceNeeded: service ? [service] : [],
+        projectAddress: address,
+        city: cityCounty,
+        message,
+        preferredContactMethod: contactMethod,
+        sourcePage: page,
+        consent
+      },
       rows: [
         { label: "Name", value: name },
         { label: "Phone", value: phone },

@@ -1,0 +1,58 @@
+---
+/**
+ * Dynamic CMS page route (SSR). Static routes (about-us, services/…, etc.)
+ * always take precedence — this only handles slugs managed in Payload CMS.
+ * Unpublished or missing pages return the 404 page.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import CTASection from "../components/CTASection.astro";
+import { fetchPageBySlug } from "../lib/payload";
+import { renderLexical, cmsAssetBase } from "../lib/lexical";
+import { notFoundResponse } from "../lib/notFound";
+import type { Media } from "../lib/types";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const page = slug ? await fetchPageBySlug(slug) : null;
+
+if (!page) {
+  return notFoundResponse();
+}
+
+const contentHtml = renderLexical(page.content);
+const featured = typeof page.featuredImage === "object" && page.featuredImage !== null ? (page.featuredImage as Media) : null;
+const featuredUrl = featured?.url
+  ? featured.url.startsWith("/")
+    ? `${cmsAssetBase()}${featured.url}`
+    : featured.url
+  : undefined;
+---
+<BaseLayout
+  title={page.metaTitle || `${page.title} | VMG Painting & Remodeling LLC`}
+  description={page.metaDescription || page.excerpt || `${page.title} — VMG Painting & Remodeling LLC, Roy, WA.`}
+  path={`/${page.slug}`}
+>
+  <PageHero title={page.title} text={page.excerpt ?? ""} crumbs={[{ label: "Home", href: "/" }, { label: page.title }]} />
+  <section class="section">
+    <div class="container">
+      {featuredUrl && (
+        <img class="cms-featured" src={featuredUrl} alt={featured?.alt ?? ""} width={featured?.width ?? 1200} height={featured?.height ?? 675} loading="lazy" decoding="async" />
+      )}
+      <article class="cms-content" set:html={contentHtml} />
+    </div>
+  </section>
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .cms-featured { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 28px; }
+  .cms-content { max-width: 800px; }
+  .cms-content :global(h2), .cms-content :global(h3) { margin-top: 34px; }
+  .cms-content :global(img) { border-radius: var(--radius); margin: 20px 0; }
+  .cms-content :global(a) { color: var(--gold-dark); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .cms-content :global(ul), .cms-content :global(ol) { color: var(--muted); margin: 0 0 18px; padding-left: 24px; }
+  .cms-content :global(li) { margin-bottom: 8px; }
+  .cms-content :global(blockquote) { border-left: 4px solid var(--gold); margin: 20px 0; padding: 8px 0 8px 20px; color: var(--muted); }
+</style>

@@ -1,0 +1,74 @@
+---
+/** Updates/news listing (SSR) — shows published CMS updates only. */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import CTASection from "../../components/CTASection.astro";
+import { fetchUpdates } from "../../lib/payload";
+import { cmsAssetBase } from "../../lib/lexical";
+import type { Media } from "../../lib/types";
+
+export const prerender = false;
+
+const updates = await fetchUpdates(30);
+
+function imageFor(update: (typeof updates)[number]): { url: string; alt: string } | null {
+  const media = typeof update.featuredImage === "object" && update.featuredImage !== null ? (update.featuredImage as Media) : null;
+  if (!media?.url) return null;
+  return {
+    url: media.url.startsWith("/") ? `${cmsAssetBase()}${media.url}` : media.url,
+    alt: media.alt ?? ""
+  };
+}
+
+function formatDate(value?: string | null): string {
+  if (!value) return "";
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "America/Los_Angeles" }).format(new Date(value));
+}
+---
+<BaseLayout
+  title="Updates & News | VMG Painting & Remodeling LLC"
+  description="Project updates, tips, and news from VMG Painting & Remodeling LLC — a family-owned contractor serving Thurston, Pierce, King, and Snohomish County, WA."
+  path="/updates"
+>
+  <PageHero
+    title="Updates & News"
+    text="Project updates, homeowner tips, and company news from the VMG team."
+    crumbs={[{ label: "Home", href: "/" }, { label: "Updates" }]}
+  />
+  <section class="section">
+    <div class="container">
+      {updates.length === 0 ? (
+        <p class="lead">No updates have been published yet — check back soon. In the meantime, <a class="inline-link" href="/free-estimate">request a free estimate</a> or <a class="inline-link" href="/services">explore our services</a>.</p>
+      ) : (
+        <div class="grid grid-3">
+          {updates.map((update) => {
+            const image = imageFor(update);
+            return (
+              <article class="card update-card">
+                <a href={`/updates/${update.slug}`}>
+                  {image && <img src={image.url} alt={image.alt} width="520" height="300" loading="lazy" decoding="async" />}
+                  <div class="update-body">
+                    {update.publishedAt && <p class="note">{formatDate(update.publishedAt)}</p>}
+                    <h2>{update.title}</h2>
+                    {update.excerpt && <p>{update.excerpt}</p>}
+                    <span class="update-link">Read More <span aria-hidden="true">&rarr;</span></span>
+                  </div>
+                </a>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </section>
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .inline-link { color: var(--gold-dark); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+  .update-card img { width: 100%; height: 210px; object-fit: cover; }
+  .update-body { padding: 22px; }
+  .update-body h2 { font-size: 1.3rem; color: var(--ink); }
+  .update-link { color: var(--gold-dark); font-weight: 900; }
+  .update-card a:hover .update-link, .update-card a:focus-visible .update-link { text-decoration: underline; text-underline-offset: 3px; }
+</style>

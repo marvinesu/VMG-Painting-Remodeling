@@ -74,11 +74,37 @@ export const POST: APIRoute = (context) =>
     const countyValue = county === "Other" && countyOther ? `Other — ${countyOther}` : county;
     const ownerValue = owner === "No" && ownerRelationship ? `No — ${ownerRelationship}` : owner;
 
+    const storedMessage = [
+      details,
+      "",
+      `Timeline: ${timeline}`,
+      preferredDate ? `Preferred estimate date: ${preferredDate}` : "",
+      preferredTime ? `Preferred time: ${preferredTime}` : "",
+      budget ? `Budget range: ${budget}` : "",
+      `Property owner: ${ownerValue}`,
+      county === "Other" && countyOther ? `Service location: ${countyOther}` : ""
+    ]
+      .filter((line, index) => line !== "" || index === 1)
+      .join("\n");
+
     return {
       errors,
       subject: "New Free Estimate Request - VMG Painting & Remodeling",
       leadType: "Free Estimate Request",
       replyTo: email || undefined,
+      lead: {
+        name,
+        email,
+        phone,
+        serviceNeeded: projectTypes,
+        projectAddress: address,
+        city,
+        county,
+        message: storedMessage,
+        preferredContactMethod: contactMethod,
+        sourcePage: page,
+        consent
+      },
       rows: [
         { label: "Name", value: name },
         { label: "Phone", value: phone },
