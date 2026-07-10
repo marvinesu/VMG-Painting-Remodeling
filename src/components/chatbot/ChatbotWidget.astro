@@ -30,7 +30,7 @@ const config = {
 <div class="vmg-chat" data-chat data-config={JSON.stringify(config)}>
   <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="vmg-chat-panel" data-chat-launcher>
     <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 18h4"/>
+      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
     </svg>
     <span>Request a Free Estimate</span>
   </button>
@@ -477,6 +477,7 @@ const config = {
     }
 
     launcher.addEventListener("click", () => (panel.hidden ? openPanel() : closePanel()));
+    window.setTimeout(() => launcher.classList.add("prompt-hidden"), 7000);
     closeButton.addEventListener("click", closePanel);
     restartButton.addEventListener("click", start);
     document.addEventListener("keydown", (event) => {
@@ -648,7 +649,12 @@ const config = {
   .chat-panel[aria-busy="true"] .chat-options,
   .chat-panel[aria-busy="true"] .chat-input-row { pointer-events: none; opacity: .55; }
   @media (max-width: 520px) {
-    .chat-launcher { right: 12px; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 62px); padding: 11px 15px; font-size: .86rem; }
+    .chat-launcher { right: 76px; bottom: max(12px, env(safe-area-inset-bottom)); width: 52px; height: 52px; padding: 0; justify-content: center; border-radius: 50%; }
+    .chat-launcher svg { width: 21px; height: 21px; color: var(--white); }
+    .chat-launcher span { position: absolute; right: -1px; bottom: 63px; width: 205px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); box-shadow: 0 10px 26px rgba(13,6,48,.18); text-align: left; line-height: 1.35; transition: opacity 180ms ease, transform 180ms ease; }
+    .chat-launcher span::after { content: ""; position: absolute; right: 15px; bottom: -7px; width: 12px; height: 12px; background: var(--white); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transform: rotate(45deg); }
+    .chat-launcher.prompt-hidden span { opacity: 0; pointer-events: none; transform: translateY(5px); }
+    .chat-launcher:hover span, .chat-launcher:focus-visible span { opacity: 1; transform: none; }
     .chat-panel { right: 8px; left: 8px; width: auto; bottom: max(8px, env(safe-area-inset-bottom)); height: auto; max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom))); border-radius: 14px; }
     .chat-header { padding: 12px 14px; }
     .chat-messages { min-height: 140px; max-height: calc(100dvh - 250px); padding: 14px; }

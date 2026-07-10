@@ -15,9 +15,8 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
   </div>
   <nav class="nav container" aria-label="Primary navigation">
     <a class="logo" href="/" aria-label="VMG Painting & Remodeling home">VMG Painting <span>&amp; Remodeling</span></a>
-    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav-links">
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
       <span class="menu-icon" aria-hidden="true"></span>
-      Menu
     </button>
     <div class="nav-links" id="site-nav-links">
       {primaryNav.slice(0, 2).map((item) => <a href={item.href}>{item.label}</a>)}
@@ -41,17 +40,20 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
   button?.addEventListener("click", () => {
     const open = button.getAttribute("aria-expanded") === "true";
     button.setAttribute("aria-expanded", String(!open));
+    button.setAttribute("aria-label", open ? "Open menu" : "Close menu");
     links?.classList.toggle("open", !open);
     document.body.classList.toggle("mobile-menu-open", !open);
   });
   links?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
     button?.setAttribute("aria-expanded", "false");
+    button?.setAttribute("aria-label", "Open menu");
     links.classList.remove("open");
     document.body.classList.remove("mobile-menu-open");
   }));
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && button?.getAttribute("aria-expanded") === "true") {
       button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "Open menu");
       links?.classList.remove("open");
       document.body.classList.remove("mobile-menu-open");
       button.focus();
@@ -93,6 +95,7 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
   .menu-button { display: none; }
   @media (max-width: 920px) {
     .site-header { position: static; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .topbar { position: fixed; inset: 0 0 auto; z-index: 84; }
     .topbar-inner { justify-content: center; }
     .topbar-inner span, .topbar-inner a:last-child { display: none; }
     .topbar-inner a:first-child { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .78rem; }
@@ -103,45 +106,51 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
       bottom: max(12px, env(safe-area-inset-bottom));
       z-index: 82;
       align-items: center;
-      gap: 9px;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
       background: var(--lime);
       color: var(--ink);
-      border: 0;
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-weight: 900;
+      border: 2px solid var(--navy);
+      border-radius: 50%;
+      padding: 0;
       cursor: pointer;
+      box-shadow: 0 9px 22px rgba(13, 6, 48, .22);
+      transition: transform 180ms cubic-bezier(.23,1,.32,1), background 180ms ease;
     }
-    .menu-icon { display: inline-block; width: 16px; height: 2px; background: currentColor; position: relative; }
-    .menu-icon::before, .menu-icon::after { content: ""; position: absolute; left: 0; width: 16px; height: 2px; background: currentColor; }
-    .menu-icon::before { top: -5px; }
-    .menu-icon::after { top: 5px; }
-    .nav { min-height: 68px; }
+    .menu-button:active { transform: scale(.94); }
+    .menu-icon { display: inline-block; width: 18px; height: 2px; background: currentColor; position: relative; transition: background 160ms ease; }
+    .menu-icon::before, .menu-icon::after { content: ""; position: absolute; left: 0; width: 18px; height: 2px; background: currentColor; transition: top 180ms ease, transform 180ms ease; }
+    .menu-icon::before { top: -6px; }
+    .menu-icon::after { top: 6px; }
+    .menu-button[aria-expanded="true"] .menu-icon { background: transparent; }
+    .menu-button[aria-expanded="true"] .menu-icon::before { top: 0; transform: rotate(45deg); }
+    .menu-button[aria-expanded="true"] .menu-icon::after { top: 0; transform: rotate(-45deg); }
+    .nav { min-height: 64px; margin-top: 38px; }
     .nav-links {
       display: none;
       position: fixed;
       left: 12px;
       bottom: calc(max(12px, env(safe-area-inset-bottom)) + 58px);
       z-index: 81;
-      width: min(340px, calc(100vw - 24px));
-      max-height: calc(100dvh - 100px);
+      width: min(310px, calc(100vw - 24px));
+      max-height: calc(100dvh - 116px);
       overflow-y: auto;
       flex-direction: column;
       align-items: stretch;
-      gap: 4px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
+      gap: 2px;
+      padding: 10px;
+      border: 2px solid rgba(56, 78, 119, .28);
+      border-radius: 14px;
       background: var(--white);
       box-shadow: 0 18px 44px rgba(13, 6, 48, .28);
     }
     .nav-links.open { display: flex; }
-    .nav-links a { padding: 10px 12px; border-radius: 8px; }
+    .nav-links > a, .services-menu > summary { padding: 9px 11px; border-radius: 8px; }
     .nav-links a:hover, .nav-links a:focus-visible { background: var(--cream); }
-    .services-panel { position: static; width: 100%; margin-top: 8px; box-shadow: none; }
-    .services-panel a { padding: 11px 12px; }
-    .nav-phone { padding: 10px 0; }
-    .nav-cta-wrap { width: 100%; justify-content: center; }
+    .services-panel { position: static; width: 100%; margin-top: 4px; padding: 5px; box-shadow: none; border-radius: 10px; }
+    .services-panel a { padding: 8px 10px; font-size: .87rem; }
+    .nav-phone, .nav-cta-wrap { display: none; }
     :global(body.chat-open) .menu-button,
     :global(body.chat-open) .nav-links { opacity: 0; pointer-events: none; }
   }
