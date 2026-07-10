@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import FloatingCallButton from "../components/FloatingCallButton.astro";
 import ChatbotWidget from "../components/chatbot/ChatbotWidget.astro";
 import EstimatePopup from "../components/EstimatePopup.astro";
+import VoucherBanner from "../components/VoucherBanner.astro";
 import { site } from "../data/site";
 import { srcsetFor } from "../data/images";
 import "../styles/global.css";
@@ -121,6 +122,7 @@ const jsonLd = [businessSchema, ...schema];
     <FloatingCallButton />
     <ChatbotWidget />
     <EstimatePopup />
+    <VoucherBanner />
     <script>
       import "../scripts/motion";
     </script>

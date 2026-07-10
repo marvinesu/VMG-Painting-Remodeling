@@ -1,0 +1,124 @@
+---
+/**
+ * Small bottom-corner voucher offer: "10% OFF" claimable on every page.
+ *
+ * Slides up after 4 seconds; dismissing hides it for 7 days, claiming hides it
+ * for 30 days. "Claim" opens the estimate popup with the voucher attached to
+ * the lead (see EstimatePopup's vmg:claim-offer listener), so the notification
+ * email shows the customer claimed the offer.
+ */
+---
+<div class="voucher-banner" data-voucher-banner role="region" aria-label="Special offer" hidden>
+  <span class="voucher-icon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.6 13.4 12 22 2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z" />
+      <circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
+  </span>
+  <p class="voucher-text">
+    <strong>New Customer Offer</strong>
+    <span>10% OFF your project — claim your voucher</span>
+  </p>
+  <button class="btn voucher-claim" type="button" data-voucher-claim>Claim 10% Off</button>
+  <button class="voucher-close" type="button" data-voucher-close aria-label="Dismiss this offer">
+    <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  </button>
+</div>
+
+<script>
+  const banner = document.querySelector<HTMLElement>("[data-voucher-banner]");
+  if (banner) {
+    const DISMISS_KEY = "vmg-voucher-dismissed-at";
+    const CLAIM_KEY = "vmg-voucher-claimed-at";
+    const DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
+    const CLAIM_MS = 30 * 24 * 60 * 60 * 1000;
+
+    const readAt = (key: string) => {
+      try { return Number(localStorage.getItem(key) ?? 0); } catch { return 0; }
+    };
+    const stamp = (key: string) => {
+      try { localStorage.setItem(key, String(Date.now())); } catch { /* private mode */ }
+    };
+
+    const dismissedAt = readAt(DISMISS_KEY);
+    const claimedAt = readAt(CLAIM_KEY);
+    const suppressed =
+      (dismissedAt && Date.now() - dismissedAt < DISMISS_MS) ||
+      (claimedAt && Date.now() - claimedAt < CLAIM_MS);
+
+    if (!suppressed) {
+      setTimeout(() => { banner.hidden = false; }, 4000);
+    }
+
+    banner.querySelector("[data-voucher-close]")?.addEventListener("click", () => {
+      banner.hidden = true;
+      stamp(DISMISS_KEY);
+    });
+
+    banner.querySelector("[data-voucher-claim]")?.addEventListener("click", () => {
+      banner.hidden = true;
+      stamp(CLAIM_KEY);
+      document.dispatchEvent(new CustomEvent("vmg:claim-offer"));
+    });
+  }
+</script>
+
+<style>
+  .voucher-banner {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: min(430px, calc(100vw - 100px));
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--teal);
+    border-radius: 14px;
+    box-shadow: 0 18px 44px rgba(13, 6, 48, 0.28);
+    padding: 12px 14px;
+  }
+  .voucher-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--ink);
+  }
+  .voucher-text { margin: 0; display: grid; line-height: 1.35; color: var(--muted); font-size: .85rem; min-width: 0; }
+  .voucher-text strong { color: var(--navy); font-size: .92rem; }
+  .voucher-claim { min-height: 40px; padding: 8px 16px; font-size: .88rem; flex-shrink: 0; }
+  .voucher-close {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--navy);
+    cursor: pointer;
+  }
+  .voucher-close:hover, .voucher-close:focus-visible { background: var(--navy); color: var(--white); }
+  @media (prefers-reduced-motion: no-preference) {
+    .voucher-banner { animation: voucher-in 380ms cubic-bezier(0.23, 1, 0.32, 1); }
+    @keyframes voucher-in {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+  @media (max-width: 640px) {
+    .voucher-banner { left: 12px; bottom: 12px; max-width: calc(100vw - 90px); flex-wrap: wrap; gap: 8px 12px; }
+    .voucher-claim { width: 100%; }
+  }
+</style>

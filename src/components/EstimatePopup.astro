@@ -23,11 +23,13 @@ import LeadFormScript from "./forms/LeadFormScript.astro";
     <div class="popup-header">
       <span class="eyebrow">Free, No-Obligation Estimate</span>
       <h2 id="estimate-popup-title">Ready to Start Your Project?</h2>
+      <p class="popup-offer" data-popup-offer hidden>Your <strong>10% OFF voucher</strong> will be attached to this request — just mention it during your estimate.</p>
       <p>Painting, siding, roofing, windows, decks, or remodeling — tell us what you need and our family-owned team will follow up with a free estimate.</p>
     </div>
     <form class="lead-form popup-lead-form" method="post" action="/api/lead" data-lead-form data-endpoint="/api/lead" novalidate aria-label="Free estimate request">
       <p class="form-status" role="alert" data-status></p>
-      <input type="hidden" name="leadType" value="Popup Estimate Lead" />
+      <input type="hidden" name="leadType" value="Popup Estimate Lead" data-lead-type />
+      <input type="hidden" name="details" value="" data-offer-input />
 
       <div class="popup-grid">
         <div class="field form-field">
@@ -149,6 +151,17 @@ import LeadFormScript from "./forms/LeadFormScript.astro";
       }
     });
 
+    // Voucher banner "Claim 10% Off": open immediately (bypasses the timing
+    // and cooldown rules) and attach the offer to the lead payload.
+    document.addEventListener("vmg:claim-offer", () => {
+      const offerInput = root.querySelector<HTMLInputElement>("[data-offer-input]");
+      const leadTypeInput = root.querySelector<HTMLInputElement>("[data-lead-type]");
+      if (offerInput) offerInput.value = "Customer claimed the 10% OFF new-customer voucher from the website offer popup.";
+      if (leadTypeInput) leadTypeInput.value = "10% Voucher Claim";
+      root.querySelector<HTMLElement>("[data-popup-offer]")?.removeAttribute("hidden");
+      if (root.hidden) open();
+    });
+
     // After a successful submit the shared form script swaps in a success
     // panel — record it so the popup never shows again, then auto-close.
     const form = root.querySelector<HTMLFormElement>("form");
@@ -197,6 +210,16 @@ import LeadFormScript from "./forms/LeadFormScript.astro";
   .popup-header { padding-right: 40px; }
   .popup-header h2 { font-size: clamp(1.45rem, 3.5vw, 1.8rem); margin-bottom: 10px; }
   .popup-header p { margin-bottom: 18px; }
+  .popup-offer {
+    display: inline-block;
+    background: var(--lime);
+    color: var(--ink);
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-size: .92rem;
+    margin-bottom: 12px;
+  }
+  .popup-offer strong { color: var(--ink); }
   .popup-lead-form { gap: 13px; }
   .popup-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
   .popup-alt { margin: 14px 0 0; text-align: center; font-size: 0.92rem; color: var(--muted); }

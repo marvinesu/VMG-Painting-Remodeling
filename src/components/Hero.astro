@@ -1,29 +1,41 @@
 ---
+/**
+ * Home hero with rotating background slides. The first slide is the LCP image
+ * (eager + high priority, preloaded by the page); the rest load lazily at low
+ * priority and crossfade in every 6 seconds. Rotation is skipped entirely for
+ * prefers-reduced-motion users and when only one image is passed.
+ */
 import { srcsetFor } from "../data/images";
+
+type Slide = { src: string; alt: string };
 
 interface Props {
   eyebrow: string;
   title: string;
   text: string;
-  image: string;
-  imageAlt?: string;
+  /** Background slides — first one is the LCP image. */
+  images: Slide[];
   primaryHref?: string;
   secondaryHref?: string;
 }
-const { eyebrow, title, text, image, imageAlt = "", primaryHref = "/free-estimate", secondaryHref = "/services" } = Astro.props;
+const { eyebrow, title, text, images, primaryHref = "/free-estimate", secondaryHref = "/services" } = Astro.props;
 ---
 <section class="hero">
-  <div class="hero-bg">
-    <img
-      src={image}
-      srcset={srcsetFor(image)}
-      sizes="100vw"
-      alt={imageAlt}
-      width="1440"
-      height="1152"
-      fetchpriority="high"
-      decoding="async"
-    />
+  <div class="hero-bg" data-hero-slides>
+    {images.map((img, i) => (
+      <img
+        class={`slide${i === 0 ? " active" : ""}`}
+        src={img.src}
+        srcset={srcsetFor(img.src)}
+        sizes="100vw"
+        alt={img.alt}
+        width="1440"
+        height="1152"
+        fetchpriority={i === 0 ? "high" : "low"}
+        loading={i === 0 ? "eager" : "lazy"}
+        decoding="async"
+      />
+    ))}
   </div>
   <div class="container hero-inner">
     <span class="eyebrow">{eyebrow}</span>
@@ -37,11 +49,40 @@ const { eyebrow, title, text, image, imageAlt = "", primaryHref = "/free-estimat
   </div>
 </section>
 
+<script>
+  const wrap = document.querySelector<HTMLElement>("[data-hero-slides]");
+  const slides = wrap ? Array.from(wrap.querySelectorAll<HTMLImageElement>("img.slide")) : [];
+  if (slides.length > 1 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.remove("active");
+      current = (current + 1) % slides.length;
+      slides[current].classList.add("active");
+    }, 6000);
+  }
+</script>
+
 <style>
   .hero { min-height: 700px; position: relative; display: grid; align-items: center; color: var(--white); overflow: hidden; }
-  .hero-bg { position: absolute; inset: 0; background: var(--charcoal); }
+  .hero-bg { position: absolute; inset: 0; background: var(--navy); }
+  .hero-bg .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1200ms ease;
+  }
+  .hero-bg .slide.active { opacity: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-bg .slide.active { animation: hero-zoom 7000ms ease-out forwards; }
+    @keyframes hero-zoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+  }
   .hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13,6,48,.88), rgba(24,49,79,.58), rgba(24,49,79,.24)); }
-  .hero-bg img { width: 100%; height: 100%; object-fit: cover; }
   .hero-inner { position: relative; padding: 110px 0 72px; }
   .hero-areas { margin: 22px 0 0; font-weight: 700; color: rgba(255,255,255,.85); font-size: .95rem; letter-spacing: .02em; }
   @media (max-width: 720px) { .hero { min-height: 600px; } .hero-bg::after { background: rgba(13,6,48,.74); } }
