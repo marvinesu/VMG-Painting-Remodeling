@@ -2,7 +2,7 @@
 /**
  * Native VMG chat assistant — no external chatbot provider, no heavy
  * libraries. A small vanilla-JS guided flow that collects the same lead
- * information as the estimate form and POSTs it to /api/chatbot-lead.
+ * information as the estimate form and POSTs the complete transcript to /api/chat.
  *
  * To change questions/options, edit the `config` object below (options come
  * from src/lib/leadOptions.ts so forms and chatbot stay in sync).
@@ -66,6 +66,7 @@ const config = {
     <form class="chat-input-row" data-chat-input-row hidden>
       <label class="visually-hidden" for="vmg-chat-input">Your answer</label>
       <input id="vmg-chat-input" type="text" autocomplete="off" placeholder="Type your answer…" />
+      <label class="visually-hidden" for="vmg-chat-textarea">Your message</label>
       <textarea id="vmg-chat-textarea" rows="3" hidden placeholder="Tell us about your project"></textarea>
       <button class="btn chat-send" type="submit">Send</button>
     </form>
@@ -131,6 +132,8 @@ const config = {
     // Full transcript + session id, submitted to /api/chat for CMS storage.
     let transcript: { sender: "user" | "bot"; text: string; timestamp: string }[] = [];
     let sessionId = "";
+    let conversationVersion = 0;
+    let submitting = false;
 
     function newSessionId(): string {
       return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -150,18 +153,24 @@ const config = {
       const bubble = document.createElement("div");
       bubble.className = `chat-msg ${kind}`;
       bubble.innerHTML = html;
+      if (bubble.querySelector(".chat-summary")) bubble.classList.add("summary");
       messagesEl.appendChild(bubble);
       messagesEl.scrollTop = messagesEl.scrollHeight;
       transcript.push({ sender: kind, text: bubble.textContent ?? "", timestamp: new Date().toISOString() });
     }
 
     function botSay(html: string, done?: () => void) {
+      const version = conversationVersion;
       const typing = document.createElement("div");
       typing.className = "chat-msg bot chat-typing";
       typing.textContent = "…";
       messagesEl.appendChild(typing);
       messagesEl.scrollTop = messagesEl.scrollHeight;
       window.setTimeout(() => {
+        if (version !== conversationVersion) {
+          typing.remove();
+          return;
+        }
         typing.remove();
         addMessage("bot", html);
         done?.();
@@ -222,8 +231,10 @@ const config = {
       editingKey = null;
       transcript = [];
       sessionId = newSessionId();
+      conversationVersion += 1;
+      submitting = false;
       botSay(
-        "Hi! Iâ€™m the VMG Assistant. I can help you request a free estimate, ask a question, or connect with our team. What would you like to do?",
+        "Hi! I'm the VMG Assistant. I can help you request a free estimate, ask a question, or connect with our team. What would you like to do?",
         showMainMenu
       );
     }
@@ -250,15 +261,26 @@ const config = {
 
     function showServices() {
       addMessage("user", "View Services");
-      botSay("Here are our services — tap one to learn more, or request an estimate:", () => {
+      botSay("Choose a service to view details or start a free estimate:", () => {
         const items = config.servicePages.map((page: { label: string; href: string }) => ({
           label: page.label,
-          href: page.href
+          onSelect: () => showServiceChoice(page)
         }));
         items.push({ label: "Request a Free Estimate", onSelect: () => beginFlow(ESTIMATE_STEPS, "Chatbot Estimate Request", "Request a Free Estimate") } as never);
         items.push({ label: "Back to menu", onSelect: showMainMenu } as never);
         showOptions(items);
       });
+    }
+
+    function showServiceChoice(page: { label: string; href: string }) {
+      addMessage("user", escapeHtml(page.label));
+      botSay(`Would you like to learn more about ${escapeHtml(page.label)} or request a free estimate?`, () =>
+        showOptions([
+          { label: `View ${page.label}`, href: page.href },
+          { label: "Request an Estimate", onSelect: () => beginFlow(ESTIMATE_STEPS, "Chatbot Estimate Request", `Estimate for ${page.label}`) },
+          { label: "Back to Services", onSelect: showServices }
+        ])
+      );
     }
 
     function beginFlow(flowSteps: Step[], type: string, userLabel: string) {
@@ -288,11 +310,19 @@ const config = {
     function answer(step: Step, value: string) {
       addMessage("user", escapeHtml(value));
       answers[step.key] = value;
+      if (step.key === "county" && value !== "Other") {
+        delete answers.otherCounty;
+        steps = steps.filter((item) => item.key !== "otherCounty");
+      }
       if (step.key === "county" && value === "Other" && !steps.some((item) => item.key === "otherCounty")) {
         steps.splice(stepIndex + 1, 0, { key: "otherCounty", label: "County / City", question: "What county or city is the project in?", input: true });
       }
       if (step.key === "owner" && value !== "Yes" && !steps.some((item) => item.key === "ownerRelationship")) {
         steps.splice(stepIndex + 1, 0, { key: "ownerRelationship", label: "Relationship to Owner", question: "What is your relationship to the property owner?", input: true });
+      }
+      if (step.key === "owner" && value === "Yes") {
+        delete answers.ownerRelationship;
+        steps = steps.filter((item) => item.key !== "ownerRelationship");
       }
       if (editingKey) {
         editingKey = null;
@@ -353,6 +383,8 @@ const config = {
     }
 
     async function submitLead() {
+      if (submitting) return;
+      submitting = true;
       addMessage("user", "Submit Request");
       clearOptions();
       panel.setAttribute("aria-busy", "true");
@@ -399,6 +431,7 @@ const config = {
           ])
         );
       } finally {
+        submitting = false;
         panel.removeAttribute("aria-busy");
       }
     }
@@ -418,6 +451,13 @@ const config = {
         return;
       }
       answer(step, value);
+    });
+
+    textareaEl.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        inputRow.requestSubmit();
+      }
     });
 
     function openPanel() {
@@ -549,6 +589,7 @@ const config = {
   }
   .chat-msg.bot { background: var(--white); border: 1px solid var(--line); color: var(--ink); border-bottom-left-radius: 5px; align-self: flex-start; }
   .chat-msg.user { background: linear-gradient(135deg, var(--charcoal-2), var(--charcoal)); color: var(--white); border-bottom-right-radius: 5px; align-self: flex-end; }
+  .chat-msg.summary { width: 100%; max-width: 100%; }
   .chat-msg a { color: var(--gold-dark); text-decoration: underline; text-underline-offset: 2px; }
   .chat-msg.user a { color: var(--gold); }
   .chat-typing { color: var(--muted); letter-spacing: 3px; }
