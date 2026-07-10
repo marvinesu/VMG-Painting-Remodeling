@@ -32,10 +32,11 @@ const { title, text, href, image, imageAlt } = Astro.props;
 <style>
   .service-card { border-radius: var(--radius); overflow: hidden; background: var(--white); box-shadow: var(--shadow); transition: transform 160ms cubic-bezier(.23,1,.32,1); }
   .service-card img { width: 100%; height: clamp(210px, 24vw, 260px); object-fit: cover; }
-  .service-body { padding: 22px; border: 1px solid var(--line); border-top: 0; min-height: 190px; display: grid; align-content: start; }
+  .service-body { padding: 22px; border: 1px solid var(--line); border-top: 0; min-height: 190px; display: flex; flex-direction: column; }
   .service-body h3 { color: var(--ink); }
-  .service-body p { margin-bottom: 12px; }
+  .service-body p { margin-bottom: 20px; color: var(--muted); }
   .service-link { color: var(--gold-dark); font-weight: 900; }
+  .service-body .service-link { margin-top: auto; }
   .service-card a:hover .service-link, .service-card a:focus-visible .service-link { text-decoration: underline; text-underline-offset: 3px; }
   @media (hover: hover) and (pointer: fine) {
     .service-card:hover { transform: translateY(-3px); }
