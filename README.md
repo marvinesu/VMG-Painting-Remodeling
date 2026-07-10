@@ -1,6 +1,6 @@
-# VMG Painting & Remodeling LLC Website
+﻿# VMG Painting & Remodeling LLC Website
 
-Production-ready static Astro website for `vmgpaintingremodeling.com`.
+Production-ready static Astro website for `vmgpaintingnremodelingllc.com`.
 
 ## Commands
 
@@ -19,7 +19,7 @@ Use Hostinger static website or Git deployment settings:
 - Entry file: leave blank
 - Node version: 20+ recommended
 
-Upload or deploy the contents of `dist` to the site root for `vmgpaintingremodeling.com`.
+Upload or deploy the contents of `dist` to the site root for `vmgpaintingnremodelingllc.com`.
 
 ## Replacement Notes
 
@@ -35,4 +35,4 @@ Upload or deploy the contents of `dist` to the site root for `vmgpaintingremodel
 - Verify Washington contractor registration, bond, and insurance status with Washington L&I before publishing final claims.
 - Add the final logo and favicon.
 - Confirm the production Fillout forms and paste the chatbot embed.
-- Confirm DNS and SSL inside Hostinger for `vmgpaintingremodeling.com`.
+- Confirm DNS and SSL inside Hostinger for `vmgpaintingnremodelingllc.com`.

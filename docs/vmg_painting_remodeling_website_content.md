@@ -1,7 +1,7 @@
-# VMG Painting & Remodeling LLC — Website Content Copy Deck
+﻿# VMG Painting & Remodeling LLC â€” Website Content Copy Deck
 
 **Business Name:** VMG Painting & Remodeling LLC  
-**Website:** vmgpaintingremodeling.com  
+**Website:** vmgpaintingnremodelingllc.com  
 **Primary Phone:** (253) 754-4871  
 **Secondary Phone:** (206) 944-8143  
 **Email:** vmgpaintingnremodelingllc@gmail.com  
@@ -12,7 +12,7 @@
 **WA Contractor Registration:** VMGPAPR782PD  
 **Business Positioning:** Family-owned painting, remodeling, and exterior improvement contractor serving Western Washington.
 
-> **Publishing note:** Before final launch, confirm the current contractor registration, bond, and insurance status directly with Washington L&I. The copy below uses careful wording such as “Washington-registered contractor” to avoid overclaiming.
+> **Publishing note:** Before final launch, confirm the current contractor registration, bond, and insurance status directly with Washington L&I. The copy below uses careful wording such as â€œWashington-registered contractorâ€ to avoid overclaiming.
 
 ---
 
@@ -92,7 +92,7 @@ The Painting & Remodeling Contractor Western Washington Homeowners Call When the
 Quality Painting, Remodeling & Exterior Upgrades Built to Last
 
 ### Hero Paragraph
-Your home should look sharp, feel solid, and be protected from Washington weather. VMG Painting & Remodeling LLC helps homeowners and property owners upgrade their spaces with professional painting, siding, roofing, windows, decks, and remodeling services — all backed by over 30 years of construction experience.
+Your home should look sharp, feel solid, and be protected from Washington weather. VMG Painting & Remodeling LLC helps homeowners and property owners upgrade their spaces with professional painting, siding, roofing, windows, decks, and remodeling services â€” all backed by over 30 years of construction experience.
 
 ### Hero Buttons
 **Primary:** Get a Free Estimate  
@@ -114,7 +114,7 @@ We Bring Skilled Craftsmanship, Clear Communication, and Real Construction Exper
 ### Body Copy
 A fresh coat of paint can change the way a home feels. New siding can protect it. A better deck can bring the family outside again. A smart remodel can make the space finally work the way it should.
 
-But here’s the thing: the final result depends on the contractor doing the work.
+But hereâ€™s the thing: the final result depends on the contractor doing the work.
 
 At VMG Painting & Remodeling LLC, we do more than show up with tools. We bring over three decades of field experience, project leadership, and hands-on craftsmanship. Owner Victor Gomez built his career in residential and commercial construction before starting VMG to serve local homeowners with the kind of honest, detail-focused work he believes every customer deserves.
 
@@ -138,34 +138,34 @@ Request Your Free Estimate
 OUR SERVICES
 
 ### Heading
-Services We’re Offering
+Services Weâ€™re Offering
 
-### Service Card 1 — Interior & Exterior Painting
+### Service Card 1 â€” Interior & Exterior Painting
 **Title:** Interior & Exterior Painting  
 **Short Text:** Clean lines, durable finishes, and professional prep work for homes, rentals, and commercial spaces.  
 **Button:** Learn More
 
-### Service Card 2 — Siding
+### Service Card 2 â€” Siding
 **Title:** Siding  
 **Short Text:** Improve curb appeal and protect your home with siding repair, replacement, and installation services.  
 **Button:** Learn More
 
-### Service Card 3 — Roofing
+### Service Card 3 â€” Roofing
 **Title:** Roofing  
 **Short Text:** Roof repair and replacement solutions designed to help protect your home from leaks and weather damage.  
 **Button:** Learn More
 
-### Service Card 4 — Window Installation
+### Service Card 4 â€” Window Installation
 **Title:** Window Installation  
 **Short Text:** Upgrade comfort, energy efficiency, and appearance with professionally installed windows.  
 **Button:** Learn More
 
-### Service Card 5 — Decks
+### Service Card 5 â€” Decks
 **Title:** Decks  
 **Short Text:** Wood decks, composite decks, and custom outdoor living spaces built for everyday use.  
 **Button:** Learn More
 
-### Service Card 6 — Remodeling Services
+### Service Card 6 â€” Remodeling Services
 **Title:** Remodeling Services  
 **Short Text:** Functional, attractive remodeling solutions for homeowners ready to update the spaces they use most.  
 **Button:** Learn More
@@ -185,7 +185,7 @@ The difference between a project that looks good for a month and one that holds 
 
 That is where experience matters.
 
-VMG Painting & Remodeling LLC brings a contractor’s eye to every project — not just a painter’s eye or an installer’s eye. We look at the whole home, the conditions, the materials, and the final goal so the work is done with care from start to finish.
+VMG Painting & Remodeling LLC brings a contractorâ€™s eye to every project â€” not just a painterâ€™s eye or an installerâ€™s eye. We look at the whole home, the conditions, the materials, and the final goal so the work is done with care from start to finish.
 
 ### Checkmarks
 - Over 30 years of construction experience
@@ -205,19 +205,19 @@ OUR PROCESS
 ### Heading
 A Simple Process From First Call to Final Walkthrough
 
-### Step 1 — Request Your Estimate
-Tell us what you need help with — painting, siding, roofing, windows, decks, or remodeling — and we’ll schedule a time to review the project.
+### Step 1 â€” Request Your Estimate
+Tell us what you need help with â€” painting, siding, roofing, windows, decks, or remodeling â€” and weâ€™ll schedule a time to review the project.
 
-### Step 2 — Review the Scope
+### Step 2 â€” Review the Scope
 We look at the condition of the space, discuss your goals, and explain what needs to be done before the work begins.
 
-### Step 3 — Get a Clear Proposal
+### Step 3 â€” Get a Clear Proposal
 You receive a straightforward estimate so you understand the project scope, materials, and next steps.
 
-### Step 4 — We Complete the Work
+### Step 4 â€” We Complete the Work
 Our team handles the project with careful preparation, clean workmanship, and consistent communication.
 
-### Step 5 — Final Walkthrough
+### Step 5 â€” Final Walkthrough
 Before we wrap up, we review the finished work with you and address any final details.
 
 ---
@@ -256,16 +256,16 @@ TESTIMONIALS
 What Homeowners Say About Working With VMG
 
 ### Testimonial Placeholder 1
-“Victor and his team were professional, respectful, and detail-oriented. They explained the work clearly and made sure everything was finished the right way.”  
-— Homeowner in Pierce County
+â€œVictor and his team were professional, respectful, and detail-oriented. They explained the work clearly and made sure everything was finished the right way.â€  
+â€” Homeowner in Pierce County
 
 ### Testimonial Placeholder 2
-“VMG helped us update the exterior of our home and the difference was huge. The communication was great from the estimate to the final walkthrough.”  
-— Homeowner in King County
+â€œVMG helped us update the exterior of our home and the difference was huge. The communication was great from the estimate to the final walkthrough.â€  
+â€” Homeowner in King County
 
 ### Testimonial Placeholder 3
-“We needed a contractor who could handle more than one part of the project. VMG made the process easier and delivered quality work.”  
-— Homeowner in Thurston County
+â€œWe needed a contractor who could handle more than one part of the project. VMG made the process easier and delivered quality work.â€  
+â€” Homeowner in Thurston County
 
 > Replace these with verified customer reviews before publishing if available.
 
@@ -292,7 +292,7 @@ A: Yes. We provide interior and exterior painting, exterior improvements, deck w
 A: Yes. VMG Painting & Remodeling LLC operates under Washington Contractor Registration #VMGPAPR782PD. Please verify current status with Washington L&I before hiring any contractor.
 
 **Q: How do I get started?**  
-A: Call (253) 754-4871 or request a free estimate through the website. We’ll review your project and explain the next steps.
+A: Call (253) 754-4871 or request a free estimate through the website. Weâ€™ll review your project and explain the next steps.
 
 ---
 
@@ -337,14 +337,14 @@ Victor Gomez has spent more than 30 years in residential and commercial construc
 
 That experience shaped the way he works today.
 
-He learned how to lead crews, solve problems, manage details, and keep projects moving without losing sight of quality. More importantly, he learned that every home represents someone’s investment, comfort, and future.
+He learned how to lead crews, solve problems, manage details, and keep projects moving without losing sight of quality. More importantly, he learned that every home represents someoneâ€™s investment, comfort, and future.
 
 After years of hands-on construction experience, Victor decided to launch VMG Painting & Remodeling LLC so he could serve homeowners directly. His goal was simple: provide dependable craftsmanship, honest communication, and quality work that helps local families improve and protect their homes.
 
-Today, Victor’s wife, Elizabeth Gomez, helps with the administrative side of the business. Together, they are building VMG as a family-owned company rooted in service, trust, and long-term relationships.
+Today, Victorâ€™s wife, Elizabeth Gomez, helps with the administrative side of the business. Together, they are building VMG as a family-owned company rooted in service, trust, and long-term relationships.
 
 ### Supporting Paragraph
-From painting and siding to roofing, windows, decks, and remodeling, VMG approaches every project with the same mindset: do the work carefully, communicate clearly, and treat the customer’s home with respect.
+From painting and siding to roofing, windows, decks, and remodeling, VMG approaches every project with the same mindset: do the work carefully, communicate clearly, and treat the customerâ€™s home with respect.
 
 ### CTA
 Schedule a Free Estimate
@@ -371,19 +371,19 @@ We believe homeowners deserve a contractor who is honest about the work, clear a
 ### Heading
 What We Stand For
 
-### Value 1 — Quality Workmanship
+### Value 1 â€” Quality Workmanship
 We take preparation, installation, and finishing seriously because the details are what make the work last.
 
-### Value 2 — Honest Communication
+### Value 2 â€” Honest Communication
 We explain what we see, what we recommend, and what the project requires before the work begins.
 
-### Value 3 — Family-Owned Service
+### Value 3 â€” Family-Owned Service
 Victor and Elizabeth are personally invested in the reputation of the company and the satisfaction of every customer.
 
-### Value 4 — Community Commitment
+### Value 4 â€” Community Commitment
 We are proud to serve homeowners across Thurston, Pierce, King, and Snohomish County.
 
-### Value 5 — Practical Solutions
+### Value 5 â€” Practical Solutions
 We focus on recommendations that make sense for the home, the budget, and the long-term result.
 
 ---
@@ -411,10 +411,10 @@ Always verify contractor registration, bond, insurance, and current status direc
 ## About Page Final CTA
 
 ### Heading
-Let’s Talk About Your Project
+Letâ€™s Talk About Your Project
 
 ### Body Copy
-Tell us what you want to improve, repair, or remodel. We’ll help you understand your options and provide a clear estimate.
+Tell us what you want to improve, repair, or remodel. Weâ€™ll help you understand your options and provide a clear estimate.
 
 ### CTA
 Get a Free Estimate
@@ -480,14 +480,14 @@ Interior and exterior remodeling services designed to make your home more functi
 Not Sure Where to Start?
 
 ### Body Copy
-A lot of homeowners know something needs to be improved, but they are not sure what should come first. Call VMG Painting & Remodeling LLC and we’ll help you review your project, prioritize the work, and understand your options.
+A lot of homeowners know something needs to be improved, but they are not sure what should come first. Call VMG Painting & Remodeling LLC and weâ€™ll help you review your project, prioritize the work, and understand your options.
 
 ### CTA
 Talk to a Contractor
 
 ---
 
-# 5. Service Page — Interior & Exterior Painting
+# 5. Service Page â€” Interior & Exterior Painting
 
 ## SEO Metadata
 **SEO Title:** Interior & Exterior Painting in Roy, WA | VMG Painting & Remodeling LLC  
@@ -511,7 +511,7 @@ PAINTING SERVICES
 A Better Paint Job Starts With Better Preparation
 
 ### Body Copy
-Paint is one of the fastest ways to change the look of your home — but the quality of the finish depends on what happens before the paint goes on.
+Paint is one of the fastest ways to change the look of your home â€” but the quality of the finish depends on what happens before the paint goes on.
 
 At VMG Painting & Remodeling LLC, we focus on surface preparation, clean lines, proper materials, and careful application. Whether you need interior painting, exterior painting, trim work, doors, walls, or a full home repaint, we help you get a finish that looks clean and holds up.
 
@@ -565,7 +565,7 @@ Request a Free Estimate
 
 ---
 
-# 6. Service Page — Siding
+# 6. Service Page â€” Siding
 
 ## SEO Metadata
 **SEO Title:** Siding Installation & Replacement in Roy, WA | VMG Painting & Remodeling LLC  
@@ -648,7 +648,7 @@ Request a Free Estimate
 
 ---
 
-# 7. Service Page — Roofing
+# 7. Service Page â€” Roofing
 
 ## SEO Metadata
 **SEO Title:** Roofing Contractor in Roy, WA | Roof Repair & Replacement | VMG  
@@ -672,7 +672,7 @@ ROOFING SERVICES
 A Reliable Roof Starts With the Right Contractor
 
 ### Body Copy
-Your roof is one of the most important parts of your home. When it fails, the damage can spread quickly — from leaks and insulation problems to drywall, framing, and interior repairs.
+Your roof is one of the most important parts of your home. When it fails, the damage can spread quickly â€” from leaks and insulation problems to drywall, framing, and interior repairs.
 
 VMG Painting & Remodeling LLC helps homeowners address roofing concerns with practical, professional service. Whether your roof needs repair, replacement, or a closer look after years of wear, we can help you understand the next step.
 
@@ -730,7 +730,7 @@ Request a Free Estimate
 
 ---
 
-# 8. Service Page — Window Installation
+# 8. Service Page â€” Window Installation
 
 ## SEO Metadata
 **SEO Title:** Window Installation in Roy, WA | VMG Painting & Remodeling LLC  
@@ -782,7 +782,7 @@ Get a Free Window Estimate
 - Poor insulation or comfort issues
 
 ### Our Window Installation Approach
-We focus on proper fit, clean installation, and careful finish work. Windows should not only look good — they should be installed correctly so they perform properly.
+We focus on proper fit, clean installation, and careful finish work. Windows should not only look good â€” they should be installed correctly so they perform properly.
 
 ---
 
@@ -812,7 +812,7 @@ Request a Free Estimate
 
 ---
 
-# 9. Service Page — Decks
+# 9. Service Page â€” Decks
 
 ## SEO Metadata
 **SEO Title:** Deck Builder in Roy, WA | Wood, Composite & Custom Decks | VMG  
@@ -899,7 +899,7 @@ Request a Free Estimate
 
 ---
 
-# 10. Service Page — Remodeling Services
+# 10. Service Page â€” Remodeling Services
 
 ## SEO Metadata
 **SEO Title:** Remodeling Contractor in Roy, WA | VMG Painting & Remodeling LLC  
@@ -952,7 +952,7 @@ Get a Free Remodeling Estimate
 - To create a space that better fits the family
 
 ### Our Remodeling Approach
-We review your goals, look at the current condition, discuss practical options, and help create a clear scope of work. Remodeling should not feel confusing — it should feel organized, realistic, and guided by a contractor who understands the details.
+We review your goals, look at the current condition, discuss practical options, and help create a clear scope of work. Remodeling should not feel confusing â€” it should feel organized, realistic, and guided by a contractor who understands the details.
 
 ---
 
@@ -965,14 +965,14 @@ A: Yes. We can help with focused updates as well as broader remodeling projects 
 A: Yes. Painting and finish work are often part of remodeling projects.
 
 **Q: How do I know what the project will cost?**  
-A: The best first step is to request an estimate. We’ll review the project and provide a clear scope based on the work needed.
+A: The best first step is to request an estimate. Weâ€™ll review the project and provide a clear scope based on the work needed.
 
 ---
 
 ## Final CTA
 
 ### Heading
-Let’s Turn Your Home Improvement Idea Into a Clear Plan
+Letâ€™s Turn Your Home Improvement Idea Into a Clear Plan
 
 ### Body Copy
 Call VMG Painting & Remodeling LLC today to schedule your free remodeling estimate.
@@ -1003,7 +1003,7 @@ Home / Contact Us
 Tell Us About Your Project
 
 ### Body Copy
-Need painting, siding, roofing, windows, a deck, or remodeling work? Contact VMG Painting & Remodeling LLC today and tell us what you want to improve. We’ll review your project and help you take the next step with a free estimate.
+Need painting, siding, roofing, windows, a deck, or remodeling work? Contact VMG Painting & Remodeling LLC today and tell us what you want to improve. Weâ€™ll review your project and help you take the next step with a free estimate.
 
 ---
 
@@ -1100,7 +1100,7 @@ Get a Clear Estimate From a Contractor With 30+ Years of Experience
 ### Body Copy
 Whether you already know exactly what you need or you are still comparing options, VMG Painting & Remodeling LLC can help you review the project and understand the next step.
 
-Tell us about your painting, siding, roofing, window, deck, or remodeling project and we’ll follow up to schedule your free estimate.
+Tell us about your painting, siding, roofing, window, deck, or remodeling project and weâ€™ll follow up to schedule your free estimate.
 
 ### CTA
 Request Your Free Estimate
@@ -1143,8 +1143,8 @@ Request Your Free Estimate
 
 ### Desired Project Timeline Dropdown
 - As Soon As Possible
-- Within 2–4 Weeks
-- Within 1–3 Months
+- Within 2â€“4 Weeks
+- Within 1â€“3 Months
 - Planning Ahead
 
 ### Submit Button
@@ -1157,16 +1157,16 @@ Send My Estimate Request
 ### Heading
 What Happens After You Request an Estimate?
 
-### Step 1 — We Review Your Request
+### Step 1 â€” We Review Your Request
 We look at the service needed, location, and project details.
 
-### Step 2 — We Contact You
+### Step 2 â€” We Contact You
 Our team follows up to ask any needed questions and schedule a time to review the project.
 
-### Step 3 — We Prepare a Clear Estimate
+### Step 3 â€” We Prepare a Clear Estimate
 You receive a straightforward scope so you know what is included and what to expect.
 
-### Step 4 — You Decide When to Start
+### Step 4 â€” You Decide When to Start
 No pressure. Just clear information so you can make the right decision for your home.
 
 ---
@@ -1356,7 +1356,7 @@ Use this order to fit the Wallox-style template shown in the screenshots:
 8. **FAQ Preview:** 4 common questions
 9. **Projects/Gallery:** painting, siding, roofing, windows, decks, remodeling
 10. **Testimonials:** verified reviews or placeholders until real reviews are available
-11. **Final CTA:** “Ready to Improve Your Home?”
+11. **Final CTA:** â€œReady to Improve Your Home?â€
 12. **Footer:** contact details, services, service areas
 
 ---
@@ -1375,7 +1375,7 @@ Get a Free Estimate
 ### Heading
 Need a Contractor You Can Talk To Directly?
 ### Text
-Call VMG today and tell us what you need. We’ll review your project, answer your questions, and provide a clear estimate.
+Call VMG today and tell us what you need. Weâ€™ll review your project, answer your questions, and provide a clear estimate.
 ### Button
 Call (253) 754-4871
 
@@ -1420,7 +1420,7 @@ Use consistent NAP information across the website:
 **Phone:** (253) 754-4871  
 **Secondary Phone:** (206) 944-8143  
 **Email:** vmgpaintingnremodelingllc@gmail.com  
-**Website:** https://vmgpaintingremodeling.com/  
+**Website:** https://vmgpaintingnremodelingllc.com/  
 **Business Type:** Contractor / Painting Contractor / Remodeler  
 **Service Area:** Thurston County, Pierce County, King County, Snohomish County  
 **Contractor Registration:** VMGPAPR782PD

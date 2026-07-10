@@ -1,8 +1,8 @@
 export const site = {
   name: "VMG Painting & Remodeling LLC",
   shortName: "VMG Painting & Remodeling",
-  domain: "vmgpaintingremodeling.com",
-  url: "https://vmgpaintingremodeling.com",
+  domain: "vmgpaintingnremodelingllc.com",
+  url: "https://vmgpaintingnremodelingllc.com",
   phone: "253-754-4871",
   phoneDisplay: "(253) 754-4871",
   secondaryPhone: "206-944-8143",
