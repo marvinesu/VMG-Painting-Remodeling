@@ -1,5 +1,5 @@
 ---
-import FilloutEstimateButton from "./FilloutEstimateButton.astro";
+import EstimateCtaButton from "./EstimateCtaButton.astro";
 import { services } from "../data/services";
 import { navItems, site } from "../data/site";
 
@@ -30,7 +30,7 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
       </details>
       {primaryNav.slice(2).map((item) => <a href={item.href}>{item.label}</a>)}
       <a class="nav-phone" href={`tel:${site.tel}`}>{site.phoneDisplay}</a>
-      <FilloutEstimateButton className="nav-cta-wrap" />
+      <EstimateCtaButton className="nav-cta-wrap" />
     </div>
   </nav>
 </header>

@@ -14,6 +14,8 @@ export const site = {
   owner: "Victor Gomez",
   admin: "Elizabeth Gomez",
   areas: ["Thurston County", "Pierce County", "King County", "Snohomish County"],
+  // Set to false to hide the quick lead form in the footer.
+  footerLeadForm: true,
   // Approximate coordinates for Roy, WA — used in LocalBusiness structured data.
   geo: { latitude: 47.0043, longitude: -122.5443 }
 };

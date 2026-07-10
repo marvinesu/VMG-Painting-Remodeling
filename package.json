@@ -6,11 +6,16 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "start": "astro preview --host 0.0.0.0"
+    "start": "node ./dist/server/entry.mjs",
+    "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
+    "@astrojs/node": "^9.4.4",
     "@astrojs/sitemap": "^3.6.0",
-    "astro": "^5.10.2"
+    "astro": "^5.10.2",
+    "nodemailer": "^7.0.9"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/nodemailer": "^7.0.4"
+  }
 }

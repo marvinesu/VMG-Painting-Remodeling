@@ -1,0 +1,66 @@
+---
+/**
+ * Compact footer lead capture: name, phone, service, consent, submit.
+ * Posts to /api/chatbot-lead as a "Footer Quick Lead".
+ * To disable this form, set `footerLeadForm: false` in src/data/site.ts.
+ */
+import { SERVICE_OPTIONS } from "../../lib/leadOptions";
+import LeadFormScript from "./LeadFormScript.astro";
+---
+<LeadFormScript />
+<form class="lead-form footer-lead-form" method="post" action="/api/chatbot-lead" data-lead-form data-endpoint="/api/chatbot-lead" novalidate aria-label="Quick estimate request">
+  <p class="form-status" role="alert" data-status></p>
+  <input type="hidden" name="leadType" value="Footer Quick Lead" />
+
+  <div class="field form-field">
+    <label for="footer-name">Name <span class="required-mark" aria-hidden="true">*</span></label>
+    <input id="footer-name" name="name" type="text" autocomplete="name" placeholder="Your name" required aria-describedby="footer-name-error" />
+    <p class="field-error" id="footer-name-error">Please enter your name.</p>
+  </div>
+  <div class="field form-field">
+    <label for="footer-phone">Phone <span class="required-mark" aria-hidden="true">*</span></label>
+    <input id="footer-phone" name="phone" type="tel" autocomplete="tel" placeholder="(253) 555-0100" required aria-describedby="footer-phone-error" />
+    <p class="field-error" id="footer-phone-error">Please enter a valid phone number.</p>
+  </div>
+  <div class="field form-field">
+    <label for="footer-service">Service Needed <span class="required-mark" aria-hidden="true">*</span></label>
+    <select id="footer-service" name="service" required aria-describedby="footer-service-error">
+      <option value="">Choose a service…</option>
+      {SERVICE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+    </select>
+    <p class="field-error" id="footer-service-error">Please choose a service.</p>
+  </div>
+
+  <div class="field">
+    <label class="checkbox-option consent-option footer-consent">
+      <input type="checkbox" name="consent" value="true" required aria-describedby="footer-consent-error" />
+      <span>I agree to be contacted by phone, text, or email. <span class="required-mark" aria-hidden="true">*</span></span>
+    </label>
+    <p class="field-error" id="footer-consent-error">Please confirm you agree to be contacted.</p>
+  </div>
+
+  <!-- Spam protection: hidden from real visitors -->
+  <div class="honeypot-field" aria-hidden="true">
+    <label for="footer-company-website">Company website</label>
+    <input id="footer-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="form_started_at" value="" data-started-at />
+  <input type="hidden" name="page" value="" data-page-source />
+
+  <button class="btn" type="submit" data-submit>Request a Free Estimate</button>
+</form>
+
+<style>
+  .footer-lead-form { gap: 12px; }
+  .footer-lead-form :global(label) { color: var(--white); }
+  .footer-lead-form :global(input), .footer-lead-form :global(select) {
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(255, 255, 255, .22);
+    color: var(--white);
+  }
+  .footer-lead-form :global(select option) { color: var(--ink); }
+  .footer-lead-form :global(input::placeholder) { color: rgba(255, 255, 255, .5); }
+  .footer-lead-form :global(.consent-option) { color: rgba(255, 255, 255, .72); }
+  .footer-lead-form :global(.field-error) { color: #ffb3b3; }
+  .footer-lead-form :global(.form-success-panel), .footer-lead-form :global(.form-success-panel h3) { color: var(--white); }
+</style>

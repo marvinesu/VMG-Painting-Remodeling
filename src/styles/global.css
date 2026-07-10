@@ -170,6 +170,27 @@ input, textarea, select {
 }
 textarea { min-height: 140px; resize: vertical; }
 .note { font-size: .9rem; color: var(--muted); }
+/* Native lead forms */
+.lead-form { display: grid; gap: 16px; }
+.lead-form fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
+.lead-form legend { font-weight: 800; color: var(--ink); padding: 0; margin-bottom: 4px; }
+.required-mark { color: var(--gold-dark); }
+.field-hint { font-size: .85rem; color: var(--muted); margin: 0; }
+.field-error { display: none; font-size: .88rem; font-weight: 700; color: #a83232; margin: 0; }
+.field.invalid .field-error { display: block; }
+.field.invalid input, .field.invalid textarea, .field.invalid select { border-color: #a83232; }
+.checkbox-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+.checkbox-option, .radio-option { display: flex; align-items: flex-start; gap: 9px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.checkbox-option input, .radio-option input { width: auto; margin-top: 4px; flex-shrink: 0; }
+.consent-option { font-size: .9rem; font-weight: 500; color: var(--muted); }
+.form-status { display: none; border-radius: var(--radius); padding: 14px 16px; font-weight: 700; margin: 0; }
+.form-status.error { display: block; background: #fbeaea; color: #7c2626; border: 1px solid #e7bcbc; }
+.form-status.success { display: block; background: #eaf6ec; color: #205a2c; border: 1px solid #bfe0c6; }
+.form-success-panel { text-align: left; }
+.form-success-panel h3 { color: var(--ink); }
+.honeypot-field { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 560px) { .checkbox-grid { grid-template-columns: 1fr; } }
+
 summary { cursor: pointer; font-weight: 800; }
 details.card summary { padding: 4px 0; }
 details.card p { margin: 12px 0 0; }

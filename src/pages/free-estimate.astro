@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
-import FilloutEstimateForm from "../components/FilloutEstimateForm.astro";
+import FreeEstimateForm from "../components/forms/FreeEstimateForm.astro";
 import CTASection from "../components/CTASection.astro";
 import { images } from "../data/images";
 import { site } from "../data/site";
@@ -22,7 +22,6 @@ const breadcrumbSchema = {
   image={images.roofing[0].src}
   schema={[breadcrumbSchema]}
   preloadImage={images.roofing[0].src}
-  preconnect={["https://server.fillout.com"]}
 >
   <PageHero
     title="Get Your Free Estimate"
@@ -45,7 +44,7 @@ const breadcrumbSchema = {
         </ul>
         <p class="note">Serving Thurston, Pierce, King, and Snohomish County from Roy, WA. Prefer the phone? Call <a class="inline-link" href={`tel:${site.tel}`}>{site.phoneDisplay}</a>.</p>
       </div>
-      <div class="card pad"><FilloutEstimateForm /></div>
+      <div class="card pad"><FreeEstimateForm /></div>
     </div>
   </section>
   <CTASection title="Need a Faster Answer?" text="Call VMG Painting & Remodeling LLC directly and speak with our team about your painting, remodeling, or exterior project." />

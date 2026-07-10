@@ -4,7 +4,7 @@ import Hero from "../components/Hero.astro";
 import ServiceCard from "../components/ServiceCard.astro";
 import CTASection from "../components/CTASection.astro";
 import GalleryGrid from "../components/GalleryGrid.astro";
-import FilloutEstimateForm from "../components/FilloutEstimateForm.astro";
+import FreeEstimateForm from "../components/forms/FreeEstimateForm.astro";
 import { services } from "../data/services";
 import { images, srcsetFor, SPLIT_SIZES } from "../data/images";
 import { site } from "../data/site";
@@ -192,7 +192,7 @@ const commitments = [
         <p class="lead">Share a few details about your painting, siding, roofing, window, deck, or remodeling project and our team will follow up with a free, no-obligation estimate.</p>
         <p>Prefer to talk it through? Call <a class="inline-link" href={`tel:${site.tel}`}>{site.phoneDisplay}</a> and speak with the team directly.</p>
       </div>
-      <div class="card pad"><FilloutEstimateForm trigger="click" /></div>
+      <div class="card pad"><FreeEstimateForm /></div>
     </div>
   </section>
   <CTASection title="Ready to Talk About Your Project?" text="Whether you need paint, siding, roofing, windows, a custom deck, or a remodel, VMG Painting & Remodeling LLC is ready to help — starting with a free estimate." />

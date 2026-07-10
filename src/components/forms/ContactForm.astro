@@ -1,0 +1,89 @@
+---
+/**
+ * Native contact form — submits JSON to POST /api/contact.
+ * No third-party scripts. Client JS handles inline validation and
+ * loading/success/error states; the server re-validates everything.
+ */
+import { CONTACT_METHOD_OPTIONS, SERVICE_OPTIONS } from "../../lib/leadOptions";
+import { site } from "../../data/site";
+import LeadFormScript from "./LeadFormScript.astro";
+---
+<LeadFormScript />
+<form class="lead-form" method="post" action="/api/contact" data-lead-form data-endpoint="/api/contact" novalidate>
+  <p class="form-status" role="alert" data-status></p>
+
+  <div class="field form-field">
+    <label for="contact-name">Full Name <span class="required-mark" aria-hidden="true">*</span></label>
+    <input id="contact-name" name="name" type="text" autocomplete="name" placeholder="Your name" required aria-describedby="contact-name-error" />
+    <p class="field-error" id="contact-name-error">Please enter your full name.</p>
+  </div>
+
+  <div class="form-grid">
+    <div class="field form-field">
+      <label for="contact-phone">Phone Number <span class="required-mark" aria-hidden="true">*</span></label>
+      <input id="contact-phone" name="phone" type="tel" autocomplete="tel" placeholder="(253) 555-0100" required aria-describedby="contact-phone-error" />
+      <p class="field-error" id="contact-phone-error">Please enter a valid phone number.</p>
+    </div>
+    <div class="field form-field">
+      <label for="contact-email">Email Address <span class="required-mark" aria-hidden="true">*</span></label>
+      <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required aria-describedby="contact-email-error" />
+      <p class="field-error" id="contact-email-error">Please enter a valid email address.</p>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <div class="field form-field">
+      <label for="contact-address">Property Address <span class="field-hint-inline">(optional)</span></label>
+      <input id="contact-address" name="address" type="text" autocomplete="street-address" placeholder="Street address" />
+    </div>
+    <div class="field form-field">
+      <label for="contact-city">City / County <span class="field-hint-inline">(optional)</span></label>
+      <input id="contact-city" name="cityCounty" type="text" placeholder="e.g. Tacoma, Pierce County" />
+    </div>
+  </div>
+
+  <div class="field form-field">
+    <label for="contact-service">Service Interested In <span class="required-mark" aria-hidden="true">*</span></label>
+    <select id="contact-service" name="service" required aria-describedby="contact-service-error">
+      <option value="">Choose a service…</option>
+      {SERVICE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+    </select>
+    <p class="field-error" id="contact-service-error">Please choose a service.</p>
+  </div>
+
+  <div class="field form-field">
+    <label for="contact-message">Message / How Can We Help? <span class="required-mark" aria-hidden="true">*</span></label>
+    <textarea id="contact-message" name="message" placeholder="Tell us about your project or question" required aria-describedby="contact-message-error"></textarea>
+    <p class="field-error" id="contact-message-error">Please tell us how we can help.</p>
+  </div>
+
+  <fieldset class="field">
+    <legend>Preferred Contact Method <span class="required-mark" aria-hidden="true">*</span></legend>
+    {CONTACT_METHOD_OPTIONS.map((option, i) => (
+      <label class="radio-option">
+        <input type="radio" name="contactMethod" value={option} required={i === 0} />
+        {option}
+      </label>
+    ))}
+    <p class="field-error" id="contact-method-error">Please choose a preferred contact method.</p>
+  </fieldset>
+
+  <div class="field">
+    <label class="checkbox-option consent-option">
+      <input type="checkbox" name="consent" value="true" required aria-describedby="contact-consent-error" />
+      <span>I agree to be contacted by VMG Painting &amp; Remodeling LLC by phone, text, or email regarding my inquiry. Message and data rates may apply. <span class="required-mark" aria-hidden="true">*</span></span>
+    </label>
+    <p class="field-error" id="contact-consent-error">Please confirm you agree to be contacted.</p>
+  </div>
+
+  <!-- Spam protection: hidden from real visitors -->
+  <div class="honeypot-field" aria-hidden="true">
+    <label for="contact-company-website">Company website</label>
+    <input id="contact-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="form_started_at" value="" data-started-at />
+  <input type="hidden" name="page" value="" data-page-source />
+
+  <button class="btn" type="submit" data-submit>Send Message</button>
+  <p class="note">Prefer to talk? Call <a href={`tel:${site.tel}`}>{site.phoneDisplay}</a>.</p>
+</form>

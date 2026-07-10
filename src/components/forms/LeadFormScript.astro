@@ -1,0 +1,191 @@
+<!--
+  Shared client-side behavior for all native lead forms ([data-lead-form]):
+  inline validation, conditional fields, JSON submit, loading/success/error
+  states. Included by each form component; Astro dedupes the module so it
+  ships once per page.
+-->
+<script>
+  function isValidEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+  }
+  function isValidPhone(value: string): boolean {
+    const digits = value.replace(/\D/g, "");
+    return digits.length >= 7 && digits.length <= 15;
+  }
+
+  function fieldWrap(el: Element): HTMLElement | null {
+    return el.closest(".field");
+  }
+
+  function setInvalid(el: HTMLElement, invalid: boolean, message?: string) {
+    const wrap = fieldWrap(el);
+    if (!wrap) return;
+    wrap.classList.toggle("invalid", invalid);
+    el.setAttribute("aria-invalid", String(invalid));
+    if (invalid && message) {
+      const error = wrap.querySelector<HTMLElement>(".field-error");
+      if (error) error.textContent = message;
+    }
+  }
+
+  function validateForm(form: HTMLFormElement): HTMLElement | null {
+    let firstInvalid: HTMLElement | null = null;
+    const flag = (el: HTMLElement, message?: string) => {
+      setInvalid(el, true, message);
+      if (!firstInvalid) firstInvalid = el;
+    };
+
+    form.querySelectorAll<HTMLElement>(".field.invalid").forEach((wrap) => wrap.classList.remove("invalid"));
+
+    const seenRadioGroups = new Set<string>();
+    form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+      "input[required], select[required], textarea[required]"
+    ).forEach((el) => {
+      if (el.closest("[hidden]")) return; // skip hidden conditional fields
+      if (el instanceof HTMLInputElement && el.type === "radio") {
+        if (seenRadioGroups.has(el.name)) return;
+        seenRadioGroups.add(el.name);
+        const checked = form.querySelector(`input[name="${el.name}"]:checked`);
+        if (!checked) flag(el);
+        else setInvalid(el, false);
+        return;
+      }
+      if (el instanceof HTMLInputElement && el.type === "checkbox") {
+        if (!el.checked) flag(el);
+        return;
+      }
+      const value = el.value.trim();
+      if (!value) {
+        flag(el);
+      } else if (el instanceof HTMLInputElement && el.type === "email" && !isValidEmail(value)) {
+        flag(el, "Please enter a valid email address.");
+      } else if (el instanceof HTMLInputElement && el.type === "tel" && !isValidPhone(value)) {
+        flag(el, "Please enter a valid phone number.");
+      }
+    });
+
+    // Checkbox groups marked required as a group (project types)
+    form.querySelectorAll<HTMLElement>("[data-required-group]").forEach((group) => {
+      const checked = group.querySelector("input:checked");
+      const wrap = group.closest(".field");
+      wrap?.classList.toggle("invalid", !checked);
+      if (!checked && !firstInvalid) {
+        firstInvalid = group.querySelector<HTMLElement>("input") ?? group;
+      }
+    });
+
+    return firstInvalid;
+  }
+
+  function payloadFrom(form: HTMLFormElement): Record<string, unknown> {
+    const data = new FormData(form);
+    const payload: Record<string, unknown> = {};
+    for (const key of new Set(data.keys())) {
+      const values = data.getAll(key).map(String);
+      payload[key] = values.length > 1 ? values : values[0];
+    }
+    // Multi-select checkboxes should always be arrays.
+    form.querySelectorAll<HTMLElement>("[data-array-field]").forEach((group) => {
+      const name = group.dataset.arrayField;
+      if (name && typeof payload[name] === "string") payload[name] = [payload[name]];
+    });
+    return payload;
+  }
+
+  function showSuccess(form: HTMLFormElement) {
+    // Swap the fields for a confirmation inside the same <form> element so
+    // scoped styles (e.g. the dark footer variant) keep applying.
+    form.innerHTML =
+      '<div class="form-success-panel" role="status">' +
+      "<h3>Thank you! Your request has been sent.</h3>" +
+      "<p>Our team will contact you shortly. For faster assistance, call " +
+      '<a href="tel:+12537544871"><strong>(253) 754-4871</strong></a>.</p></div>';
+    form.querySelector("a")?.focus();
+  }
+
+  document.querySelectorAll<HTMLFormElement>("[data-lead-form]").forEach((form) => {
+    // Anti-spam timing + page source
+    const started = form.querySelector<HTMLInputElement>("[data-started-at]");
+    if (started) started.value = String(Date.now());
+    const page = form.querySelector<HTMLInputElement>("[data-page-source]");
+    if (page) page.value = location.pathname;
+
+    // Conditional fields: [data-show-when="fieldName:value"]
+    const conditionals = form.querySelectorAll<HTMLElement>("[data-show-when]");
+    const updateConditionals = () => {
+      conditionals.forEach((section) => {
+        const [name, expected] = (section.dataset.showWhen ?? "").split(":");
+        const fields = form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+          `select[name="${name}"], input[name="${name}"]:checked`
+        );
+        const show = Array.from(fields).some((field) => field.value === expected);
+        section.hidden = !show;
+        section.querySelectorAll("input, textarea").forEach((input) => {
+          if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+            input.required = show && input.dataset.conditionallyRequired === "true";
+          }
+        });
+      });
+    };
+    if (conditionals.length > 0) {
+      form.addEventListener("change", updateConditionals);
+      updateConditionals();
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const status = form.querySelector<HTMLElement>("[data-status]");
+      const button = form.querySelector<HTMLButtonElement>("[data-submit]");
+      if (status) {
+        status.className = "form-status";
+        status.textContent = "";
+      }
+
+      const firstInvalid = validateForm(form);
+      if (firstInvalid) {
+        firstInvalid.focus();
+        if (status) {
+          status.className = "form-status error";
+          status.textContent = "Please correct the highlighted fields below.";
+        }
+        return;
+      }
+
+      const originalLabel = button?.textContent ?? "Submit";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Sending…";
+      }
+
+      try {
+        const response = await fetch(form.dataset.endpoint ?? form.action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payloadFrom(form))
+        });
+        const result = await response.json().catch(() => ({}));
+        if (response.ok && result.ok) {
+          showSuccess(form);
+          return;
+        }
+        if (status) {
+          status.className = "form-status error";
+          status.textContent =
+            result.error ??
+            "Sorry, something went wrong. Please call us at (253) 754-4871 or email vmgpaintingnremodelingllc@gmail.com.";
+        }
+      } catch {
+        if (status) {
+          status.className = "form-status error";
+          status.textContent =
+            "Sorry, we couldn't send your request. Please call us at (253) 754-4871 or email vmgpaintingnremodelingllc@gmail.com.";
+        }
+      } finally {
+        if (button && document.contains(button)) {
+          button.disabled = false;
+          button.textContent = originalLabel;
+        }
+      }
+    });
+  });
+</script>

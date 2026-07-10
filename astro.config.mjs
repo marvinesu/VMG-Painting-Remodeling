@@ -1,9 +1,14 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import node from "@astrojs/node";
 
 export default defineConfig({
   site: "https://vmgpaintingnremodelingllc.com",
+  // Pages stay fully prerendered (static). The Node adapter exists only so the
+  // /api/* lead endpoints (marked `prerender = false`) can run server-side.
+  // Deploy runs `node ./dist/server/entry.mjs` — see README.
   output: "static",
+  adapter: node({ mode: "standalone" }),
   integrations: [sitemap()],
   build: {
     // The whole stylesheet is small (~10KB); inlining removes the
