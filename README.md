@@ -62,13 +62,31 @@ npm start              # payload migrate && next start
 
 ## Hostinger deployment
 
-### Website app (existing)
+### Website app (existing) — verified working settings
 
-- Build command: `npm run build`
-- **Entry file: `dist/server/entry.mjs`** (required — see 403 note below)
-- Node version: 22.x
+| Setting | Value |
+| --- | --- |
+| Framework preset | Astro |
+| Branch | main |
+| Node version | 22.x |
+| Root directory | `./` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| **Entry file** | **`server/entry.mjs`** |
+
+Important details learned from the live deployment:
+
+- **The entry file path is relative to the output directory**, not the repo
+  root. Hostinger deploys only the contents of `dist/` to the runtime, so the
+  entry is `server/entry.mjs` (NOT `dist/server/entry.mjs` — that fails the
+  deployment even though the build log ends with "Complete!").
+- Because the runtime receives `dist/` **without `node_modules`**, the server
+  must be fully self-contained. This is handled by `vite.ssr.noExternal: true`
+  in `astro.config.mjs` — do not remove it, or startup crashes with
+  `ERR_MODULE_NOT_FOUND`.
 - Env vars: everything in `.env.example` (`HOST=0.0.0.0`, SMTP fallback vars,
-  `SMTP_ENCRYPTION_KEY`, and the three `PAYLOAD_*` values once the CMS is live)
+  `SMTP_ENCRYPTION_KEY`, and the three `PAYLOAD_*` values once the CMS is live).
+- After each deploy, click **Clear cache**.
 
 ### CMS app (new — second web app)
 
@@ -85,17 +103,29 @@ npm start              # payload migrate && next start
   deploys, switch `DATABASE_URI` to a managed Postgres database and swap the
   adapter to `@payloadcms/db-postgres`.
 
-### If the site returns 403 after deployment
+### Deployment troubleshooting (from real incidents)
 
-A 403 usually means Hostinger is serving `dist/` as static files instead of
-running the Node server. Check:
+**403 Forbidden after deploy** — Hostinger is serving `dist/` as static files
+instead of running the Node server:
 
-1. Entry file is `dist/server/entry.mjs` (not blank).
-2. Build command is `npm run build`.
-3. Node version is 22.x.
-4. `HOST=0.0.0.0` env var is set.
-5. The deployment completed successfully.
-6. Clear the cache after redeploying.
+1. Entry file must be set to `server/entry.mjs` (a blank entry file = static mode).
+2. Build command is `npm run build`, output directory `dist`.
+3. Node version is 22.x and `HOST=0.0.0.0` env var is set.
+4. Clear the cache after redeploying.
+
+**"Build failed" even though the build log ends with `[build] Complete!`** —
+the failure is in Hostinger's post-build startup, not the build:
+
+1. Entry file written as `dist/server/entry.mjs`? Change it to
+   `server/entry.mjs` (the path is resolved inside the output directory).
+2. `vite.ssr.noExternal: true` removed from `astro.config.mjs`? Restore it —
+   the runtime has no `node_modules`, so all deps must be bundled.
+3. Still failing: open **View analysis** and **Runtime logs** in the panel for
+   the actual startup error.
+
+**Env var values** — avoid `$` characters in values where possible (shell
+expansion can mangle them), and never use one combined "SMTP" variable; each
+`SMTP_*` key must be its own variable.
 
 ## SMTP settings (graphical, in the CMS)
 

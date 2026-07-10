@@ -58,10 +58,12 @@ export async function seed(payload: Payload): Promise<void> {
           published: false,
           content: richTextFromBlocks([
             {
-              heading: "Website app (Astro) settings",
+              heading: "Website app (Astro) settings — verified working",
               list: [
+                "Framework preset: Astro",
                 "Build command: npm run build",
-                "Entry file: dist/server/entry.mjs",
+                "Output directory: dist",
+                "Entry file: server/entry.mjs (relative to the OUTPUT directory — NOT dist/server/entry.mjs)",
                 "Node version: 22.x",
                 "Environment variable HOST = 0.0.0.0"
               ]
@@ -90,12 +92,21 @@ export async function seed(payload: Payload): Promise<void> {
             {
               heading: "If the site returns 403 after a deploy",
               list: [
-                "Confirm the entry file is dist/server/entry.mjs (not blank).",
-                "Confirm the build command is npm run build.",
+                "Confirm the entry file is server/entry.mjs (not blank).",
+                "Confirm the build command is npm run build and output directory is dist.",
                 "Confirm Node version is 22.x.",
                 "Confirm HOST = 0.0.0.0 is set.",
                 "Confirm the deployment completed, then clear the cache.",
                 "A 403 usually means Hostinger is serving dist/ as static files instead of running the Node server."
+              ]
+            },
+            {
+              heading: "If deployment says Build failed but the build log ends with Complete!",
+              list: [
+                "The failure is in Hostinger's post-build startup, not the build itself.",
+                "Entry file written as dist/server/entry.mjs fails — it must be server/entry.mjs because the path is resolved inside the output directory.",
+                "The runtime receives dist/ without node_modules, so vite.ssr.noExternal: true must stay in astro.config.mjs.",
+                "Check View analysis and Runtime logs for the actual startup error."
               ]
             },
             {
@@ -124,7 +135,7 @@ export async function seed(payload: Payload): Promise<void> {
           lastReviewed: new Date().toISOString(),
           checklist: [
             { item: "Build command set to npm run build", completed: false },
-            { item: "Entry file set to dist/server/entry.mjs (website app)", completed: false },
+            { item: "Entry file set to server/entry.mjs (website app, relative to output dir)", completed: false },
             { item: "Node version set to 22.x", completed: false },
             { item: "HOST env var set to 0.0.0.0", completed: false },
             { item: "SMTP_ENCRYPTION_KEY added to both apps", completed: false },

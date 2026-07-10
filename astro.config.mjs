@@ -6,7 +6,8 @@ export default defineConfig({
   site: "https://vmgpaintingnremodelingllc.com",
   // Pages stay fully prerendered (static). The Node adapter exists only so the
   // /api/* lead endpoints (marked `prerender = false`) can run server-side.
-  // Deploy runs `node ./dist/server/entry.mjs` — see README.
+  // Hostinger entry file setting: `server/entry.mjs` (relative to the dist
+  // output directory) — see README deployment notes.
   output: "static",
   adapter: node({ mode: "standalone" }),
   integrations: [sitemap()],
