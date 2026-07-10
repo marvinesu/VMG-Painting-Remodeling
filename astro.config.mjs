@@ -14,5 +14,13 @@ export default defineConfig({
     // The whole stylesheet is small (~10KB); inlining removes the
     // render-blocking CSS request entirely.
     inlineStylesheets: "always"
+  },
+  vite: {
+    ssr: {
+      // Bundle ALL dependencies into dist/server so the entry file runs
+      // standalone — Hostinger's runtime only receives the dist folder,
+      // without node_modules.
+      noExternal: true
+    }
   }
 });
