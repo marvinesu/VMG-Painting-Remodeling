@@ -102,22 +102,30 @@ export async function handleLeadRequest(
     });
   }
 
-  // reCAPTCHA (active only when RECAPTCHA_SECRET_KEY is set). Failed checks
-  // get the same fake success as the honeypot so bots learn nothing.
+  // reCAPTCHA (active only when RECAPTCHA_SECRET_KEY is set). A failed check
+  // does NOT drop the submission — losing a real lead costs more than reading
+  // spam — it delivers the email flagged with the failure reason instead.
+  // Honeypot/timing/rate-limit above still drop the obvious bots.
   const recaptcha = await verifyRecaptcha(body.recaptchaToken, ip);
   if (recaptcha.verdict === "fail") {
+    console.error(`[lead] reCAPTCHA check failed (${recaptcha.reason ?? "unknown"}) — delivering flagged lead from ${route}.`);
     void createSecurityLog({
       eventType: "suspicious_submission",
       ipAddress: ip,
       userAgent,
       route,
-      description: `Submission dropped by reCAPTCHA (${recaptcha.reason ?? "failed"}).`,
+      description: `reCAPTCHA failed (${recaptcha.reason ?? "failed"}) — lead delivered flagged.`,
       severity: "low"
     });
-    return json(200, { ok: true });
   }
 
   const { errors, subject, leadType, rows, replyTo, lead } = validate(body);
+  if (recaptcha.verdict === "fail") {
+    rows.push({
+      label: "Spam Check",
+      value: `reCAPTCHA did not verify this submission (${recaptcha.reason ?? "unknown"}). It may be spam — confirm by phone before scheduling.`
+    });
+  }
   if (Object.keys(errors).length > 0) {
     return json(400, { ok: false, error: "Please correct the highlighted fields.", fields: errors });
   }
