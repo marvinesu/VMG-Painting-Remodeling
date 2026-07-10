@@ -12,7 +12,7 @@ import { sendLeadEmail, smtpConfigured, type LeadRow } from "./email";
 import { createLead, createSecurityLog, payloadEnabled } from "./payload";
 import { isRateLimited } from "./rateLimit";
 import { verifyRecaptcha } from "./recaptcha";
-import { isSpam, type FieldErrors } from "./validation";
+import { spamReason, type FieldErrors } from "./validation";
 import type { Lead } from "./types";
 
 export type LeadValidator = (body: Record<string, unknown>) => {
@@ -75,13 +75,15 @@ export async function handleLeadRequest(
   }
 
   // Honeypot / too-fast submissions: pretend success, store nothing.
-  if (isSpam(body)) {
+  const spam = spamReason(body);
+  if (spam) {
+    console.error(`[lead] Submission on ${route} dropped by spam check: ${spam}`);
     void createSecurityLog({
       eventType: "suspicious_submission",
       ipAddress: ip,
       userAgent,
       route,
-      description: "Submission dropped by spam checks (honeypot or timing).",
+      description: `Submission dropped by spam checks: ${spam}.`,
       severity: "low"
     });
     return json(200, { ok: true });

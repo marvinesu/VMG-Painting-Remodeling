@@ -46,16 +46,28 @@ export function pickFromList(values: unknown, options: readonly string[]): strin
 }
 
 /**
- * Basic spam heuristics. Returns true when the submission should be silently
- * dropped (we still respond with success so bots don't adapt).
+ * Basic spam heuristics. Returns the reason a submission should be silently
+ * dropped (we still respond with success so bots don't adapt), or null when
+ * it looks legitimate.
  */
-export function isSpam(body: Record<string, unknown>): boolean {
-  // Honeypot field: real visitors never see or fill it.
-  if (clean(body.company_website, 200) !== "") return true;
+export function spamReason(body: Record<string, unknown>): string | null {
+  // Honeypot field: real visitors never see or fill it. The current field is
+  // named `form_ref_check` — deliberately meaningless so browser autofill
+  // never matches it (the old `company_website` name attracted autofill and
+  // silently ate real submissions). The old name is still checked for bots
+  // replaying cached markup.
+  if (clean(body.form_ref_check, 200) !== "") return "honeypot (form_ref_check filled)";
+  if (clean(body.company_website, 200) !== "") return "honeypot (company_website filled)";
   // Form filled implausibly fast (< 2.5s after render).
   const startedAt = Number(body.form_started_at);
-  if (Number.isFinite(startedAt) && startedAt > 0 && Date.now() - startedAt < 2500) return true;
-  return false;
+  if (Number.isFinite(startedAt) && startedAt > 0 && Date.now() - startedAt < 2500) {
+    return `filled too fast (${Date.now() - startedAt}ms)`;
+  }
+  return null;
+}
+
+export function isSpam(body: Record<string, unknown>): boolean {
+  return spamReason(body) !== null;
 }
 
 /** Reject obviously suspicious free-text content (link farms). */
