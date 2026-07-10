@@ -30,6 +30,7 @@ export const genericLeadValidator: LeadValidator = (body) => {
   const ownerRelationship = clean(body.ownerRelationship, 160);
   const otherCounty = clean(body.otherCounty, 160);
   const contactMethod = clean(body.contactMethod, 40);
+  const callbackTime = clean(body.callbackTime, 40);
   const consent = body.consent === true || body.consent === "true" || body.consent === "on";
   const page = clean(body.page, 200);
 
@@ -56,7 +57,8 @@ export const genericLeadValidator: LeadValidator = (body) => {
     timeline ? `Timeline: ${timeline}` : "",
     budget ? `Budget range: ${budget}` : "",
     owner ? `Property owner: ${owner}` : "",
-    ownerRelationship ? `Relationship to owner: ${ownerRelationship}` : ""
+    ownerRelationship ? `Relationship to owner: ${ownerRelationship}` : "",
+    callbackTime ? `Best callback time: ${callbackTime}` : ""
   ]
     .filter((line, index) => line !== "" || index === 1)
     .join("\n");
@@ -91,6 +93,7 @@ export const genericLeadValidator: LeadValidator = (body) => {
       { label: "Property Owner", value: owner },
       { label: "Relationship to Owner", value: ownerRelationship },
       { label: "Preferred Contact Method", value: contactMethod },
+      { label: "Best Callback Time", value: callbackTime },
       { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "" },
       { label: "Page Source", value: page }
     ]

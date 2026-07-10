@@ -13,6 +13,7 @@ import {
   COUNTY_OPTIONS,
   OWNER_OPTIONS,
   SERVICE_OPTIONS,
+  TIME_OPTIONS,
   TIMELINE_OPTIONS
 } from "../../lib/leadOptions";
 import { services } from "../../data/services";
@@ -27,6 +28,7 @@ const config = {
   timelines: TIMELINE_OPTIONS,
   budgets: BUDGET_OPTIONS,
   owners: OWNER_OPTIONS,
+  callbackTimes: TIME_OPTIONS,
   contactMethods: CONTACT_METHOD_OPTIONS,
   servicePages: services.map((service) => ({ label: service.title, href: `/services/${service.slug}` }))
 };
@@ -120,6 +122,15 @@ const config = {
       { key: "contactMethod", label: "Contact Method", question: "How would you prefer we contact you?", options: config.contactMethods }
     ];
 
+    const CALLBACK_STEPS: Step[] = [
+      { key: "name", label: "Name", question: "What is your full name?", input: true },
+      { key: "phone", label: "Phone", question: "What is the best phone number for your callback?", input: true, validate: "phone" },
+      { key: "callbackTime", label: "Best Time", question: "When is the best time for us to call?", options: config.callbackTimes },
+      { key: "details", label: "What You Need", question: "What would you like to discuss with our team?", input: true, multiline: true },
+      { key: "contactMethod", label: "Contact Method", question: "How would you prefer we contact you?", options: ["Phone Call", "Text Message"] },
+      { key: "email", label: "Email", question: "What is your email address?", input: true, validate: "email" }
+    ];
+
     const CONSENT_QUESTION =
       "Do you agree to be contacted by VMG Painting & Remodeling LLC by phone, text, or email regarding your request? Message and data rates may apply.";
 
@@ -183,6 +194,7 @@ const config = {
 
     function clearOptions() {
       optionsEl.innerHTML = "";
+      optionsEl.classList.remove("primary-menu");
       inputRow.hidden = true;
     }
 
@@ -242,14 +254,14 @@ const config = {
     function showMainMenu() {
       showOptions([
         { label: "Request a Free Estimate", onSelect: () => beginFlow(ESTIMATE_STEPS, "Chatbot Estimate Request", "Request a Free Estimate") },
-        { label: "Ask a Question", onSelect: () => beginFlow(QUESTION_STEPS, "Chatbot General Question", "Ask a Question") },
-        { label: "View Services", onSelect: showServices },
-        { label: "Call VMG Now", onSelect: showCallNow }
+        { label: "Call Now", onSelect: showCallNow },
+        { label: "Request a Call Back", onSelect: () => beginFlow(CALLBACK_STEPS, "Chatbot Callback Request", "Request a Call Back") }
       ]);
+      optionsEl.classList.add("primary-menu");
     }
 
     function showCallNow() {
-      addMessage("user", "Call VMG Now");
+      addMessage("user", "Call Now");
       botSay(
         `You can call VMG Painting &amp; Remodeling at <a href="tel:${config.tel}"><strong>${config.phoneDisplay}</strong></a>.`,
         () => showOptions([
@@ -613,6 +625,9 @@ const config = {
     overflow-y: auto;
   }
   .chat-options:empty { padding: 0; }
+  .chat-options.primary-menu { display: grid; grid-template-columns: 1fr; max-height: none; }
+  .chat-options.primary-menu .chat-option { width: 100%; text-align: center; }
+  .chat-options.primary-menu .chat-option:first-child { background: var(--navy); color: var(--white); }
   .chat-option {
     border: 1.5px solid var(--navy-2);
     background: var(--white);
