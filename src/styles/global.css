@@ -21,6 +21,9 @@
 }
 
 * { box-sizing: border-box; }
+/* Elements with the hidden attribute must never be shown, even when a class
+   sets display (flex/grid) — this is what makes panels/steps actually close. */
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;

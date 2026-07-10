@@ -1,6 +1,9 @@
 ---
 /**
- * Native free estimate / book now form — submits JSON to POST /api/free-estimate.
+ * Native free estimate / book now form — a 3-step wizard that submits JSON to
+ * POST /api/free-estimate (all fields serialize regardless of visible step).
+ *
+ * Steps: 1) contact info  2) project details  3) schedule & confirm.
  * Conditional logic:
  *  - County = Other        -> asks for the county/service location
  *  - Property Owner = No   -> asks relationship to the owner
@@ -26,151 +29,203 @@ const { defaultService } = Astro.props;
 ---
 <LeadFormScript />
 <form class="lead-form" method="post" action="/api/free-estimate" data-lead-form data-endpoint="/api/free-estimate" novalidate>
+  <div class="form-progress">
+    <p class="step-label" aria-live="polite">Step <span data-step-current>1</span> of 3</p>
+    <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-step-bar></div></div>
+  </div>
   <p class="form-status" role="alert" data-status></p>
 
-  <div class="field form-field">
-    <label for="est-name">Full Name <span class="required-mark" aria-hidden="true">*</span></label>
-    <input id="est-name" name="name" type="text" autocomplete="name" placeholder="Your name" required aria-describedby="est-name-error" />
-    <p class="field-error" id="est-name-error">Please enter your full name.</p>
-  </div>
+  <!-- Step 1: Contact info -->
+  <div class="form-step" data-form-step>
+    <h3 class="step-title" tabindex="-1">Let's start with your contact info</h3>
 
-  <div class="form-grid">
     <div class="field form-field">
-      <label for="est-phone">Phone Number <span class="required-mark" aria-hidden="true">*</span></label>
-      <input id="est-phone" name="phone" type="tel" autocomplete="tel" placeholder="(253) 555-0100" required aria-describedby="est-phone-error" />
-      <p class="field-error" id="est-phone-error">Please enter a valid phone number.</p>
+      <label for="est-name">Full Name <span class="required-mark" aria-hidden="true">*</span></label>
+      <input id="est-name" name="name" type="text" autocomplete="name" placeholder="Your name" required aria-describedby="est-name-error" />
+      <p class="field-error" id="est-name-error">Please enter your full name.</p>
     </div>
-    <div class="field form-field">
-      <label for="est-email">Email Address <span class="required-mark" aria-hidden="true">*</span></label>
-      <input id="est-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required aria-describedby="est-email-error" />
-      <p class="field-error" id="est-email-error">Please enter a valid email address.</p>
-    </div>
-  </div>
 
-  <div class="form-grid">
-    <div class="field form-field">
-      <label for="est-address">Project Address <span class="required-mark" aria-hidden="true">*</span></label>
-      <input id="est-address" name="address" type="text" autocomplete="street-address" placeholder="Street address" required aria-describedby="est-address-error" />
-      <p class="field-error" id="est-address-error">Please enter the project address.</p>
+    <div class="form-grid">
+      <div class="field form-field">
+        <label for="est-phone">Phone Number <span class="required-mark" aria-hidden="true">*</span></label>
+        <input id="est-phone" name="phone" type="tel" autocomplete="tel" placeholder="(253) 555-0100" required aria-describedby="est-phone-error" />
+        <p class="field-error" id="est-phone-error">Please enter a valid phone number.</p>
+      </div>
+      <div class="field form-field">
+        <label for="est-email">Email Address <span class="required-mark" aria-hidden="true">*</span></label>
+        <input id="est-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required aria-describedby="est-email-error" />
+        <p class="field-error" id="est-email-error">Please enter a valid email address.</p>
+      </div>
     </div>
-    <div class="field form-field">
-      <label for="est-city">City <span class="required-mark" aria-hidden="true">*</span></label>
-      <input id="est-city" name="city" type="text" autocomplete="address-level2" placeholder="e.g. Tacoma" required aria-describedby="est-city-error" />
-      <p class="field-error" id="est-city-error">Please enter the city.</p>
+
+    <div class="step-nav">
+      <button class="btn" type="button" data-step-next>Next: Project Details <span aria-hidden="true">&rarr;</span></button>
     </div>
   </div>
 
-  <div class="field form-field">
-    <label for="est-county">County <span class="required-mark" aria-hidden="true">*</span></label>
-    <select id="est-county" name="county" required aria-describedby="est-county-error">
-      <option value="">Choose a county…</option>
-      {COUNTY_OPTIONS.map((option) => <option value={option}>{option}</option>)}
-    </select>
-    <p class="field-error" id="est-county-error">Please choose a county.</p>
+  <!-- Step 2: Project details -->
+  <div class="form-step" data-form-step hidden>
+    <h3 class="step-title" tabindex="-1">Tell us about the project</h3>
+
+    <div class="form-grid">
+      <div class="field form-field">
+        <label for="est-address">Project Address <span class="required-mark" aria-hidden="true">*</span></label>
+        <input id="est-address" name="address" type="text" autocomplete="street-address" placeholder="Street address" required aria-describedby="est-address-error" />
+        <p class="field-error" id="est-address-error">Please enter the project address.</p>
+      </div>
+      <div class="field form-field">
+        <label for="est-city">City <span class="required-mark" aria-hidden="true">*</span></label>
+        <input id="est-city" name="city" type="text" autocomplete="address-level2" placeholder="e.g. Tacoma" required aria-describedby="est-city-error" />
+        <p class="field-error" id="est-city-error">Please enter the city.</p>
+      </div>
+    </div>
+
+    <div class="field form-field">
+      <label for="est-county">County <span class="required-mark" aria-hidden="true">*</span></label>
+      <select id="est-county" name="county" required aria-describedby="est-county-error">
+        <option value="">Choose a county&hellip;</option>
+        {COUNTY_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+      </select>
+      <p class="field-error" id="est-county-error">Please choose a county.</p>
+    </div>
+
+    <div class="field form-field" data-show-when="county:Other" hidden>
+      <label for="est-county-other">Please enter your county or service location. <span class="required-mark" aria-hidden="true">*</span></label>
+      <input id="est-county-other" name="countyOther" type="text" placeholder="County or nearest city" data-conditionally-required="true" aria-describedby="est-county-other-error" />
+      <p class="field-error" id="est-county-other-error">Please enter your county or service location.</p>
+    </div>
+
+    <fieldset class="field">
+      <legend>Project Type <span class="required-mark" aria-hidden="true">*</span> <span class="field-hint-inline">(select all that apply)</span></legend>
+      <div class="checkbox-grid" data-required-group data-array-field="projectTypes">
+        {SERVICE_OPTIONS.map((option) => (
+          <label class="checkbox-option">
+            <input type="checkbox" name="projectTypes" value={option} checked={option === defaultService} />
+            {option}
+          </label>
+        ))}
+      </div>
+      <p class="field-error">Please choose at least one project type.</p>
+      <p class="field-hint" data-show-when="projectTypes:Multiple Services" hidden>Great — please describe all the services you need in the project details below.</p>
+    </fieldset>
+
+    <div class="field form-field">
+      <label for="est-details">Project Details <span class="required-mark" aria-hidden="true">*</span></label>
+      <textarea id="est-details" name="details" placeholder="What would you like done? Size, rooms, materials, current condition…" required aria-describedby="est-details-error"></textarea>
+      <p class="field-error" id="est-details-error">Please describe your project.</p>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn outline" type="button" data-step-back><span aria-hidden="true">&larr;</span> Back</button>
+      <button class="btn" type="button" data-step-next>Next: Schedule <span aria-hidden="true">&rarr;</span></button>
+    </div>
   </div>
 
-  <div class="field form-field" data-show-when="county:Other" hidden>
-    <label for="est-county-other">Please enter your county or service location. <span class="required-mark" aria-hidden="true">*</span></label>
-    <input id="est-county-other" name="countyOther" type="text" placeholder="County or nearest city" data-conditionally-required="true" aria-describedby="est-county-other-error" />
-    <p class="field-error" id="est-county-other-error">Please enter your county or service location.</p>
-  </div>
+  <!-- Step 3: Schedule & confirm -->
+  <div class="form-step" data-form-step hidden>
+    <h3 class="step-title" tabindex="-1">Schedule and confirm</h3>
 
-  <fieldset class="field">
-    <legend>Project Type <span class="required-mark" aria-hidden="true">*</span> <span class="field-hint-inline">(select all that apply)</span></legend>
-    <div class="checkbox-grid" data-required-group data-array-field="projectTypes">
-      {SERVICE_OPTIONS.map((option) => (
-        <label class="checkbox-option">
-          <input type="checkbox" name="projectTypes" value={option} checked={option === defaultService} />
+    <div class="form-grid">
+      <div class="field form-field">
+        <label for="est-timeline">When would you like to start? <span class="required-mark" aria-hidden="true">*</span></label>
+        <select id="est-timeline" name="timeline" required aria-describedby="est-timeline-error">
+          <option value="">Choose a timeline&hellip;</option>
+          {TIMELINE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+        </select>
+        <p class="field-error" id="est-timeline-error">Please choose when you would like to start.</p>
+      </div>
+      <div class="field form-field">
+        <label for="est-budget">Budget Range <span class="field-hint-inline">(optional)</span></label>
+        <select id="est-budget" name="budget">
+          <option value="">Choose a range&hellip;</option>
+          {BUDGET_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field form-field">
+        <label for="est-date">Preferred Estimate Date <span class="field-hint-inline">(optional)</span></label>
+        <input id="est-date" name="preferredDate" type="date" />
+      </div>
+      <div class="field form-field">
+        <label for="est-time">Preferred Time <span class="field-hint-inline">(optional)</span></label>
+        <select id="est-time" name="preferredTime">
+          <option value="">Choose a time&hellip;</option>
+          {TIME_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+        </select>
+      </div>
+    </div>
+
+    <fieldset class="field">
+      <legend>Are you the property owner? <span class="required-mark" aria-hidden="true">*</span></legend>
+      {OWNER_OPTIONS.map((option, i) => (
+        <label class="radio-option">
+          <input type="radio" name="owner" value={option} required={i === 0} />
           {option}
         </label>
       ))}
-    </div>
-    <p class="field-error">Please choose at least one project type.</p>
-    <p class="field-hint" data-show-when="projectTypes:Multiple Services" hidden>Great — please describe all the services you need in the project details below.</p>
-  </fieldset>
+      <p class="field-error">Please tell us if you are the property owner.</p>
+    </fieldset>
 
-  <div class="field form-field">
-    <label for="est-details">Project Details <span class="required-mark" aria-hidden="true">*</span></label>
-    <textarea id="est-details" name="details" placeholder="What would you like done? Size, rooms, materials, current condition…" required aria-describedby="est-details-error"></textarea>
-    <p class="field-error" id="est-details-error">Please describe your project.</p>
-  </div>
+    <div class="field form-field" data-show-when="owner:No" hidden>
+      <label for="est-owner-relationship">What is your relationship to the property owner? <span class="required-mark" aria-hidden="true">*</span></label>
+      <input id="est-owner-relationship" name="ownerRelationship" type="text" placeholder="e.g. property manager, family member" data-conditionally-required="true" aria-describedby="est-owner-rel-error" />
+      <p class="field-error" id="est-owner-rel-error">Please describe your relationship to the property owner.</p>
+    </div>
 
-  <div class="form-grid">
-    <div class="field form-field">
-      <label for="est-timeline">When would you like to start? <span class="required-mark" aria-hidden="true">*</span></label>
-      <select id="est-timeline" name="timeline" required aria-describedby="est-timeline-error">
-        <option value="">Choose a timeline…</option>
-        {TIMELINE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
-      </select>
-      <p class="field-error" id="est-timeline-error">Please choose when you would like to start.</p>
-    </div>
-    <div class="field form-field">
-      <label for="est-budget">Budget Range <span class="field-hint-inline">(optional)</span></label>
-      <select id="est-budget" name="budget">
-        <option value="">Choose a range…</option>
-        {BUDGET_OPTIONS.map((option) => <option value={option}>{option}</option>)}
-      </select>
-    </div>
-  </div>
+    <fieldset class="field">
+      <legend>Preferred Contact Method <span class="required-mark" aria-hidden="true">*</span></legend>
+      {CONTACT_METHOD_OPTIONS.map((option, i) => (
+        <label class="radio-option">
+          <input type="radio" name="contactMethod" value={option} required={i === 0} />
+          {option}
+        </label>
+      ))}
+      <p class="field-error">Please choose a preferred contact method.</p>
+    </fieldset>
 
-  <div class="form-grid">
-    <div class="field form-field">
-      <label for="est-date">Preferred Estimate Date <span class="field-hint-inline">(optional)</span></label>
-      <input id="est-date" name="preferredDate" type="date" />
-    </div>
-    <div class="field form-field">
-      <label for="est-time">Preferred Time <span class="field-hint-inline">(optional)</span></label>
-      <select id="est-time" name="preferredTime">
-        <option value="">Choose a time…</option>
-        {TIME_OPTIONS.map((option) => <option value={option}>{option}</option>)}
-      </select>
-    </div>
-  </div>
-
-  <fieldset class="field">
-    <legend>Are you the property owner? <span class="required-mark" aria-hidden="true">*</span></legend>
-    {OWNER_OPTIONS.map((option, i) => (
-      <label class="radio-option">
-        <input type="radio" name="owner" value={option} required={i === 0} />
-        {option}
+    <div class="field">
+      <label class="checkbox-option consent-option">
+        <input type="checkbox" name="consent" value="true" required aria-describedby="est-consent-error" />
+        <span>I agree to be contacted by VMG Painting &amp; Remodeling LLC by phone, text, or email regarding my free estimate request. Message and data rates may apply. <span class="required-mark" aria-hidden="true">*</span></span>
       </label>
-    ))}
-    <p class="field-error">Please tell us if you are the property owner.</p>
-  </fieldset>
+      <p class="field-error" id="est-consent-error">Please confirm you agree to be contacted.</p>
+    </div>
 
-  <div class="field form-field" data-show-when="owner:No" hidden>
-    <label for="est-owner-relationship">What is your relationship to the property owner? <span class="required-mark" aria-hidden="true">*</span></label>
-    <input id="est-owner-relationship" name="ownerRelationship" type="text" placeholder="e.g. property manager, family member" data-conditionally-required="true" aria-describedby="est-owner-rel-error" />
-    <p class="field-error" id="est-owner-rel-error">Please describe your relationship to the property owner.</p>
+    <!-- Spam protection: hidden from real visitors -->
+    <div class="honeypot-field" aria-hidden="true">
+      <label for="est-company-website">Company website</label>
+      <input id="est-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+    <input type="hidden" name="form_started_at" value="" data-started-at />
+    <input type="hidden" name="page" value="" data-page-source />
+
+    <div class="step-nav">
+      <button class="btn outline" type="button" data-step-back><span aria-hidden="true">&larr;</span> Back</button>
+      <button class="btn" type="submit" data-submit>Request My Free Estimate</button>
+    </div>
+    <p class="note">Free, no-obligation estimate. Prefer to talk? Call <a href={`tel:${site.tel}`}>{site.phoneDisplay}</a>.</p>
   </div>
-
-  <fieldset class="field">
-    <legend>Preferred Contact Method <span class="required-mark" aria-hidden="true">*</span></legend>
-    {CONTACT_METHOD_OPTIONS.map((option, i) => (
-      <label class="radio-option">
-        <input type="radio" name="contactMethod" value={option} required={i === 0} />
-        {option}
-      </label>
-    ))}
-    <p class="field-error">Please choose a preferred contact method.</p>
-  </fieldset>
-
-  <div class="field">
-    <label class="checkbox-option consent-option">
-      <input type="checkbox" name="consent" value="true" required aria-describedby="est-consent-error" />
-      <span>I agree to be contacted by VMG Painting &amp; Remodeling LLC by phone, text, or email regarding my free estimate request. Message and data rates may apply. <span class="required-mark" aria-hidden="true">*</span></span>
-    </label>
-    <p class="field-error" id="est-consent-error">Please confirm you agree to be contacted.</p>
-  </div>
-
-  <!-- Spam protection: hidden from real visitors -->
-  <div class="honeypot-field" aria-hidden="true">
-    <label for="est-company-website">Company website</label>
-    <input id="est-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
-  </div>
-  <input type="hidden" name="form_started_at" value="" data-started-at />
-  <input type="hidden" name="page" value="" data-page-source />
-
-  <button class="btn" type="submit" data-submit>Request My Free Estimate</button>
-  <p class="note">Free, no-obligation estimate. Prefer to talk? Call <a href={`tel:${site.tel}`}>{site.phoneDisplay}</a>.</p>
 </form>
+
+<style>
+  .form-progress { display: grid; gap: 8px; }
+  .step-label { margin: 0; font-size: .85rem; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
+  .step-label span { color: var(--gold-dark); }
+  .progress-track { height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .progress-fill { height: 100%; width: 33.33%; border-radius: 999px; background: linear-gradient(90deg, var(--gold-dark), var(--gold)); transition: width 260ms cubic-bezier(.23, 1, .32, 1); }
+  .form-step { display: grid; gap: 16px; }
+  .step-title { margin: 0; font-size: 1.15rem; color: var(--ink); outline: none; }
+  .step-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .form-step { animation: step-in 240ms cubic-bezier(.23, 1, .32, 1); }
+    @keyframes step-in {
+      from { opacity: 0; transform: translateX(14px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  }
+  @media (max-width: 560px) {
+    .step-nav .btn { width: 100%; }
+  }
+</style>

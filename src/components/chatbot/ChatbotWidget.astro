@@ -41,10 +41,24 @@ const config = {
 
   <section id="vmg-chat-panel" class="chat-panel" role="dialog" aria-label="VMG Painting & Remodeling chat assistant" hidden data-chat-panel>
     <header class="chat-header">
-      <p class="chat-title">VMG Chat Assistant</p>
+      <div class="chat-identity">
+        <span class="chat-avatar" aria-hidden="true">V</span>
+        <div class="chat-titles">
+          <p class="chat-title">VMG Assistant</p>
+          <p class="chat-subtitle">Family-owned &middot; Roy, WA</p>
+        </div>
+      </div>
       <div class="chat-header-actions">
-        <button type="button" class="chat-icon-button" data-chat-restart>Start over</button>
-        <button type="button" class="chat-icon-button" data-chat-close aria-label="Close chat">&times;</button>
+        <button type="button" class="chat-icon-button" data-chat-restart aria-label="Restart conversation" title="Start over">
+          <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 2.6-6.4L3 8" /><path d="M3 3v5h5" />
+          </svg>
+        </button>
+        <button type="button" class="chat-icon-button" data-chat-close aria-label="Close chat" title="Close">
+          <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M5 5l14 14M19 5L5 19" />
+          </svg>
+        </button>
       </div>
     </header>
     <div class="chat-messages" data-chat-messages aria-live="polite"></div>
@@ -412,30 +426,32 @@ const config = {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    border: 0;
+    border: 2px solid rgba(229, 166, 58, .55);
     cursor: pointer;
-    background: var(--charcoal);
+    background: linear-gradient(135deg, var(--charcoal-2), var(--charcoal));
     color: var(--white);
     padding: 13px 20px;
     border-radius: 999px;
-    box-shadow: 0 10px 22px rgba(36, 32, 24, 0.3);
+    box-shadow: 0 12px 28px rgba(36, 32, 24, 0.38);
     font-weight: 900;
     font-size: .95rem;
-    transition: transform 160ms cubic-bezier(.23,1,.32,1);
+    transition: transform 160ms cubic-bezier(.23,1,.32,1), box-shadow 160ms ease;
   }
-  .chat-launcher:hover, .chat-launcher:focus-visible { transform: translateY(-2px); }
+  .chat-launcher svg { color: var(--gold); }
+  .chat-launcher:hover, .chat-launcher:focus-visible { transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 34px rgba(36, 32, 24, 0.45); }
   .chat-panel {
     position: fixed;
     right: 18px;
     bottom: 140px;
     z-index: 65;
-    width: min(380px, calc(100vw - 24px));
-    height: min(560px, calc(100dvh - 160px));
+    width: min(390px, calc(100vw - 24px));
+    height: min(580px, calc(100dvh - 160px));
     display: flex;
     flex-direction: column;
     background: var(--white);
-    border-radius: 14px;
-    box-shadow: 0 18px 44px rgba(36, 32, 24, 0.32);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(36, 32, 24, 0.35);
     overflow: hidden;
   }
   .chat-header {
@@ -443,24 +459,42 @@ const config = {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    background: var(--charcoal);
+    background: linear-gradient(135deg, var(--charcoal-2), var(--charcoal) 70%);
     color: var(--white);
-    padding: 12px 16px;
+    padding: 14px 16px;
+    border-bottom: 2px solid var(--gold);
   }
-  .chat-title { margin: 0; font-weight: 900; }
-  .chat-header-actions { display: flex; align-items: center; gap: 8px; }
+  .chat-identity { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .chat-avatar {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #1f1a12;
+    font-weight: 900;
+    font-size: 1.15rem;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, .18);
+  }
+  .chat-titles { min-width: 0; }
+  .chat-title { margin: 0; font-weight: 900; line-height: 1.2; }
+  .chat-subtitle { margin: 2px 0 0; font-size: .76rem; color: rgba(255, 255, 255, .68); line-height: 1.2; }
+  .chat-header-actions { display: flex; align-items: center; gap: 7px; }
   .chat-icon-button {
-    border: 1px solid rgba(255,255,255,.3);
-    background: transparent;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255, 255, 255, .28);
+    background: rgba(255, 255, 255, .06);
     color: var(--white);
-    border-radius: 999px;
-    padding: 4px 12px;
-    font-size: .82rem;
-    font-weight: 700;
+    border-radius: 50%;
     cursor: pointer;
-    line-height: 1.4;
+    transition: background 140ms ease;
   }
-  .chat-icon-button:hover, .chat-icon-button:focus-visible { background: rgba(255,255,255,.12); }
+  .chat-icon-button:hover, .chat-icon-button:focus-visible { background: rgba(255, 255, 255, .18); }
   .chat-messages {
     flex: 1;
     overflow-y: auto;
@@ -469,25 +503,35 @@ const config = {
     flex-direction: column;
     gap: 10px;
     background: var(--paper);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
   }
   .chat-msg {
     max-width: 85%;
-    padding: 10px 14px;
-    border-radius: 14px;
+    padding: 11px 15px;
+    border-radius: 16px;
     font-size: .93rem;
     line-height: 1.5;
     overflow-wrap: break-word;
+    box-shadow: 0 1px 3px rgba(36, 32, 24, .08);
   }
-  .chat-msg.bot { background: var(--cream); color: var(--ink); border-bottom-left-radius: 4px; align-self: flex-start; }
-  .chat-msg.user { background: var(--charcoal); color: var(--white); border-bottom-right-radius: 4px; align-self: flex-end; }
+  .chat-msg.bot { background: var(--white); border: 1px solid var(--line); color: var(--ink); border-bottom-left-radius: 5px; align-self: flex-start; }
+  .chat-msg.user { background: linear-gradient(135deg, var(--charcoal-2), var(--charcoal)); color: var(--white); border-bottom-right-radius: 5px; align-self: flex-end; }
   .chat-msg a { color: var(--gold-dark); text-decoration: underline; text-underline-offset: 2px; }
   .chat-msg.user a { color: var(--gold); }
-  .chat-typing { color: var(--muted); letter-spacing: 2px; }
+  .chat-typing { color: var(--muted); letter-spacing: 3px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .chat-msg { animation: chat-msg-in 220ms cubic-bezier(.23, 1, .32, 1); }
+    @keyframes chat-msg-in {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
   .chat-options {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 0 16px 12px;
+    padding: 4px 16px 14px;
     background: var(--paper);
   }
   .chat-options:empty { padding: 0; }
@@ -496,13 +540,16 @@ const config = {
     background: var(--white);
     color: var(--ink);
     border-radius: 999px;
-    padding: 8px 14px;
+    padding: 9px 16px;
+    min-height: 40px;
     font-size: .88rem;
     font-weight: 800;
     cursor: pointer;
     text-align: left;
+    box-shadow: 0 1px 3px rgba(36, 32, 24, .07);
+    transition: background 130ms ease, transform 130ms ease;
   }
-  .chat-option:hover, .chat-option:focus-visible { background: var(--gold); color: #1f1a12; }
+  .chat-option:hover, .chat-option:focus-visible { background: var(--gold); color: #1f1a12; transform: translateY(-1px); }
   .chat-input-row {
     display: flex;
     gap: 8px;
@@ -510,8 +557,8 @@ const config = {
     border-top: 1px solid var(--line);
     background: var(--white);
   }
-  .chat-input-row input { flex: 1; }
-  .chat-send { min-height: 44px; padding: 10px 16px; }
+  .chat-input-row input { flex: 1; border-radius: 999px; padding-left: 18px; }
+  .chat-send { min-height: 44px; padding: 10px 18px; }
   @media (max-width: 520px) {
     .chat-launcher { right: 12px; bottom: 74px; padding: 12px 16px; }
     .chat-panel { right: 12px; left: 12px; width: auto; bottom: 128px; }

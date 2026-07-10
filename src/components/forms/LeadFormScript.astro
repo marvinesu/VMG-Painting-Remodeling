@@ -28,17 +28,17 @@
     }
   }
 
-  function validateForm(form: HTMLFormElement): HTMLElement | null {
+  function validateForm(form: HTMLFormElement, scope: HTMLElement = form): HTMLElement | null {
     let firstInvalid: HTMLElement | null = null;
     const flag = (el: HTMLElement, message?: string) => {
       setInvalid(el, true, message);
       if (!firstInvalid) firstInvalid = el;
     };
 
-    form.querySelectorAll<HTMLElement>(".field.invalid").forEach((wrap) => wrap.classList.remove("invalid"));
+    scope.querySelectorAll<HTMLElement>(".field.invalid").forEach((wrap) => wrap.classList.remove("invalid"));
 
     const seenRadioGroups = new Set<string>();
-    form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+    scope.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
       "input[required], select[required], textarea[required]"
     ).forEach((el) => {
       if (el.closest("[hidden]")) return; // skip hidden conditional fields
@@ -65,7 +65,7 @@
     });
 
     // Checkbox groups marked required as a group (project types)
-    form.querySelectorAll<HTMLElement>("[data-required-group]").forEach((group) => {
+    scope.querySelectorAll<HTMLElement>("[data-required-group]").forEach((group) => {
       const checked = group.querySelector("input:checked");
       const wrap = group.closest(".field");
       wrap?.classList.toggle("invalid", !checked);
@@ -130,6 +130,61 @@
     if (conditionals.length > 0) {
       form.addEventListener("change", updateConditionals);
       updateConditionals();
+    }
+
+    // Multi-step wizard: any form with [data-form-step] sections becomes a
+    // step-by-step flow. "Next" validates only the current step; values from
+    // completed (hidden) steps stay in the FormData payload.
+    const steps = Array.from(form.querySelectorAll<HTMLElement>("[data-form-step]"));
+    if (steps.length > 1) {
+      let current = 0;
+      const stepCurrent = form.querySelector<HTMLElement>("[data-step-current]");
+      const stepBar = form.querySelector<HTMLElement>("[data-step-bar]");
+
+      const showStep = (index: number, focusTitle: boolean) => {
+        current = Math.max(0, Math.min(index, steps.length - 1));
+        steps.forEach((step, i) => {
+          step.hidden = i !== current;
+        });
+        if (stepCurrent) stepCurrent.textContent = String(current + 1);
+        if (stepBar) stepBar.style.width = `${((current + 1) / steps.length) * 100}%`;
+        updateConditionals();
+        if (focusTitle) {
+          const title = steps[current].querySelector<HTMLElement>(".step-title");
+          title?.focus();
+          form.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+      };
+
+      form.querySelectorAll<HTMLButtonElement>("[data-step-next]").forEach((button) =>
+        button.addEventListener("click", () => {
+          const invalid = validateForm(form, steps[current]);
+          if (invalid) {
+            invalid.focus();
+            return;
+          }
+          showStep(current + 1, true);
+        })
+      );
+      form.querySelectorAll<HTMLButtonElement>("[data-step-back]").forEach((button) =>
+        button.addEventListener("click", () => showStep(current - 1, true))
+      );
+      // Enter in a text field triggers implicit submission — before the last
+      // step, treat it as "Next" instead. (Registered before the main submit
+      // handler, so stopImmediatePropagation prevents an early submit.)
+      form.addEventListener("submit", (event) => {
+        if (current < steps.length - 1) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          const invalid = validateForm(form, steps[current]);
+          if (invalid) {
+            invalid.focus();
+            return;
+          }
+          showStep(current + 1, true);
+        }
+      });
+      showStep(0, false);
     }
 
     form.addEventListener("submit", async (event) => {
