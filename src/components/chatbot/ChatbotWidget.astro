@@ -8,13 +8,10 @@
  * from src/lib/leadOptions.ts so forms and chatbot stay in sync).
  */
 import {
-  BUDGET_OPTIONS,
   CONTACT_METHOD_OPTIONS,
-  COUNTY_OPTIONS,
   OWNER_OPTIONS,
   SERVICE_OPTIONS,
   TIME_OPTIONS,
-  TIMELINE_OPTIONS
 } from "../../lib/leadOptions";
 import { services } from "../../data/services";
 import { site } from "../../data/site";
@@ -24,9 +21,6 @@ const config = {
   tel: site.tel,
   email: site.email,
   services: SERVICE_OPTIONS,
-  counties: COUNTY_OPTIONS,
-  timelines: TIMELINE_OPTIONS,
-  budgets: BUDGET_OPTIONS,
   owners: OWNER_OPTIONS,
   callbackTimes: TIME_OPTIONS,
   contactMethods: CONTACT_METHOD_OPTIONS,
@@ -102,11 +96,8 @@ const config = {
 
     const ESTIMATE_STEPS: Step[] = [
       { key: "service", label: "Service", question: "What type of project do you need help with?", options: config.services },
-      { key: "county", label: "County", question: "Where is the project located?", options: config.counties },
-      { key: "location", label: "Address / City", question: "What is the project address or city?", input: true },
+      { key: "location", label: "Full Address", question: "What is the full project address?", input: true },
       { key: "details", label: "Project Description", question: "Tell us a little about the project.", input: true, multiline: true },
-      { key: "timeline", label: "Timeline", question: "When would you like to start?", options: config.timelines },
-      { key: "budget", label: "Budget", question: "What is your approximate budget?", options: config.budgets },
       { key: "owner", label: "Property Owner", question: "Are you the property owner?", options: config.owners },
       { key: "name", label: "Name", question: "What is your full name?", input: true },
       { key: "phone", label: "Phone", question: "What is the best phone number to reach you?", input: true, validate: "phone" },
@@ -322,13 +313,6 @@ const config = {
     function answer(step: Step, value: string) {
       addMessage("user", escapeHtml(value));
       answers[step.key] = value;
-      if (step.key === "county" && value !== "Other") {
-        delete answers.otherCounty;
-        steps = steps.filter((item) => item.key !== "otherCounty");
-      }
-      if (step.key === "county" && value === "Other" && !steps.some((item) => item.key === "otherCounty")) {
-        steps.splice(stepIndex + 1, 0, { key: "otherCounty", label: "County / City", question: "What county or city is the project in?", input: true });
-      }
       if (step.key === "owner" && value !== "Yes" && !steps.some((item) => item.key === "ownerRelationship")) {
         steps.splice(stepIndex + 1, 0, { key: "ownerRelationship", label: "Relationship to Owner", question: "What is your relationship to the property owner?", input: true });
       }
