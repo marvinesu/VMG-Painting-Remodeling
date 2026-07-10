@@ -27,6 +27,8 @@ export const genericLeadValidator: LeadValidator = (body) => {
   const timeline = clean(body.timeline, 60);
   const budget = clean(body.budget, 40);
   const owner = clean(body.owner, 120);
+  const ownerRelationship = clean(body.ownerRelationship, 160);
+  const otherCounty = clean(body.otherCounty, 160);
   const contactMethod = clean(body.contactMethod, 40);
   const consent = body.consent === true || body.consent === "true" || body.consent === "on";
   const page = clean(body.page, 200);
@@ -49,11 +51,12 @@ export const genericLeadValidator: LeadValidator = (body) => {
     details || "(no project details provided)",
     "",
     knownServices.length === 0 && service ? `Service (as entered): ${service}` : "",
-    !knownCounty && county ? `County (as entered): ${county}` : "",
+    otherCounty ? `Other county / city: ${otherCounty}` : !knownCounty && county ? `County (as entered): ${county}` : "",
     location ? `Project location: ${location}` : "",
     timeline ? `Timeline: ${timeline}` : "",
     budget ? `Budget range: ${budget}` : "",
-    owner ? `Property owner: ${owner}` : ""
+    owner ? `Property owner: ${owner}` : "",
+    ownerRelationship ? `Relationship to owner: ${ownerRelationship}` : ""
   ]
     .filter((line, index) => line !== "" || index === 1)
     .join("\n");
@@ -86,6 +89,7 @@ export const genericLeadValidator: LeadValidator = (body) => {
       { label: "Timeline", value: timeline },
       { label: "Budget Range", value: budget },
       { label: "Property Owner", value: owner },
+      { label: "Relationship to Owner", value: ownerRelationship },
       { label: "Preferred Contact Method", value: contactMethod },
       { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "" },
       { label: "Page Source", value: page }

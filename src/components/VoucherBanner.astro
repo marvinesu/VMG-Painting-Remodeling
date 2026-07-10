@@ -110,6 +110,7 @@
     cursor: pointer;
   }
   .voucher-close:hover, .voucher-close:focus-visible { background: var(--navy); color: var(--white); }
+  :global(body.chat-open) .voucher-banner { opacity: 0; pointer-events: none; transform: translateY(12px); }
   @media (prefers-reduced-motion: no-preference) {
     .voucher-banner { animation: voucher-in 380ms cubic-bezier(0.23, 1, 0.32, 1); }
     @keyframes voucher-in {

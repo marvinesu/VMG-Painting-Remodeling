@@ -45,7 +45,7 @@ const config = {
         <span class="chat-avatar" aria-hidden="true">V</span>
         <div class="chat-titles">
           <p class="chat-title">VMG Assistant</p>
-          <p class="chat-subtitle">Family-owned &middot; Roy, WA</p>
+          <p class="chat-subtitle">Free estimates &middot; Roy, WA</p>
         </div>
       </div>
       <div class="chat-header-actions">
@@ -66,6 +66,7 @@ const config = {
     <form class="chat-input-row" data-chat-input-row hidden>
       <label class="visually-hidden" for="vmg-chat-input">Your answer</label>
       <input id="vmg-chat-input" type="text" autocomplete="off" placeholder="Type your answer…" />
+      <textarea id="vmg-chat-textarea" rows="3" hidden placeholder="Tell us about your project"></textarea>
       <button class="btn chat-send" type="submit">Send</button>
     </form>
   </section>
@@ -82,6 +83,7 @@ const config = {
     const optionsEl = root.querySelector<HTMLElement>("[data-chat-options]")!;
     const inputRow = root.querySelector<HTMLFormElement>("[data-chat-input-row]")!;
     const inputEl = inputRow.querySelector<HTMLInputElement>("input")!;
+    const textareaEl = inputRow.querySelector<HTMLTextAreaElement>("textarea")!;
     const closeButton = root.querySelector<HTMLButtonElement>("[data-chat-close]")!;
     const restartButton = root.querySelector<HTMLButtonElement>("[data-chat-restart]")!;
 
@@ -91,14 +93,15 @@ const config = {
       question: string;
       options?: string[];
       input?: boolean;
+      multiline?: boolean;
       validate?: "phone" | "email";
     };
 
     const ESTIMATE_STEPS: Step[] = [
-      { key: "service", label: "Service", question: "What service do you need?", options: config.services },
-      { key: "county", label: "County", question: "What county is the project located in?", options: config.counties },
+      { key: "service", label: "Service", question: "What type of project do you need help with?", options: config.services },
+      { key: "county", label: "County", question: "Where is the project located?", options: config.counties },
       { key: "location", label: "Address / City", question: "What is the project address or city?", input: true },
-      { key: "details", label: "Project Description", question: "Please describe your project.", input: true },
+      { key: "details", label: "Project Description", question: "Tell us a little about the project.", input: true, multiline: true },
       { key: "timeline", label: "Timeline", question: "When would you like to start?", options: config.timelines },
       { key: "budget", label: "Budget", question: "What is your approximate budget?", options: config.budgets },
       { key: "owner", label: "Property Owner", question: "Are you the property owner?", options: config.owners },
@@ -109,7 +112,7 @@ const config = {
     ];
 
     const QUESTION_STEPS: Step[] = [
-      { key: "details", label: "Question", question: "What would you like to ask our team?", input: true },
+      { key: "details", label: "Question", question: "What would you like to ask our team?", input: true, multiline: true },
       { key: "name", label: "Name", question: "What is your full name?", input: true },
       { key: "phone", label: "Phone", question: "What is the best phone number to reach you?", input: true, validate: "phone" },
       { key: "email", label: "Email", question: "What is your email address?", input: true, validate: "email" },
@@ -140,7 +143,7 @@ const config = {
     }
     function isValidPhone(value: string) {
       const digits = value.replace(/\D/g, "");
-      return digits.length >= 7 && digits.length <= 15;
+      return digits.length === 10 || (digits.length === 11 && digits.startsWith("1"));
     }
 
     function addMessage(kind: "bot" | "user", html: string) {
@@ -199,9 +202,16 @@ const config = {
       clearOptions();
       inputRow.hidden = false;
       inputEl.value = "";
+      textareaEl.value = "";
+      inputEl.hidden = Boolean(step.multiline);
+      textareaEl.hidden = !step.multiline;
       inputEl.placeholder = "Type your answer…";
       inputRow.dataset.stepKey = step.key;
-      inputEl.focus();
+      inputEl.placeholder = step.key === "phone" ? "(253) 754-4871" : step.key === "email" ? "you@example.com" : "Type your answer";
+      textareaEl.placeholder = leadType.includes("Estimate")
+        ? "Example: exterior repaint, roof repair, new deck, siding replacement, kitchen remodel"
+        : "Type your message";
+      (step.multiline ? textareaEl : inputEl).focus();
     }
 
     function start() {
@@ -213,7 +223,7 @@ const config = {
       transcript = [];
       sessionId = newSessionId();
       botSay(
-        "Hi! Welcome to VMG Painting &amp; Remodeling. I can help you request a free estimate or send a message to our team. What can we help you with today?",
+        "Hi! Iâ€™m the VMG Assistant. I can help you request a free estimate, ask a question, or connect with our team. What would you like to do?",
         showMainMenu
       );
     }
@@ -221,9 +231,9 @@ const config = {
     function showMainMenu() {
       showOptions([
         { label: "Request a Free Estimate", onSelect: () => beginFlow(ESTIMATE_STEPS, "Chatbot Estimate Request", "Request a Free Estimate") },
-        { label: "Ask a General Question", onSelect: () => beginFlow(QUESTION_STEPS, "Chatbot General Question", "Ask a General Question") },
-        { label: "Call VMG Now", onSelect: showCallNow },
-        { label: "View Services", onSelect: showServices }
+        { label: "Ask a Question", onSelect: () => beginFlow(QUESTION_STEPS, "Chatbot General Question", "Ask a Question") },
+        { label: "View Services", onSelect: showServices },
+        { label: "Call VMG Now", onSelect: showCallNow }
       ]);
     }
 
@@ -253,7 +263,7 @@ const config = {
 
     function beginFlow(flowSteps: Step[], type: string, userLabel: string) {
       addMessage("user", escapeHtml(userLabel));
-      steps = flowSteps;
+      steps = flowSteps.map((step) => ({ ...step, options: step.options ? [...step.options] : undefined }));
       leadType = type;
       stepIndex = 0;
       editingKey = null;
@@ -278,6 +288,12 @@ const config = {
     function answer(step: Step, value: string) {
       addMessage("user", escapeHtml(value));
       answers[step.key] = value;
+      if (step.key === "county" && value === "Other" && !steps.some((item) => item.key === "otherCounty")) {
+        steps.splice(stepIndex + 1, 0, { key: "otherCounty", label: "County / City", question: "What county or city is the project in?", input: true });
+      }
+      if (step.key === "owner" && value !== "Yes" && !steps.some((item) => item.key === "ownerRelationship")) {
+        steps.splice(stepIndex + 1, 0, { key: "ownerRelationship", label: "Relationship to Owner", question: "What is your relationship to the property owner?", input: true });
+      }
       if (editingKey) {
         editingKey = null;
         showSummary();
@@ -306,16 +322,13 @@ const config = {
     function showSummary() {
       const rows = steps
         .filter((step) => answers[step.key])
-        .map((step) => `<strong>${escapeHtml(step.label)}:</strong> ${escapeHtml(answers[step.key])}`)
-        .join("<br>");
-      botSay(`Here's what I have so far:<br><br>${rows}<br><br>Would you like to submit this request?`, () =>
+        .map((step) => `<div class="summary-row"><dt>${escapeHtml(step.label)}</dt><dd>${escapeHtml(answers[step.key])}</dd></div>`)
+        .join("");
+      botSay(`<section class="chat-summary"><h3>Review Your Request</h3><dl>${rows}</dl></section>`, () =>
         showOptions([
           { label: "Submit Request", onSelect: submitLead },
           { label: "Edit Information", onSelect: showEditMenu },
-          { label: "Cancel", onSelect: () => {
-            addMessage("user", "Cancel");
-            botSay("Okay, I've cancelled that request. Anything else I can help with?", showMainMenu);
-          } }
+          { label: "Start Over", onSelect: start }
         ])
       );
     }
@@ -342,6 +355,7 @@ const config = {
     async function submitLead() {
       addMessage("user", "Submit Request");
       clearOptions();
+      panel.setAttribute("aria-busy", "true");
       botSay("Sending your request…");
       try {
         const response = await fetch("/api/chat", {
@@ -352,6 +366,14 @@ const config = {
             leadType,
             messages: transcript,
             ...answers,
+            serviceNeeded: answers.service,
+            projectAddressOrCity: answers.location,
+            projectDescription: answers.details,
+            propertyOwner: answers.owner,
+            ownerRelationship: answers.ownerRelationship,
+            preferredContactMethod: answers.contactMethod,
+            sourcePage: location.pathname,
+            submittedAt: new Date().toISOString(),
             page: location.pathname
           })
         });
@@ -359,7 +381,11 @@ const config = {
         if (response.ok && result.ok) {
           botSay(
             `Thank you! Your request has been sent to VMG Painting &amp; Remodeling. Our team will contact you shortly. For faster assistance, call <a href="tel:${config.tel}"><strong>${config.phoneDisplay}</strong></a>.`,
-            () => showOptions([{ label: "Start a new conversation", onSelect: start }])
+            () => showOptions([
+              { label: `Call ${config.phoneDisplay}`, href: `tel:${config.tel}` },
+              { label: "Start New Request", onSelect: start },
+              { label: "Close Chat", onSelect: closePanel }
+            ])
           );
         } else {
           throw new Error(result.error ?? "send failed");
@@ -368,10 +394,12 @@ const config = {
         botSay(
           `Sorry, something went wrong while sending your request. Please call us directly at <a href="tel:${config.tel}"><strong>${config.phoneDisplay}</strong></a> or email <a href="mailto:${config.email}">${config.email}</a>.`,
           () => showOptions([
-            { label: "Try again", onSelect: submitLead },
-            { label: "Back to menu", onSelect: showMainMenu }
+            { label: "Try Again", onSelect: submitLead },
+            { label: `Call ${config.phoneDisplay}`, href: `tel:${config.tel}` }
           ])
         );
+      } finally {
+        panel.removeAttribute("aria-busy");
       }
     }
 
@@ -379,14 +407,14 @@ const config = {
       event.preventDefault();
       const step = steps.find((item) => item.key === inputRow.dataset.stepKey) ?? steps[stepIndex];
       if (!step) return;
-      const value = inputEl.value.trim();
+      const value = (step.multiline ? textareaEl.value : inputEl.value).trim();
       if (!value) return;
       if (step.validate === "phone" && !isValidPhone(value)) {
-        botSay("That phone number doesn't look right — please enter a valid phone number.");
+        botSay("Please enter a valid phone number so our team can contact you.");
         return;
       }
       if (step.validate === "email" && !isValidEmail(value)) {
-        botSay("That email doesn't look right — please enter a valid email address.");
+        botSay("Please enter a valid email address.");
         return;
       }
       answer(step, value);
@@ -394,16 +422,20 @@ const config = {
 
     function openPanel() {
       panel.hidden = false;
+      launcher.hidden = true;
+      document.body.classList.add("chat-open");
       launcher.setAttribute("aria-expanded", "true");
       if (!opened) {
         opened = true;
         start();
       }
-      panel.querySelector<HTMLElement>(".chat-option, input:not([hidden])")?.focus();
+      panel.querySelector<HTMLElement>(".chat-option, input:not([hidden]), textarea:not([hidden])")?.focus();
     }
 
     function closePanel() {
       panel.hidden = true;
+      launcher.hidden = false;
+      document.body.classList.remove("chat-open");
       launcher.setAttribute("aria-expanded", "false");
       launcher.focus();
     }
@@ -417,12 +449,12 @@ const config = {
   }
 </script>
 
-<style>
+<style is:global>
   .chat-launcher {
     position: fixed;
     right: 18px;
     bottom: 78px;
-    z-index: 60;
+    z-index: 80;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -442,10 +474,10 @@ const config = {
   .chat-panel {
     position: fixed;
     right: 18px;
-    bottom: 140px;
-    z-index: 65;
-    width: min(390px, calc(100vw - 24px));
-    height: min(580px, calc(100dvh - 160px));
+    bottom: 18px;
+    z-index: 90;
+    width: min(420px, calc(100vw - 24px));
+    height: min(680px, calc(100dvh - 36px));
     display: flex;
     flex-direction: column;
     background: var(--white);
@@ -533,6 +565,8 @@ const config = {
     gap: 8px;
     padding: 4px 16px 14px;
     background: var(--paper);
+    max-height: 190px;
+    overflow-y: auto;
   }
   .chat-options:empty { padding: 0; }
   .chat-option {
@@ -558,9 +592,24 @@ const config = {
     background: var(--white);
   }
   .chat-input-row input { flex: 1; border-radius: 999px; padding-left: 18px; }
+  .chat-input-row textarea { flex: 1; min-height: 76px; max-height: 130px; resize: vertical; }
   .chat-send { min-height: 44px; padding: 10px 18px; }
+  .chat-summary { width: 100%; }
+  .chat-summary h3 { margin-bottom: 14px; color: var(--navy); font-size: 1.05rem; }
+  .chat-summary dl { display: grid; gap: 0; margin: 0; }
+  .summary-row { display: grid; grid-template-columns: minmax(92px, .8fr) 1.2fr; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .summary-row:last-child { border-bottom: 0; }
+  .summary-row dt { color: var(--muted); font-size: .8rem; font-weight: 800; }
+  .summary-row dd { margin: 0; color: var(--ink); font-size: .86rem; font-weight: 650; overflow-wrap: anywhere; }
+  .chat-panel[aria-busy="true"] .chat-options,
+  .chat-panel[aria-busy="true"] .chat-input-row { pointer-events: none; opacity: .55; }
   @media (max-width: 520px) {
     .chat-launcher { right: 12px; bottom: 74px; padding: 12px 16px; }
-    .chat-panel { right: 12px; left: 12px; width: auto; bottom: 128px; }
+    .chat-panel { right: 8px; left: 8px; width: auto; bottom: max(8px, env(safe-area-inset-bottom)); height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom))); border-radius: 14px; }
+    .chat-header { padding: 12px 14px; }
+    .chat-messages { padding: 14px; }
+    .chat-options { padding-inline: 14px; max-height: 180px; }
+    .chat-input-row { padding: 10px 12px max(10px, env(safe-area-inset-bottom)); }
+    .chat-send { padding-inline: 14px; }
   }
 </style>
