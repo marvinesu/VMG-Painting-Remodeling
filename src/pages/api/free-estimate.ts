@@ -69,7 +69,6 @@ export const POST: APIRoute = (context) =>
       errors.ownerRelationship = "Please describe your relationship to the property owner.";
     if (!contactMethod || !inList(contactMethod, CONTACT_METHOD_OPTIONS))
       errors.contactMethod = "Please choose a preferred contact method.";
-    if (!consent) errors.consent = "Please confirm you agree to be contacted.";
 
     const countyValue = county === "Other" && countyOther ? `Other — ${countyOther}` : county;
     const ownerValue = owner === "No" && ownerRelationship ? `No — ${ownerRelationship}` : owner;
@@ -120,7 +119,7 @@ export const POST: APIRoute = (context) =>
         { label: "Budget Range", value: budget },
         { label: "Property Owner", value: ownerValue },
         { label: "Preferred Contact Method", value: contactMethod },
-        { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "No" },
+        { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "" },
         { label: "Page Source", value: page }
       ]
     };

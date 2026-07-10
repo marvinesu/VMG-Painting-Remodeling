@@ -36,7 +36,6 @@ export const genericLeadValidator: LeadValidator = (body) => {
   else if (!isValidPhone(phone)) errors.phone = "Please provide a valid phone number.";
   if (email && !isValidEmail(email)) errors.email = "Please provide a valid email address.";
   if (details && looksSuspicious(details)) errors.details = "Please remove links from the description.";
-  if (!consent) errors.consent = "Consent is required before submitting.";
 
   const subject = leadType.includes("Chatbot")
     ? "New Chatbot Lead - VMG Painting & Remodeling"
@@ -88,7 +87,7 @@ export const genericLeadValidator: LeadValidator = (body) => {
       { label: "Budget Range", value: budget },
       { label: "Property Owner", value: owner },
       { label: "Preferred Contact Method", value: contactMethod },
-      { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "No" },
+      { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "" },
       { label: "Page Source", value: page }
     ]
   };

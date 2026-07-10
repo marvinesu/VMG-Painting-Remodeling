@@ -38,7 +38,6 @@ export const POST: APIRoute = (context) =>
     else if (looksSuspicious(message)) errors.message = "Please remove links from your message.";
     if (!contactMethod || !inList(contactMethod, CONTACT_METHOD_OPTIONS))
       errors.contactMethod = "Please choose a preferred contact method.";
-    if (!consent) errors.consent = "Please confirm you agree to be contacted.";
 
     return {
       errors,
@@ -66,7 +65,7 @@ export const POST: APIRoute = (context) =>
         { label: "Service Interested In", value: service },
         { label: "Message", value: message },
         { label: "Preferred Contact Method", value: contactMethod },
-        { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "No" },
+        { label: "Consent to Contact", value: consent ? "Yes — agreed to be contacted by phone, text, or email" : "" },
         { label: "Page Source", value: page }
       ]
     };

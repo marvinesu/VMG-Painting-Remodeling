@@ -61,7 +61,9 @@ export const Leads: CollectionConfig = {
       options: ["new", "contacted", "resolved"],
       admin: { position: "sidebar" }
     },
-    { name: "consent", type: "checkbox", required: true },
+    // Consent is no longer collected on the website forms (removed 2026-07-10);
+    // defaults to false, still set to true by the chatbot consent step.
+    { name: "consent", type: "checkbox", defaultValue: false },
     { name: "ipAddress", type: "text", admin: { readOnly: true } },
     { name: "userAgent", type: "text", admin: { readOnly: true } }
   ]

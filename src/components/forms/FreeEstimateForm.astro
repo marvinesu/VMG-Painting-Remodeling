@@ -185,14 +185,6 @@ const { defaultService } = Astro.props;
       <p class="field-error">Please choose a preferred contact method.</p>
     </fieldset>
 
-    <div class="field">
-      <label class="checkbox-option consent-option">
-        <input type="checkbox" name="consent" value="true" required aria-describedby="est-consent-error" />
-        <span>I agree to be contacted by VMG Painting &amp; Remodeling LLC by phone, text, or email regarding my free estimate request. Message and data rates may apply. <span class="required-mark" aria-hidden="true">*</span></span>
-      </label>
-      <p class="field-error" id="est-consent-error">Please confirm you agree to be contacted.</p>
-    </div>
-
     <!-- Spam protection: hidden from real visitors -->
     <div class="honeypot-field" aria-hidden="true">
       <label for="est-company-website">Company website</label>

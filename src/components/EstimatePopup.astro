@@ -50,14 +50,6 @@ import LeadFormScript from "./forms/LeadFormScript.astro";
         <p class="field-error" id="popup-service-error">Please choose a service.</p>
       </div>
 
-      <div class="field">
-        <label class="checkbox-option consent-option">
-          <input type="checkbox" name="consent" value="true" required aria-describedby="popup-consent-error" />
-          <span>I agree to be contacted by phone, text, or email. <span class="required-mark" aria-hidden="true">*</span></span>
-        </label>
-        <p class="field-error" id="popup-consent-error">Please confirm you agree to be contacted.</p>
-      </div>
-
       <!-- Spam protection: hidden from real visitors -->
       <div class="honeypot-field" aria-hidden="true">
         <label for="popup-company-website">Company website</label>

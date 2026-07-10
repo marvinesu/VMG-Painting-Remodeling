@@ -1,6 +1,6 @@
 ---
 /**
- * Compact footer lead capture: name, phone, service, consent, submit.
+ * Compact footer lead capture: name, phone, service, submit.
  * Posts to /api/chatbot-lead as a "Footer Quick Lead".
  * To disable this form, set `footerLeadForm: false` in src/data/site.ts.
  */
@@ -29,14 +29,6 @@ import LeadFormScript from "./LeadFormScript.astro";
       {SERVICE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
     </select>
     <p class="field-error" id="footer-service-error">Please choose a service.</p>
-  </div>
-
-  <div class="field">
-    <label class="checkbox-option consent-option footer-consent">
-      <input type="checkbox" name="consent" value="true" required aria-describedby="footer-consent-error" />
-      <span>I agree to be contacted by phone, text, or email. <span class="required-mark" aria-hidden="true">*</span></span>
-    </label>
-    <p class="field-error" id="footer-consent-error">Please confirm you agree to be contacted.</p>
   </div>
 
   <!-- Spam protection: hidden from real visitors -->
