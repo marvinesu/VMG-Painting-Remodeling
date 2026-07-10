@@ -14,6 +14,28 @@ export const site = {
   owner: "Victor Gomez",
   admin: "Elizabeth Gomez",
   areas: ["Thurston County", "Pierce County", "King County", "Snohomish County"],
+  // Cities inside the served counties — used for local SEO copy and pills.
+  cities: [
+    "Tacoma",
+    "Lakewood",
+    "Puyallup",
+    "Spanaway",
+    "Graham",
+    "Gig Harbor",
+    "Bonney Lake",
+    "Olympia",
+    "Lacey",
+    "Tumwater",
+    "Yelm",
+    "Federal Way",
+    "Auburn",
+    "Kent",
+    "Renton",
+    "Seattle",
+    "Everett",
+    "Lynnwood",
+    "Marysville"
+  ],
   // Set to false to hide the quick lead form in the footer.
   footerLeadForm: true,
   // Approximate coordinates for Roy, WA — used in LocalBusiness structured data.

@@ -25,6 +25,30 @@ const faqs = [
   {
     question: "Who owns VMG Painting & Remodeling?",
     answer: "VMG Painting & Remodeling LLC is owned by Victor Gomez, who built his career over 30+ years in residential and commercial construction. His wife, Elizabeth Gomez, manages the administrative side of the business."
+  },
+  {
+    question: "Are you licensed, bonded, and insured?",
+    answer: `VMG Painting & Remodeling LLC operates under Washington Contractor Registration #${site.license}. Washington State requires registered contractors to carry a surety bond and liability insurance, and you can verify our current registration, bond, and insurance status anytime through the Washington L&I contractor lookup.`
+  },
+  {
+    question: "How much does it cost to paint a house?",
+    answer: "It depends on the size of the home, the condition of the surfaces, how much preparation and repair is needed, and the products used. That's exactly why we provide free, no-obligation estimates — you get a real number for your specific project instead of a guess."
+  },
+  {
+    question: "Do you handle commercial projects as well as homes?",
+    answer: "Yes. Most of our work is residential, but VMG also takes on commercial painting and improvement projects across Western Washington. Victor's 30+ years of experience include both residential and commercial construction."
+  },
+  {
+    question: "How long does exterior paint last in Western Washington?",
+    answer: "With proper surface preparation and quality products, an exterior paint job in our climate typically lasts around 7–10 years. Rain and moisture are hard on exteriors here, which is why thorough prep — cleaning, scraping, repairs, caulking, and priming — matters more than anything else."
+  },
+  {
+    question: "Can you combine multiple projects, like siding, painting, and windows?",
+    answer: "Yes, and it's one of the biggest advantages of working with VMG. Because we handle painting, siding, roofing, windows, decks, and remodeling, exterior and interior projects can be coordinated by one contractor instead of pieced together across several companies."
+  },
+  {
+    question: "What happens after I request a free estimate?",
+    answer: "We contact you to schedule a convenient time, walk the project with you on site, and review the conditions and your goals. Then you receive a clear written estimate with no pressure and no obligation — you decide if and when to move forward."
   }
 ];
 
@@ -160,13 +184,47 @@ const commitments = [
       ))}
     </div>
   </section>
+  <section class="section compact" aria-label="Popular projects">
+    <div class="container">
+      <span class="eyebrow">Popular Projects</span>
+      <h2>Home Improvement Projects We're Asked About Most</h2>
+      <p class="lead">From a single room of interior painting to a full exterior upgrade, these are the projects Western Washington homeowners bring to VMG most often.</p>
+      <div class="pill-row project-pills">
+        <a class="pill" href="/services/interior-exterior-painting">House Painting</a>
+        <a class="pill" href="/services/interior-exterior-painting">Exterior House Painters</a>
+        <a class="pill" href="/services/interior-exterior-painting">Interior Painting</a>
+        <a class="pill" href="/services/interior-exterior-painting">Cabinet Painting</a>
+        <a class="pill" href="/services/decks">Deck Staining</a>
+        <a class="pill" href="/services/siding">Siding Replacement</a>
+        <a class="pill" href="/services/siding">Siding Repair</a>
+        <a class="pill" href="/services/roofing">Roof Replacement</a>
+        <a class="pill" href="/services/roofing">Roof Repair</a>
+        <a class="pill" href="/services/windows-installation">Window Replacement</a>
+        <a class="pill" href="/services/windows-installation">Sliding Glass Doors</a>
+        <a class="pill" href="/services/decks">Composite Decks</a>
+        <a class="pill" href="/services/decks">Custom Deck Builds</a>
+        <a class="pill" href="/services/remodeling-services">Kitchen Remodeling</a>
+        <a class="pill" href="/services/remodeling-services">Bathroom Remodeling</a>
+        <a class="pill" href="/services/remodeling-services">Basement Finishing</a>
+      </div>
+    </div>
+  </section>
   <section class="section">
     <div class="container">
       <span class="eyebrow">Service Areas</span>
       <h2>Proudly Serving Western Washington Homeowners</h2>
       <p class="lead">VMG Painting &amp; Remodeling LLC is based in Roy, WA and serves homeowners and property owners throughout the South Sound and Puget Sound region.</p>
+      <p>
+        Whether you're looking for house painters near Tacoma, a siding contractor in Olympia, a deck builder in Puyallup,
+        or a remodeling contractor serving Lakewood, Spanaway, or Yelm — our family-owned team travels throughout
+        Thurston, Pierce, King, and Snohomish County. We regularly work in communities from Lacey and Tumwater up through
+        Federal Way, Auburn, Kent, Renton, and Seattle, and north to Everett, Lynnwood, and Marysville.
+      </p>
       <div class="pill-row area-pills">
         <span class="pill">Thurston County</span><span class="pill">Pierce County</span><span class="pill">King County</span><span class="pill">Snohomish County</span>
+      </div>
+      <div class="pill-row area-pills city-pills">
+        {site.cities.map((city) => <span class="pill pill-small">{city}</span>)}
       </div>
     </div>
   </section>
@@ -200,6 +258,11 @@ const commitments = [
 
 <style>
   .area-pills { justify-content: flex-start; }
+  .project-pills { justify-content: flex-start; margin-top: 6px; }
+  .project-pills .pill { transition: background 150ms ease, color 150ms ease, border-color 150ms ease, transform 150ms cubic-bezier(.23,1,.32,1); }
+  .project-pills .pill:hover, .project-pills .pill:focus-visible { background: var(--navy-2); border-color: var(--navy-2); color: var(--white); transform: translateY(-2px); }
+  .city-pills { margin-top: 12px; }
+  .pill-small { padding: 7px 13px; font-size: .85rem; font-weight: 700; }
   .inline-link { color: var(--gold-dark); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
   .trust-strip { background: var(--white); border-bottom: 1px solid var(--line); }
   .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); }

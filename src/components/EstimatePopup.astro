@@ -1,0 +1,228 @@
+---
+/**
+ * Free-estimate popup with a compact lead form (posts to /api/lead).
+ *
+ * Trigger rules (see script): opens once per session after 12 seconds or 40%
+ * scroll, whichever comes first. Never shows on /free-estimate or /contact-us,
+ * waits 7 days after a dismissal, and never returns in this browser after a
+ * successful submission. Escape, the X button, and the backdrop all close it.
+ */
+import { SERVICE_OPTIONS } from "../lib/leadOptions";
+import { site } from "../data/site";
+import LeadFormScript from "./forms/LeadFormScript.astro";
+---
+<LeadFormScript />
+<div class="estimate-popup" data-estimate-popup hidden>
+  <div class="popup-backdrop" data-popup-close></div>
+  <div class="popup-dialog" role="dialog" aria-modal="true" aria-labelledby="estimate-popup-title">
+    <button class="popup-close" type="button" data-popup-close aria-label="Close this popup">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+    <div class="popup-header">
+      <span class="eyebrow">Free, No-Obligation Estimate</span>
+      <h2 id="estimate-popup-title">Ready to Start Your Project?</h2>
+      <p>Painting, siding, roofing, windows, decks, or remodeling — tell us what you need and our family-owned team will follow up with a free estimate.</p>
+    </div>
+    <form class="lead-form popup-lead-form" method="post" action="/api/lead" data-lead-form data-endpoint="/api/lead" novalidate aria-label="Free estimate request">
+      <p class="form-status" role="alert" data-status></p>
+      <input type="hidden" name="leadType" value="Popup Estimate Lead" />
+
+      <div class="popup-grid">
+        <div class="field form-field">
+          <label for="popup-name">Name <span class="required-mark" aria-hidden="true">*</span></label>
+          <input id="popup-name" name="name" type="text" autocomplete="name" placeholder="Your name" required aria-describedby="popup-name-error" />
+          <p class="field-error" id="popup-name-error">Please enter your name.</p>
+        </div>
+        <div class="field form-field">
+          <label for="popup-phone">Phone <span class="required-mark" aria-hidden="true">*</span></label>
+          <input id="popup-phone" name="phone" type="tel" autocomplete="tel" placeholder="(253) 555-0100" required aria-describedby="popup-phone-error" />
+          <p class="field-error" id="popup-phone-error">Please enter a valid phone number.</p>
+        </div>
+      </div>
+      <div class="field form-field">
+        <label for="popup-service">Service Needed <span class="required-mark" aria-hidden="true">*</span></label>
+        <select id="popup-service" name="service" required aria-describedby="popup-service-error">
+          <option value="">Choose a service…</option>
+          {SERVICE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+        </select>
+        <p class="field-error" id="popup-service-error">Please choose a service.</p>
+      </div>
+
+      <div class="field">
+        <label class="checkbox-option consent-option">
+          <input type="checkbox" name="consent" value="true" required aria-describedby="popup-consent-error" />
+          <span>I agree to be contacted by phone, text, or email. <span class="required-mark" aria-hidden="true">*</span></span>
+        </label>
+        <p class="field-error" id="popup-consent-error">Please confirm you agree to be contacted.</p>
+      </div>
+
+      <!-- Spam protection: hidden from real visitors -->
+      <div class="honeypot-field" aria-hidden="true">
+        <label for="popup-company-website">Company website</label>
+        <input id="popup-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" name="form_started_at" value="" data-started-at />
+      <input type="hidden" name="page" value="" data-page-source />
+
+      <button class="btn" type="submit" data-submit>Get My Free Estimate</button>
+    </form>
+    <p class="popup-alt">Prefer to talk? Call <a href={`tel:${site.tel}`}><strong>{site.phoneDisplay}</strong></a></p>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-estimate-popup]");
+  if (root) {
+    const dialog = root.querySelector<HTMLElement>(".popup-dialog")!;
+    const DISMISS_KEY = "vmg-popup-dismissed-at";
+    const SUBMIT_KEY = "vmg-popup-submitted";
+    const SESSION_KEY = "vmg-popup-shown";
+    const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+    const path = location.pathname;
+    const skipPage = path.startsWith("/free-estimate") || path.startsWith("/contact-us");
+    let lastFocused: HTMLElement | null = null;
+
+    const storage = {
+      get(key: string, session = false) {
+        try { return (session ? sessionStorage : localStorage).getItem(key); } catch { return null; }
+      },
+      set(key: string, value: string, session = false) {
+        try { (session ? sessionStorage : localStorage).setItem(key, value); } catch { /* private mode */ }
+      }
+    };
+
+    const eligible = () => {
+      if (skipPage || !root.hidden) return false;
+      if (storage.get(SUBMIT_KEY)) return false;
+      if (storage.get(SESSION_KEY, true)) return false;
+      const dismissedAt = Number(storage.get(DISMISS_KEY) ?? 0);
+      if (dismissedAt && Date.now() - dismissedAt < COOLDOWN_MS) return false;
+      return true;
+    };
+
+    const open = () => {
+      lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      root.hidden = false;
+      document.body.style.overflow = "hidden";
+      storage.set(SESSION_KEY, "1", true);
+      root.querySelector<HTMLElement>(".popup-close")?.focus();
+    };
+
+    const close = () => {
+      if (root.hidden) return;
+      root.hidden = true;
+      document.body.style.overflow = "";
+      storage.set(DISMISS_KEY, String(Date.now()));
+      lastFocused?.focus();
+    };
+
+    const maybeOpen = () => { if (eligible()) open(); };
+
+    // Trigger: 12s on the page OR 40% scroll depth, whichever comes first.
+    const timer = setTimeout(maybeOpen, 12000);
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable > 0 && window.scrollY / scrollable >= 0.4) {
+        clearTimeout(timer);
+        window.removeEventListener("scroll", onScroll);
+        maybeOpen();
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    root.querySelectorAll("[data-popup-close]").forEach((el) => el.addEventListener("click", close));
+    document.addEventListener("keydown", (event) => {
+      if (root.hidden) return;
+      if (event.key === "Escape") {
+        close();
+        return;
+      }
+      // Keep Tab focus inside the dialog while it is open (WCAG 2.4.3).
+      if (event.key === "Tab") {
+        const focusables = Array.from(
+          dialog.querySelectorAll<HTMLElement>('button, a[href], input:not([type="hidden"]), select, textarea')
+        ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // After a successful submit the shared form script swaps in a success
+    // panel — record it so the popup never shows again, then auto-close.
+    const form = root.querySelector<HTMLFormElement>("form");
+    if (form) {
+      new MutationObserver((_, observer) => {
+        if (form.querySelector(".form-success-panel")) {
+          storage.set(SUBMIT_KEY, "1");
+          observer.disconnect();
+          setTimeout(close, 3500);
+        }
+      }).observe(form, { childList: true });
+    }
+  }
+</script>
+
+<style>
+  .estimate-popup { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 16px; }
+  .popup-backdrop { position: absolute; inset: 0; background: rgba(13, 6, 48, 0.55); backdrop-filter: blur(3px); }
+  .popup-dialog {
+    position: relative;
+    width: min(520px, 100%);
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    background: var(--white);
+    border-radius: 18px;
+    border-top: 5px solid var(--teal);
+    box-shadow: 0 30px 80px rgba(13, 6, 48, 0.45);
+    padding: clamp(22px, 4vw, 32px);
+  }
+  .popup-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--navy);
+    cursor: pointer;
+    transition: background 140ms ease, color 140ms ease;
+  }
+  .popup-close:hover, .popup-close:focus-visible { background: var(--navy); color: var(--white); }
+  .popup-header { padding-right: 40px; }
+  .popup-header h2 { font-size: clamp(1.45rem, 3.5vw, 1.8rem); margin-bottom: 10px; }
+  .popup-header p { margin-bottom: 18px; }
+  .popup-lead-form { gap: 13px; }
+  .popup-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+  .popup-alt { margin: 14px 0 0; text-align: center; font-size: 0.92rem; color: var(--muted); }
+  .popup-alt a { color: var(--navy-2); }
+  @media (prefers-reduced-motion: no-preference) {
+    .popup-backdrop { animation: popup-fade 220ms ease-out; }
+    .popup-dialog { animation: popup-in 300ms cubic-bezier(0.23, 1, 0.32, 1); }
+    @keyframes popup-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes popup-in {
+      from { opacity: 0; transform: translateY(26px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  }
+  @media (max-width: 560px) {
+    .estimate-popup { padding: 10px; align-items: end; }
+    .popup-grid { grid-template-columns: 1fr; }
+  }
+</style>

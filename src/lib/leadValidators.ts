@@ -38,10 +38,9 @@ export const genericLeadValidator: LeadValidator = (body) => {
   if (details && looksSuspicious(details)) errors.details = "Please remove links from the description.";
   if (!consent) errors.consent = "Consent is required before submitting.";
 
-  const subject =
-    leadType === "Footer Quick Lead"
-      ? "New Website Lead - VMG Painting & Remodeling"
-      : "New Chatbot Lead - VMG Painting & Remodeling";
+  const subject = leadType.includes("Chatbot")
+    ? "New Chatbot Lead - VMG Painting & Remodeling"
+    : "New Website Lead - VMG Painting & Remodeling";
 
   // Structured lead for CMS storage: select values must match known options;
   // anything else is preserved inside the message body.
