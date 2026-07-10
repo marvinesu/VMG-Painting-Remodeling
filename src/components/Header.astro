@@ -92,6 +92,7 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
   .services-panel .all-services { color: var(--gold-dark); }
   .menu-button { display: none; }
   @media (max-width: 920px) {
+    .site-header { position: static; -webkit-backdrop-filter: none; backdrop-filter: none; }
     .topbar-inner { justify-content: center; }
     .topbar-inner span, .topbar-inner a:last-child { display: none; }
     .topbar-inner a:first-child { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .78rem; }
