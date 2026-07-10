@@ -14,7 +14,9 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
     </div>
   </div>
   <nav class="nav container" aria-label="Primary navigation">
-    <a class="logo" href="/" aria-label="VMG Painting & Remodeling home">VMG Painting <span>&amp; Remodeling</span></a>
+    <a class="logo" href="/" aria-label="VMG Painting & Remodeling home">
+      <img src="/images/logo.webp" alt="VMG Painting & Remodeling" width="505" height="120" />
+    </a>
     <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
       <span class="menu-icon" aria-hidden="true"></span>
     </button>
@@ -77,8 +79,8 @@ const primaryNav = navItems.filter((item) => item.label !== "Services");
   .topbar-inner { min-height: 38px; display: flex; gap: 22px; align-items: center; justify-content: space-between; }
   .topbar a:hover, .topbar a:focus-visible { color: var(--lime); }
   .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-  .logo { font-size: 1.16rem; font-weight: 700; font-family: var(--font-heading); color: var(--ink); max-width: 270px; line-height: 1.15; }
-  .logo span { color: var(--navy-2); }
+  .logo { display: flex; align-items: center; flex-shrink: 0; }
+  .logo img { height: 48px; width: auto; }
   .nav-links { display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: .92rem; }
   .nav-links a:hover, .nav-links a:focus-visible { color: var(--gold-dark); }
   .nav-phone { white-space: nowrap; }

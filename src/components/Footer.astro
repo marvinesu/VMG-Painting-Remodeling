@@ -8,7 +8,9 @@ const year = new Date().getFullYear();
 <footer class="footer">
   <div class="container footer-top">
     <div>
-      <a class="footer-logo" href="/">VMG Painting &amp; Remodeling</a>
+      <a class="footer-logo" href="/" aria-label="VMG Painting & Remodeling home">
+        <img src="/images/logo-white.webp" alt="VMG Painting & Remodeling" width="505" height="120" loading="lazy" />
+      </a>
       <p class="footer-tagline">Family-owned. Washington-registered. Built on 30+ years of construction experience.</p>
       <div class="footer-cta-row">
         <a class="btn" href="/free-estimate">Request a Free Estimate</a>
@@ -61,7 +63,8 @@ const year = new Date().getFullYear();
 <style>
   .footer { background: linear-gradient(180deg, var(--navy) 0%, #12213c 55%, var(--ink) 100%); color: var(--white); padding: 48px 0 24px; }
   .footer-top { display: grid; grid-template-columns: 1.2fr 1fr; align-items: start; gap: 40px; padding-bottom: 34px; border-bottom: 1px solid rgba(255,255,255,.12); }
-  .footer-logo { font-size: 1.35rem; font-weight: 900; }
+  .footer-logo { display: inline-block; }
+  .footer-logo img { height: 56px; width: auto; }
   .footer-tagline { margin: 8px 0 0; color: rgba(255,255,255,.72); max-width: 520px; }
   .footer-cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
   .footer-cta-row a { margin: 0; }
