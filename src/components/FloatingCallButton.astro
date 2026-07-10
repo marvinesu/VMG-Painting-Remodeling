@@ -26,6 +26,7 @@ import { site } from "../data/site";
   }
   .floating-call:hover, .floating-call:focus-visible { transform: translateY(-2px); background: #d8f095; }
   :global(body.chat-open) .floating-call { opacity: 0; pointer-events: none; transform: translateY(12px); }
+  :global(body.mobile-menu-open) .floating-call { opacity: 0; pointer-events: none; transform: translateY(12px); }
   @media (max-width: 520px) {
     .floating-call {
       right: 12px;

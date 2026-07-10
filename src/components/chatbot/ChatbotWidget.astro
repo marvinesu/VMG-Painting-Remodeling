@@ -29,10 +29,10 @@ const config = {
 ---
 <div class="vmg-chat" data-chat data-config={JSON.stringify(config)}>
   <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="vmg-chat-panel" data-chat-launcher>
-    <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/>
+    <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 18h4"/>
     </svg>
-    <span>Chat with us</span>
+    <span>Request a Free Estimate</span>
   </button>
 
   <section id="vmg-chat-panel" class="chat-panel" role="dialog" aria-label="VMG Painting & Remodeling chat assistant" hidden data-chat-panel>
@@ -507,6 +507,7 @@ const config = {
   }
   .chat-launcher svg { color: var(--gold); }
   .chat-launcher:hover, .chat-launcher:focus-visible { transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 34px rgba(13, 6, 48, 0.45); }
+  body.mobile-menu-open .chat-launcher { opacity: 0; pointer-events: none; transform: translateY(12px); }
   .chat-panel {
     position: fixed;
     right: 18px;
@@ -647,7 +648,7 @@ const config = {
   .chat-panel[aria-busy="true"] .chat-options,
   .chat-panel[aria-busy="true"] .chat-input-row { pointer-events: none; opacity: .55; }
   @media (max-width: 520px) {
-    .chat-launcher { right: 12px; bottom: 74px; padding: 12px 16px; }
+    .chat-launcher { right: 12px; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 62px); padding: 11px 15px; font-size: .86rem; }
     .chat-panel { right: 8px; left: 8px; width: auto; bottom: max(8px, env(safe-area-inset-bottom)); height: auto; max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom))); border-radius: 14px; }
     .chat-header { padding: 12px 14px; }
     .chat-messages { min-height: 140px; max-height: calc(100dvh - 250px); padding: 14px; }
